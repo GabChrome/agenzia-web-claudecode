@@ -1,62 +1,79 @@
-'use client';
+'use client'
+import { useRef } from 'react'
+import { Canvas, useFrame } from '@react-three/fiber'
+import { Suspense } from 'react'
+import * as THREE from 'three'
 
-import { useRef } from 'react';
-import { Canvas, useFrame } from '@react-three/fiber';
+function Icosahedron() {
+  const meshRef = useRef<THREE.Mesh>(null)
+  const groupRef = useRef<THREE.Group>(null)
 
-import * as THREE from 'three';
-
-function WireframeTorus() {
-  const meshRef = useRef<THREE.Mesh>(null);
-
-  useFrame((_state, delta) => {
-    if (!meshRef.current) return;
-    meshRef.current.rotation.x += delta * 0.15;
-    meshRef.current.rotation.y += delta * 0.2;
-  });
-
-  return (
-    <mesh ref={meshRef}>
-      <torusGeometry args={[1.4, 0.45, 16, 60]} />
-      <meshBasicMaterial
-        color="#6C63FF"
-        wireframe
-        transparent
-        opacity={0.55}
-      />
-    </mesh>
-  );
-}
-
-function OuterRing() {
-  const meshRef = useRef<THREE.Mesh>(null);
-
-  useFrame((_state, delta) => {
-    if (!meshRef.current) return;
-    meshRef.current.rotation.x -= delta * 0.08;
-    meshRef.current.rotation.z += delta * 0.12;
-  });
+  useFrame((state) => {
+    if (!groupRef.current) return
+    groupRef.current.rotation.y += 0.004
+    groupRef.current.rotation.x += 0.001
+    // respiro leggero con il tempo
+    const s = 1 + Math.sin(state.clock.elapsedTime * 0.5) * 0.03
+    groupRef.current.scale.setScalar(s)
+  })
 
   return (
-    <mesh ref={meshRef}>
-      <torusGeometry args={[2.1, 0.015, 8, 100]} />
-      <meshBasicMaterial color="#857DFF" transparent opacity={0.3} />
-    </mesh>
-  );
+    <group ref={groupRef}>
+      {/* Sfera wireframe principale */}
+      <mesh ref={meshRef}>
+        <icosahedronGeometry args={[1.4, 1]} />
+        <meshBasicMaterial
+          color="#7C6EF8"
+          wireframe
+          transparent
+          opacity={0.55}
+        />
+      </mesh>
+      {/* Sfera interna più piccola, ruota al contrario */}
+      <mesh rotation={[0.5, 0, 0.3]}>
+        <icosahedronGeometry args={[0.7, 1]} />
+        <meshBasicMaterial
+          color="#7C6EF8"
+          wireframe
+          transparent
+          opacity={0.25}
+        />
+      </mesh>
+    </group>
+  )
 }
 
 export default function HeroScene() {
   return (
-    <div className="w-full h-full" aria-hidden="true">
+    <div
+      className="hero-canvas"
+      style={{
+        width: '100%',
+        maxWidth: 520,
+        aspectRatio: '1',
+        position: 'relative',
+      }}
+    >
+      {/* Glow sotto la sfera */}
+      <div style={{
+        position: 'absolute',
+        inset: '20%',
+        background: 'radial-gradient(circle, rgba(124,110,248,0.18) 0%, transparent 70%)',
+        borderRadius: '50%',
+        filter: 'blur(40px)',
+        zIndex: 0,
+      }} />
       <Canvas
-        camera={{ position: [0, 0, 5], fov: 45 }}
-        dpr={[1, 1.5]}
-        gl={{ antialias: true, alpha: true }}
-        style={{ background: 'transparent' }}
+        camera={{ position: [0, 0, 3.5], fov: 50 }}
+        gl={{ alpha: true, antialias: true }}
+        style={{ position: 'relative', zIndex: 1 }}
       >
-        <ambientLight intensity={0.5} />
-        <WireframeTorus />
-        <OuterRing />
+        <ambientLight color="#7C6EF8" intensity={0.5} />
+        <pointLight position={[2, 2, 2]} color="#ffffff" intensity={0.3} />
+        <Suspense fallback={null}>
+          <Icosahedron />
+        </Suspense>
       </Canvas>
     </div>
-  );
+  )
 }

@@ -1,11 +1,12 @@
 'use client';
 
+import { useState } from 'react';
 import { useTranslations } from 'next-intl';
-import { motion, useReducedMotion } from 'framer-motion';
-import { ArrowUpRight } from '@phosphor-icons/react';
+import Image from 'next/image';
+import { motion, AnimatePresence } from 'framer-motion';
+import { ArrowUpRight } from 'lucide-react';
 import AnimatedSection from '@/components/ui/AnimatedSection';
 
-// Immagini placeholder con seed descrittivi (picsum)
 const PROJECT_IMAGES = [
   'https://picsum.photos/seed/olio-meridiano-product/800/600',
   'https://picsum.photos/seed/studio-legale-desk/800/600',
@@ -17,82 +18,134 @@ const PROJECT_IMAGES = [
 
 export default function Portfolio() {
   const t = useTranslations('portfolio');
-  const reduce = useReducedMotion();
-
   const projects = t.raw('projects') as Array<{
     name: string;
     desc: string;
     tags: string[];
+    category: string;
   }>;
 
+  // Assumiamo che ci sia una 'category' per filtrare, o usiamo un filtro fittizio per demo
+  const filters = ['Tutti', 'E-commerce', 'Corporate', 'Web App'];
+  const [activeFilter, setActiveFilter] = useState('Tutti');
+
+  const filteredProjects = activeFilter === 'Tutti' 
+    ? projects 
+    : projects.filter(p => p.tags.includes(activeFilter) || p.name.includes(activeFilter));
+
   return (
-    <section id="portfolio" className="py-24 lg:py-32 bg-surface">
+    <section id="portfolio" style={{ padding: '120px 0', background: 'var(--surface-1)' }}>
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
-        {/* Header con eyebrow — sezione 3, primo eyebrow consentito */}
-        <AnimatedSection className="mb-16">
-          <p className="text-xs font-medium text-accent uppercase tracking-[0.14em] mb-4">
+        <AnimatedSection className="mb-12">
+          <p className="eyebrow" style={{ marginBottom: '16px', color: 'var(--accent)' }}>
             {t('headline')}
           </p>
-          <h2 className="text-display-md font-bold text-text-primary text-balance">
+          <h2 style={{
+            fontSize: 'clamp(32px, 4vw, 52px)',
+            fontWeight: 700,
+            letterSpacing: '-0.02em',
+            color: 'var(--text-1)',
+            lineHeight: 1.1,
+            marginBottom: '40px'
+          }}>
             {t('sub')}
           </h2>
+
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', marginBottom: '40px' }}>
+            {filters.map(filter => {
+              const isActive = activeFilter === filter;
+              return (
+                <button
+                  key={filter}
+                  onClick={() => setActiveFilter(filter)}
+                  style={{
+                    background: isActive ? 'rgba(124,110,248,0.12)' : 'var(--surface-1)',
+                    border: isActive ? '1px solid rgba(124,110,248,0.35)' : '1px solid var(--border-subtle)',
+                    color: isActive ? 'var(--accent)' : 'var(--text-3)',
+                    borderRadius: '999px',
+                    padding: '6px 16px',
+                    fontSize: '13px',
+                    cursor: 'pointer',
+                    transition: 'all 200ms ease'
+                  }}
+                >
+                  {filter}
+                </button>
+              );
+            })}
+          </div>
         </AnimatedSection>
 
-        {/* Griglia 3×2 desktop */}
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 lg:gap-5">
-          {projects.map((project, i) => (
-            <motion.article
-              key={project.name}
-              initial={reduce ? false : { opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, amount: 0.2 }}
-              transition={{
-                duration: 0.5,
-                delay: (i % 3) * 0.08,
-                ease: [0.16, 1, 0.3, 1],
-              }}
-              className="group relative rounded-xl overflow-hidden bg-[#0F0F0F] aspect-[4/3] cursor-pointer"
-            >
-              {/* Immagine */}
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src={PROJECT_IMAGES[i]}
-                alt={`${project.name} — ${project.desc}`}
-                className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-                loading="lazy"
-              />
+        <motion.div layout className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
+          <AnimatePresence mode="popLayout">
+            {filteredProjects.map((project, i) => (
+              <motion.article
+                layout
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.9 }}
+                transition={{ duration: 0.3 }}
+                key={project.name}
+                className="group relative overflow-hidden bg-[#0F0F0F] cursor-pointer"
+                style={{
+                  borderRadius: '12px',
+                  border: '1px solid var(--border-subtle)',
+                  aspectRatio: '16/9'
+                }}
+              >
+                <Image
+                  src={PROJECT_IMAGES[i % PROJECT_IMAGES.length]}
+                  alt={`${project.name} — ${project.desc}`}
+                  fill
+                  sizes="(max-width: 768px) 100vw, 33vw"
+                  className="object-cover transition-transform duration-500 group-hover:scale-105"
+                />
 
-              {/* Overlay su hover */}
-              <div className="absolute inset-0 bg-[rgba(10,10,10,0)] group-hover:bg-[rgba(10,10,10,0.82)] transition-all duration-300 flex flex-col justify-end p-6">
-                <div className="translate-y-4 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-300">
-                  <div className="flex flex-wrap gap-1.5 mb-3">
-                    {project.tags.map((tag) => (
-                      <span
-                        key={tag}
-                        className="text-xs font-medium text-accent bg-[rgba(108,99,255,0.18)] px-2 py-0.5 rounded-full"
-                      >
-                        {tag}
-                      </span>
-                    ))}
+                <div className="absolute inset-0 transition-all duration-300 flex flex-col justify-end p-6"
+                     style={{
+                       background: 'rgba(8,8,8,0)',
+                     }}
+                >
+                  <div className="absolute inset-0 bg-[rgba(8,8,8,0.88)] opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                  
+                  <div className="relative translate-y-4 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-300 z-10 flex flex-col justify-end h-full">
+                    <div className="flex flex-wrap gap-[6px] mb-3">
+                      {project.tags.map((tag) => (
+                        <span
+                          key={tag}
+                          style={{
+                            background: 'rgba(124,110,248,0.15)',
+                            border: '1px solid rgba(124,110,248,0.3)',
+                            borderRadius: '4px',
+                            fontSize: '11px',
+                            color: 'var(--accent)',
+                            padding: '3px 8px',
+                            fontWeight: 600
+                          }}
+                        >
+                          {tag}
+                        </span>
+                      ))}
+                    </div>
+                    <h3 style={{ color: 'var(--text-1)', fontSize: '18px', fontWeight: 600, marginTop: '10px' }}>
+                      {project.name}
+                    </h3>
+                    <p style={{ color: 'var(--text-2)', fontSize: '13px', marginTop: '4px' }}>
+                      {project.desc}
+                    </p>
+                    <span style={{
+                      display: 'inline-flex', alignItems: 'center', gap: '6px',
+                      color: 'var(--accent)', fontSize: '13px', fontWeight: 600, marginTop: '12px'
+                    }}>
+                      {t('viewProject')}
+                      <ArrowUpRight size={16} strokeWidth={2.5} />
+                    </span>
                   </div>
-                  <h3 className="text-lg font-semibold text-text-primary mb-1">
-                    {project.name}
-                  </h3>
-                  <p className="text-sm text-text-secondary mb-4">
-                    {project.desc}
-                  </p>
-                  <span className="inline-flex items-center gap-1.5 text-sm font-medium text-accent">
-                    {t('viewProject')}
-                    <ArrowUpRight size={16} weight="bold" aria-hidden="true" />
-                  </span>
                 </div>
-              </div>
-
-              {/* Border sottile visibile anche senza hover */}
-              <div className="absolute inset-0 rounded-xl border border-[rgba(255,255,255,0.06)] pointer-events-none" aria-hidden="true" />
-            </motion.article>
-          ))}
-        </div>
+              </motion.article>
+            ))}
+          </AnimatePresence>
+        </motion.div>
       </div>
     </section>
   );

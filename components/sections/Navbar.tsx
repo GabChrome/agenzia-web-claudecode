@@ -1,10 +1,9 @@
 'use client';
 
-import { useEffect, useState } from 'react';
-import { motion, useReducedMotion } from 'framer-motion';
+import { useState } from 'react';
+import { motion, useScroll, useMotionValueEvent } from 'framer-motion';
 import { useTranslations } from 'next-intl';
-import { List, X } from '@phosphor-icons/react';
-import Button from '@/components/ui/Button';
+import { Menu, X } from 'lucide-react';
 import LanguageSwitcher from '@/components/ui/LanguageSwitcher';
 
 const NAV_LINKS = ['about', 'portfolio', 'pricing', 'contact'] as const;
@@ -13,13 +12,11 @@ export default function Navbar() {
   const t = useTranslations('nav');
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
-  const reduce = useReducedMotion();
-
-  useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 20);
-    window.addEventListener('scroll', onScroll, { passive: true });
-    return () => window.removeEventListener('scroll', onScroll);
-  }, []);
+  
+  const { scrollY } = useScroll();
+  useMotionValueEvent(scrollY, "change", (latest) => {
+    setScrolled(latest > 20);
+  });
 
   const scrollTo = (id: string) => {
     setMobileOpen(false);
@@ -29,113 +26,121 @@ export default function Navbar() {
   return (
     <>
       <motion.header
-        className="fixed top-0 left-0 right-0 z-sticky"
-        initial={{ y: -80, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
+        className="fixed top-0 left-0 right-0 z-50 transition-all duration-300"
+        style={{
+          height: '60px',
+          background: scrolled ? 'rgba(8,8,8,0.85)' : 'rgba(8,8,8,0)',
+          backdropFilter: scrolled ? 'blur(20px)' : 'none',
+          WebkitBackdropFilter: scrolled ? 'blur(20px)' : 'none',
+          borderBottom: scrolled ? '1px solid var(--border-subtle)' : '1px solid transparent'
+        }}
+        initial={{ y: -80 }}
+        animate={{ y: 0 }}
         transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
       >
-        <div
-          className={`transition-all duration-300 ${
-            scrolled
-              ? 'bg-[rgba(10,10,10,0.85)] backdrop-blur-[12px] border-b border-[rgba(255,255,255,0.06)]'
-              : 'bg-transparent'
-          }`}
-        >
-          <nav
-            className="max-w-7xl mx-auto px-6 lg:px-8 h-16 flex items-center justify-between"
-            aria-label="Navigazione principale"
+        <div className="max-w-7xl mx-auto px-6 lg:px-8 h-full flex items-center justify-between">
+          {/* Logo */}
+          <button
+            onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+            className="tracking-tight hover:opacity-80 transition-opacity"
+            aria-label="Anti Gravity - torna in cima"
           >
-            {/* Logo */}
+            <span style={{ fontWeight: 700, color: 'var(--text-1)' }}>Anti</span>
+            <span style={{ fontWeight: 700, color: 'var(--accent)' }}>Gravity</span>
+          </button>
+
+          {/* Desktop nav */}
+          <ul className="hidden lg:flex items-center gap-8">
+            {NAV_LINKS.map((key) => (
+              <li key={key}>
+                <button
+                  onClick={() => scrollTo(key)}
+                  style={{
+                    color: 'var(--text-3)',
+                    fontSize: '14px',
+                    transition: 'color 150ms ease'
+                  }}
+                  onMouseEnter={(e) => e.currentTarget.style.color = 'var(--text-1)'}
+                  onMouseLeave={(e) => e.currentTarget.style.color = 'var(--text-3)'}
+                >
+                  {t(key)}
+                </button>
+              </li>
+            ))}
+          </ul>
+
+          {/* Desktop right */}
+          <div className="hidden lg:flex items-center gap-5">
+            <LanguageSwitcher />
+            <div style={{ width: '1px', height: '14px', background: 'var(--border-subtle)' }} />
             <button
-              onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-              className="text-text-primary font-bold text-lg tracking-tight hover:text-accent transition-colors"
-              aria-label="Anti Gravity - torna in cima"
+              className="btn-glow"
+              onClick={() => scrollTo('contact')}
+              style={{
+                background: 'var(--accent)',
+                color: 'white',
+                padding: '8px 18px',
+                borderRadius: '8px',
+                fontSize: '14px',
+                fontWeight: 600,
+                transition: 'filter 150ms ease',
+              }}
+              onMouseEnter={(e) => e.currentTarget.style.filter = 'brightness(1.12)'}
+              onMouseLeave={(e) => e.currentTarget.style.filter = 'brightness(1)'}
             >
-              Anti Gravity
+              {t('cta')}
             </button>
+          </div>
 
-            {/* Desktop nav */}
-            <ul className="hidden lg:flex items-center gap-8" role="list">
-              {NAV_LINKS.map((key) => (
-                <li key={key}>
-                  <button
-                    onClick={() => scrollTo(key)}
-                    className="text-sm text-text-secondary hover:text-text-primary transition-colors"
-                  >
-                    {t(key)}
-                  </button>
-                </li>
-              ))}
-            </ul>
-
-            {/* Desktop right */}
-            <div className="hidden lg:flex items-center gap-4">
-              <LanguageSwitcher />
-              <Button
-                size="sm"
-                onClick={() => scrollTo('contact')}
-              >
-                {t('cta')}
-              </Button>
-            </div>
-
-            {/* Mobile hamburger */}
-            <button
-              className="lg:hidden text-text-primary p-2 rounded-lg hover:bg-[rgba(255,255,255,0.05)] transition-colors"
-              onClick={() => setMobileOpen((v) => !v)}
-              aria-label={mobileOpen ? 'Chiudi menu' : 'Apri menu'}
-              aria-expanded={mobileOpen}
-              aria-controls="mobile-menu"
-            >
-              {mobileOpen ? <X size={22} /> : <List size={22} />}
-            </button>
-          </nav>
+          {/* Mobile hamburger */}
+          <button
+            className="lg:hidden p-2 rounded-lg"
+            style={{ color: 'var(--text-1)' }}
+            onClick={() => setMobileOpen(!mobileOpen)}
+            aria-label={mobileOpen ? 'Chiudi menu' : 'Apri menu'}
+          >
+            {mobileOpen ? <X size={22} /> : <Menu size={22} />}
+          </button>
         </div>
       </motion.header>
 
       {/* Mobile menu */}
-      <motion.div
-        id="mobile-menu"
-        className="fixed inset-0 z-modal bg-[rgba(10,10,10,0.98)] backdrop-blur-[12px] lg:hidden flex flex-col pt-20 px-6"
-        initial={false}
-        animate={
-          mobileOpen
-            ? { opacity: 1, pointerEvents: 'auto' as const }
-            : { opacity: 0, pointerEvents: 'none' as const }
-        }
-        transition={{ duration: reduce ? 0 : 0.25 }}
+      <div
+        className={`fixed inset-0 z-40 bg-[rgba(8,8,8,0.98)] backdrop-blur-[12px] lg:hidden flex flex-col pt-24 px-6 transition-opacity duration-300 ${
+          mobileOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'
+        }`}
       >
-        <ul className="flex flex-col gap-2" role="list">
-          {NAV_LINKS.map((key, i) => (
-            <motion.li
-              key={key}
-              initial={false}
-              animate={
-                mobileOpen
-                  ? { opacity: 1, x: 0 }
-                  : { opacity: 0, x: -12 }
-              }
-              transition={{
-                duration: reduce ? 0 : 0.25,
-                delay: reduce ? 0 : i * 0.05,
-              }}
-            >
+        <ul className="flex flex-col gap-4">
+          {NAV_LINKS.map((key) => (
+            <li key={key}>
               <button
                 onClick={() => scrollTo(key)}
-                className="w-full text-left text-2xl font-semibold text-text-primary py-3 border-b border-[rgba(255,255,255,0.06)] hover:text-accent transition-colors"
+                className="text-2xl font-semibold text-left w-full py-2 border-b border-[var(--border-subtle)]"
+                style={{ color: 'var(--text-1)' }}
               >
                 {t(key)}
               </button>
-            </motion.li>
+            </li>
           ))}
         </ul>
         <div className="mt-8 flex items-center justify-between">
           <LanguageSwitcher />
-          <Button onClick={() => scrollTo('contact')}>
+          <button
+            className="btn-glow"
+            onClick={() => scrollTo('contact')}
+            style={{
+              background: 'var(--accent)',
+              color: 'white',
+              padding: '12px 24px',
+              borderRadius: '8px',
+              fontSize: '16px',
+              fontWeight: 600,
+            }}
+          >
             {t('cta')}
-          </Button>
+          </button>
         </div>
-      </motion.div>
+      </div>
     </>
   );
 }
