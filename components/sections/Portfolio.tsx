@@ -25,13 +25,16 @@ export default function Portfolio() {
     category: string;
   }>;
 
-  // Assumiamo che ci sia una 'category' per filtrare, o usiamo un filtro fittizio per demo
-  const filters = ['Tutti', 'E-commerce', 'Corporate', 'Web App'];
+  // Estraiamo tutti i tag univoci dai progetti
+  const allTags = Array.from(new Set(projects.flatMap(p => p.tags)));
+  // Prendiamo i 4 tag più frequenti o usiamo una lista fissa se preferito. 
+  // Per ora usiamo tutti i tag univoci se sono pochi, altrimenti i primi 4.
+  const filters = ['Tutti', ...allTags.slice(0, 4)];
   const [activeFilter, setActiveFilter] = useState('Tutti');
 
   const filteredProjects = activeFilter === 'Tutti' 
     ? projects 
-    : projects.filter(p => p.tags.includes(activeFilter) || p.name.includes(activeFilter));
+    : projects.filter(p => p.tags.includes(activeFilter));
 
   return (
     <section id="portfolio" style={{ padding: '120px 0', background: 'var(--surface-1)' }}>
