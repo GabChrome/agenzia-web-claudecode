@@ -1,0 +1,103 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ─── CSS Variables (da config/theme.ts) ─── */
+:root {
+  --bg:           #0A0A0A;
+  --surface:      #111111;
+  --surface-high: #161616;
+  --border:       #1F1F1F;
+  --border-subtle: rgba(255, 255, 255, 0.08);
+  --accent:       #6C63FF;
+  --accent-hover: #857DFF;
+  --accent-muted: rgba(108, 99, 255, 0.12);
+  --text-primary: #F5F5F5;
+  --text-secondary: #A0A0A0;
+  --text-muted:   #666666;
+
+  /* Z-index semantico */
+  --z-dropdown:       10;
+  --z-sticky:         20;
+  --z-modal-backdrop: 30;
+  --z-modal:          40;
+  --z-toast:          50;
+  --z-tooltip:        60;
+}
+
+/* ─── Reset base ─── */
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  background-color: var(--bg);
+  color: var(--text-primary);
+  font-family: 'Inter', system-ui, sans-serif;
+  line-height: 1.6;
+  overflow-x: hidden;
+}
+
+/* ─── Focus visibili su tutti gli elementi interattivi (a11y WCAG AA) ─── */
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+/* ─── Selezione testo ─── */
+::selection {
+  background-color: var(--accent);
+  color: #fff;
+}
+
+/* ─── Scrollbar custom ─── */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: var(--bg);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--text-muted);
+}
+
+/* ─── Utilities custom ─── */
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+  .text-pretty {
+    text-wrap: pretty;
+  }
+  .border-subtle {
+    border-color: var(--border-subtle);
+  }
+  .bg-surface {
+    background-color: var(--surface);
+  }
+  .bg-surface-high {
+    background-color: var(--surface-high);
+  }
+}
+
+/* ─── Reduced motion ─── */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

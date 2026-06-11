@@ -1,0 +1,196 @@
+{
+  "nav": {
+    "about": "About",
+    "portfolio": "Portfolio",
+    "pricing": "Pricing",
+    "contact": "Contact",
+    "cta": "Book a call"
+  },
+  "hero": {
+    "headline": "Websites that convert.",
+    "sub": "We design digital experiences tailored for Italian SMEs and startups. From strategy to code, every detail is crafted to grow your business.",
+    "cta1": "Start your project",
+    "cta2": "See our work",
+    "badge": "Italian web agency"
+  },
+  "about": {
+    "headline": "We build with intention.",
+    "body": "We are not a website factory. We are a small team obsessed with quality: every project receives full attention, every line of code has a purpose.",
+    "speed": {
+      "title": "Speed",
+      "desc": "Performance optimised for every device. Lighthouse > 90 on every project we deliver."
+    },
+    "design": {
+      "title": "Design",
+      "desc": "Premium interfaces that reflect your brand. No templates, no shortcuts."
+    },
+    "support": {
+      "title": "Support",
+      "desc": "We do not disappear after launch. We are here to iterate, optimise and grow the site with you."
+    }
+  },
+  "portfolio": {
+    "headline": "Selected work",
+    "sub": "Real projects for real clients.",
+    "viewProject": "View project",
+    "projects": [
+      {
+        "name": "Olio Meridiano",
+        "desc": "E-commerce for EVO oil producer",
+        "tags": ["Next.js", "Shopify", "Design System"]
+      },
+      {
+        "name": "Studio Ferretti",
+        "desc": "Institutional site for law firm",
+        "tags": ["Next.js", "CMS", "SEO"]
+      },
+      {
+        "name": "Volta Fintech",
+        "desc": "Landing page for fintech startup",
+        "tags": ["React", "Framer Motion", "Conversion"]
+      },
+      {
+        "name": "Artigiani del Sud",
+        "desc": "Marketplace for local artisans",
+        "tags": ["Next.js", "Firebase", "Maps"]
+      },
+      {
+        "name": "MedFlow",
+        "desc": "Dashboard for medical clinic",
+        "tags": ["React", "TypeScript", "HIPAA"]
+      },
+      {
+        "name": "Terrazza Roma",
+        "desc": "Booking system for events venue",
+        "tags": ["Next.js", "Stripe", "Calendar"]
+      }
+    ]
+  },
+  "pricing": {
+    "headline": "Clear plans, no surprises.",
+    "sub": "Choose the plan that fits your project.",
+    "popular": "Most popular",
+    "cta": "Get started",
+    "plans": [
+      {
+        "name": "Base",
+        "price": "€499",
+        "desc": "For those who need a professional online presence.",
+        "features": [
+          "Up to 5 pages",
+          "Custom design",
+          "Mobile responsive",
+          "Basic SEO",
+          "1 revision"
+        ]
+      },
+      {
+        "name": "Pro",
+        "price": "€999",
+        "desc": "For those who want to grow online with high performance.",
+        "features": [
+          "Up to 15 pages",
+          "Premium design",
+          "Custom animations",
+          "Advanced SEO",
+          "CMS integration",
+          "3 revisions",
+          "1 month support"
+        ]
+      },
+      {
+        "name": "Premium",
+        "price": "€1,999",
+        "desc": "For complex projects and teams who want the best.",
+        "features": [
+          "Unlimited pages",
+          "Full design system",
+          "E-commerce or webapp",
+          "SEO + Analytics",
+          "CI/CD + Deploy",
+          "Unlimited revisions",
+          "6 months support"
+        ]
+      }
+    ]
+  },
+  "testimonials": {
+    "headline": "What our clients say.",
+    "items": [
+      {
+        "quote": "Anti Gravity transformed our online presence. The new site increased contact requests by 40% in the first month.",
+        "name": "Giulia Ferretti",
+        "role": "CEO",
+        "company": "Studio Ferretti"
+      },
+      {
+        "quote": "Extraordinary team. Punctual, professional and with an eye for design I had never seen in other agencies.",
+        "name": "Marco Benedetti",
+        "role": "Founder",
+        "company": "Volta Fintech"
+      },
+      {
+        "quote": "Our e-commerce finally works and converts. Online sales grew 60% compared to last year.",
+        "name": "Salvatore Amato",
+        "role": "Owner",
+        "company": "Olio Meridiano"
+      },
+      {
+        "quote": "Smooth collaboration from the first call to launch. They know how to listen and translate ideas into product.",
+        "name": "Chiara Russo",
+        "role": "Marketing Manager",
+        "company": "MedFlow"
+      }
+    ]
+  },
+  "contact": {
+    "headline": "Tell us about your project.",
+    "sub": "We reply within 24 hours.",
+    "form": {
+      "name": "Name",
+      "namePlaceholder": "Your name",
+      "email": "Email",
+      "emailPlaceholder": "your@email.com",
+      "projectType": "Project type",
+      "projectTypes": [
+        "Showcase website",
+        "E-commerce",
+        "Landing page",
+        "Web app",
+        "Other"
+      ],
+      "message": "Message",
+      "messagePlaceholder": "Briefly describe your project...",
+      "submit": "Send message",
+      "submitting": "Sending...",
+      "success": "Message sent! We will reply within 24 hours.",
+      "errors": {
+        "nameRequired": "Name is required",
+        "emailInvalid": "Please enter a valid email",
+        "messageMin": "Message must be at least 10 characters"
+      }
+    },
+    "info": {
+      "email": "hello@antigravity.it",
+      "hours": "Mon–Fri, 9:00–18:00 CET",
+      "location": "Rome, Italy"
+    }
+  },
+  "footer": {
+    "tagline": "We design the digital that drives growth.",
+    "services": {
+      "title": "Services",
+      "links": ["Websites", "E-commerce", "Landing pages", "Web apps", "SEO"]
+    },
+    "company": {
+      "title": "Company",
+      "links": ["About", "Portfolio", "Blog", "Careers"]
+    },
+    "legal": {
+      "title": "Legal",
+      "links": ["Privacy policy", "Cookie policy", "Terms of service"]
+    },
+    "copyright": "© 2024 Anti Gravity. All rights reserved.",
+    "vat": "VAT IT12345678901"
+  }
+}

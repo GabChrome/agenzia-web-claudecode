@@ -1,0 +1,196 @@
+{
+  "nav": {
+    "about": "Chi siamo",
+    "portfolio": "Portfolio",
+    "pricing": "Prezzi",
+    "contact": "Contatti",
+    "cta": "Prenota una call"
+  },
+  "hero": {
+    "headline": "Siti web che convertono.",
+    "sub": "Progettiamo esperienze digitali su misura per PMI e startup italiane. Dalla strategia al codice, ogni dettaglio è pensato per far crescere il tuo business.",
+    "cta1": "Inizia il tuo progetto",
+    "cta2": "Guarda il portfolio",
+    "badge": "Agenzia web italiana"
+  },
+  "about": {
+    "headline": "Costruiamo con intenzione.",
+    "body": "Non siamo una fabbrica di siti. Siamo un piccolo team ossessionato dalla qualità: ogni progetto riceve attenzione, ogni riga di codice ha uno scopo.",
+    "speed": {
+      "title": "Velocità",
+      "desc": "Performance ottimizzate per ogni dispositivo. Lighthouse > 90 su ogni progetto che consegniamo."
+    },
+    "design": {
+      "title": "Design",
+      "desc": "Interfacce premium che riflettono il tuo brand. Nessun template, nessuna scorciatoia."
+    },
+    "support": {
+      "title": "Supporto",
+      "desc": "Non sparisci dopo il lancio. Siamo qui per iterare, ottimizzare e far crescere il sito con te."
+    }
+  },
+  "portfolio": {
+    "headline": "Lavori selezionati",
+    "sub": "Progetti reali per clienti reali.",
+    "viewProject": "Vedi progetto",
+    "projects": [
+      {
+        "name": "Olio Meridiano",
+        "desc": "E-commerce per produttore di olio EVO",
+        "tags": ["Next.js", "Shopify", "Design System"]
+      },
+      {
+        "name": "Studio Ferretti",
+        "desc": "Sito istituzionale per studio legale",
+        "tags": ["Next.js", "CMS", "SEO"]
+      },
+      {
+        "name": "Volta Fintech",
+        "desc": "Landing page per startup fintech",
+        "tags": ["React", "Framer Motion", "Conversion"]
+      },
+      {
+        "name": "Artigiani del Sud",
+        "desc": "Marketplace per artigiani locali",
+        "tags": ["Next.js", "Firebase", "Maps"]
+      },
+      {
+        "name": "MedFlow",
+        "desc": "Dashboard per clinica medica",
+        "tags": ["React", "TypeScript", "HIPAA"]
+      },
+      {
+        "name": "Terrazza Roma",
+        "desc": "Booking system per locale eventi",
+        "tags": ["Next.js", "Stripe", "Calendar"]
+      }
+    ]
+  },
+  "pricing": {
+    "headline": "Piani chiari, nessuna sorpresa.",
+    "sub": "Scegli il piano più adatto al tuo progetto.",
+    "popular": "Più scelto",
+    "cta": "Inizia ora",
+    "plans": [
+      {
+        "name": "Base",
+        "price": "€499",
+        "desc": "Per chi ha bisogno di una presenza online professionale.",
+        "features": [
+          "Fino a 5 pagine",
+          "Design personalizzato",
+          "Mobile responsive",
+          "SEO base",
+          "1 revisione"
+        ]
+      },
+      {
+        "name": "Pro",
+        "price": "€999",
+        "desc": "Per chi vuole crescere online con performance elevate.",
+        "features": [
+          "Fino a 15 pagine",
+          "Design premium",
+          "Animazioni custom",
+          "SEO avanzato",
+          "CMS integrato",
+          "3 revisioni",
+          "1 mese supporto"
+        ]
+      },
+      {
+        "name": "Premium",
+        "price": "€1.999",
+        "desc": "Per progetti complessi e team che vogliono il massimo.",
+        "features": [
+          "Pagine illimitate",
+          "Design system completo",
+          "E-commerce o webapp",
+          "SEO + Analytics",
+          "CI/CD + Deploy",
+          "Revisioni illimitate",
+          "6 mesi supporto"
+        ]
+      }
+    ]
+  },
+  "testimonials": {
+    "headline": "Cosa dicono i nostri clienti.",
+    "items": [
+      {
+        "quote": "Anti Gravity ha trasformato la nostra presenza online. Il nuovo sito ha aumentato le richieste di contatto del 40% nel primo mese.",
+        "name": "Giulia Ferretti",
+        "role": "CEO",
+        "company": "Studio Ferretti"
+      },
+      {
+        "quote": "Team straordinario. Puntuale, professionale e con un occhio per il design che non avevo mai visto in altre agenzie italiane.",
+        "name": "Marco Benedetti",
+        "role": "Fondatore",
+        "company": "Volta Fintech"
+      },
+      {
+        "quote": "Il nostro e-commerce finalmente funziona e converte. Le vendite online sono cresciute del 60% rispetto all'anno scorso.",
+        "name": "Salvatore Amato",
+        "role": "Titolare",
+        "company": "Olio Meridiano"
+      },
+      {
+        "quote": "Collaborazione senza intoppi dalla prima call al lancio. Sanno ascoltare e sanno tradurre le idee in prodotto.",
+        "name": "Chiara Russo",
+        "role": "Marketing Manager",
+        "company": "MedFlow"
+      }
+    ]
+  },
+  "contact": {
+    "headline": "Raccontaci il tuo progetto.",
+    "sub": "Rispondo entro 24 ore.",
+    "form": {
+      "name": "Nome",
+      "namePlaceholder": "Il tuo nome",
+      "email": "Email",
+      "emailPlaceholder": "tua@email.it",
+      "projectType": "Tipo di progetto",
+      "projectTypes": [
+        "Sito vetrina",
+        "E-commerce",
+        "Landing page",
+        "Web app",
+        "Altro"
+      ],
+      "message": "Messaggio",
+      "messagePlaceholder": "Descrivi brevemente il tuo progetto...",
+      "submit": "Invia messaggio",
+      "submitting": "Invio in corso...",
+      "success": "Messaggio inviato! Ti rispondo entro 24 ore.",
+      "errors": {
+        "nameRequired": "Il nome è obbligatorio",
+        "emailInvalid": "Inserisci un'email valida",
+        "messageMin": "Il messaggio deve essere di almeno 10 caratteri"
+      }
+    },
+    "info": {
+      "email": "ciao@antigravity.it",
+      "hours": "Lun–Ven, 9:00–18:00 CET",
+      "location": "Roma, Italia"
+    }
+  },
+  "footer": {
+    "tagline": "Progettiamo il digitale che fa crescere.",
+    "services": {
+      "title": "Servizi",
+      "links": ["Siti web", "E-commerce", "Landing page", "Web app", "SEO"]
+    },
+    "company": {
+      "title": "Azienda",
+      "links": ["Chi siamo", "Portfolio", "Blog", "Carriere"]
+    },
+    "legal": {
+      "title": "Legale",
+      "links": ["Privacy policy", "Cookie policy", "Termini di servizio"]
+    },
+    "copyright": "© 2024 Anti Gravity. Tutti i diritti riservati.",
+    "vat": "P.IVA 12345678901"
+  }
+}
