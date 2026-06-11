@@ -7,7 +7,10 @@ import Testimonials from '@/components/sections/Testimonials';
 import Contact from '@/components/sections/Contact';
 import Footer from '@/components/sections/Footer';
 
-export default function Home() {
+import { unstable_setRequestLocale } from 'next-intl/server';
+
+export default function Home({ params: { locale } }: { params: { locale: string } }) {
+  unstable_setRequestLocale(locale);
   return (
     <>
       <Navbar />
