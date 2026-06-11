@@ -1,6 +1,7 @@
 import { NextIntlClientProvider } from 'next-intl';
 import { getMessages } from 'next-intl/server';
 import { notFound } from 'next/navigation';
+import '../globals.css';
 
 export const metadata = {
   title: 'Anti Gravity | Siti web che convertono',
