@@ -1,18 +1,21 @@
 'use client';
 
 import { useTranslations } from 'next-intl';
-import { motion, useReducedMotion } from 'framer-motion';
-import { Star } from '@phosphor-icons/react';
+import Image from 'next/image';
 import AnimatedSection from '@/components/ui/AnimatedSection';
 
-// Avatar placeholder con seed unici
-const AVATAR_SEEDS = ['giulia-ferretti', 'marco-benedetti', 'salvatore-amato', 'chiara-russo'];
+// Placeholder avatar (se non forniti nel json)
+const AVATARS = [
+  'https://picsum.photos/seed/giulia-ferretti/80/80',
+  'https://picsum.photos/seed/marco-benedetti/80/80',
+  'https://picsum.photos/seed/salvatore-amato/80/80',
+  'https://picsum.photos/seed/chiara-russo/80/80',
+];
 
 export default function Testimonials() {
   const t = useTranslations('testimonials');
-  const reduce = useReducedMotion();
 
-  const items = t.raw('items') as Array<{
+  const testimonials = t.raw('items') as Array<{
     quote: string;
     name: string;
     role: string;
@@ -20,67 +23,86 @@ export default function Testimonials() {
   }>;
 
   return (
-    <section id="testimonials" className="py-24 lg:py-32 bg-surface">
+    <section id="testimonials" style={{ padding: '120px 0', background: 'var(--surface-1)' }}>
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
-        {/* Header — no eyebrow (sezione 5) */}
+        
         <AnimatedSection className="max-w-lg mb-16">
-          <h2 className="text-display-md font-bold text-text-primary text-balance">
+          <h2 style={{
+            fontSize: 'clamp(32px, 4vw, 52px)',
+            fontWeight: 700,
+            color: 'var(--text-1)',
+            lineHeight: 1.1
+          }}>
             {t('headline')}
           </h2>
         </AnimatedSection>
 
-        {/* Griglia 2×2 */}
-        <div className="grid md:grid-cols-2 gap-4 lg:gap-5">
-          {items.map((item, i) => (
-            <motion.blockquote
-              key={item.name}
-              initial={reduce ? false : { opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, amount: 0.3 }}
-              transition={{
-                duration: 0.5,
-                delay: (i % 2) * 0.1,
-                ease: [0.16, 1, 0.3, 1],
-              }}
-              className="bg-[#0F0F0F] rounded-2xl p-8 border border-[rgba(255,255,255,0.06)] flex flex-col gap-6"
-            >
-              {/* Stelle */}
-              <div className="flex gap-1" aria-label="5 stelle su 5">
-                {Array.from({ length: 5 }).map((_, si) => (
-                  <Star
-                    key={si}
-                    size={16}
-                    weight="fill"
-                    className="text-accent"
-                    aria-hidden="true"
-                  />
-                ))}
-              </div>
-
-              {/* Quote — max 3 righe, virgolette tipografiche */}
-              <p className="text-text-primary leading-relaxed flex-1">
-                &ldquo;{item.quote}&rdquo;
-              </p>
-
-              {/* Attribuzione */}
-              <footer className="flex items-center gap-4">
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
-                  src={`https://picsum.photos/seed/${AVATAR_SEEDS[i]}/80/80`}
-                  alt={`${item.name}, ${item.role} presso ${item.company}`}
-                  className="w-10 h-10 rounded-full object-cover flex-shrink-0"
-                  loading="lazy"
-                />
-                <div>
-                  <cite className="not-italic text-sm font-semibold text-text-primary block">
-                    {item.name}
-                  </cite>
-                  <span className="text-xs text-text-muted">
-                    {item.role}, {item.company}
-                  </span>
+        <div className="grid md:grid-cols-2 gap-5">
+          {testimonials.map((test, i) => (
+            <AnimatedSection key={test.name} delay={i * 0.1}>
+              <blockquote style={{
+                background: '#0F0F0F',
+                border: '1px solid var(--border-subtle)',
+                borderRadius: '12px',
+                padding: '28px',
+                position: 'relative',
+                overflow: 'hidden',
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '20px',
+                height: '100%'
+              }}>
+                {/* Decorazione virgolette */}
+                <div style={{
+                  position: 'absolute', top: '12px', right: '20px',
+                  fontFamily: 'var(--font-serif)', fontSize: '80px', lineHeight: 1,
+                  color: 'var(--accent)', opacity: 0.15, userSelect: 'none'
+                }} aria-hidden="true">
+                  &quot;
                 </div>
-              </footer>
-            </motion.blockquote>
+
+                <p style={{
+                  color: 'var(--text-2)',
+                  fontSize: '15px',
+                  lineHeight: 1.75,
+                  fontStyle: 'italic',
+                  flex: 1,
+                  position: 'relative',
+                  zIndex: 1
+                }}>
+                  {test.quote}
+                </p>
+
+                <div style={{
+                  borderTop: '1px solid var(--border-subtle)',
+                  paddingTop: '20px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '12px'
+                }}>
+                  <Image
+                    src={AVATARS[i % AVATARS.length]}
+                    alt={test.name}
+                    width={40}
+                    height={40}
+                    style={{ borderRadius: '50%', objectFit: 'cover', border: '1px solid var(--border-default)' }}
+                  />
+                  <div style={{ display: 'flex', flexDirection: 'column' }}>
+                    <cite style={{ fontStyle: 'normal', fontSize: '14px', fontWeight: 600, color: 'var(--text-1)' }}>
+                      {test.name}
+                    </cite>
+                    <span style={{ fontSize: '12px', color: 'var(--text-3)' }}>
+                      {test.role} - {test.company}
+                    </span>
+                  </div>
+                  <div style={{ marginLeft: 'auto', display: 'flex', gap: '2px', color: 'var(--accent)' }} aria-label="5 stelle su 5">
+                    {[...Array(5)].map((_, i) => (
+                      <span key={i}>★</span>
+                    ))}
+                  </div>
+                </div>
+              </blockquote>
+            </AnimatedSection>
           ))}
         </div>
       </div>

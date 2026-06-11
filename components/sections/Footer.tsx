@@ -1,93 +1,75 @@
 'use client';
 
-import { useTranslations } from 'next-intl';
-import { TwitterLogo, LinkedinLogo, GithubLogo } from '@phosphor-icons/react';
-
 export default function Footer() {
-  const t = useTranslations('footer');
-
-  const scrollToTop = () => {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  };
-
   return (
-    <footer className="bg-surface border-t border-[rgba(255,255,255,0.06)] pt-16 pb-8 lg:pt-24 lg:pb-12">
+    <footer style={{
+      position: 'relative',
+      paddingTop: '64px',
+      paddingBottom: '32px'
+    }}>
+      {/* Border top speciale con gradiente */}
+      <div style={{
+        position: 'absolute', top: 0, left: 0, right: 0, height: '1px',
+        background: 'linear-gradient(90deg, transparent 0%, var(--accent) 30%, var(--accent) 70%, transparent 100%)',
+        opacity: 0.25
+      }} aria-hidden="true" />
+
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
-        <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-12 lg:gap-8 mb-16 lg:mb-24">
-          
-          {/* Brand & Tagline */}
-          <div className="col-span-2 lg:col-span-2">
+        
+        {/* Top riga */}
+        <div className="flex flex-col md:flex-row justify-between gap-12 mb-16">
+          <div className="flex flex-col items-start gap-4">
             <button
-              onClick={scrollToTop}
-              className="text-text-primary font-bold text-xl tracking-tight hover:text-accent transition-colors mb-4 block"
+              onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+              className="tracking-tight hover:opacity-80 transition-opacity"
               aria-label="Anti Gravity - torna in cima"
             >
-              Anti Gravity
+              <span style={{ fontWeight: 700, color: 'var(--text-1)', fontSize: '20px' }}>Anti</span>
+              <span style={{ fontWeight: 700, color: 'var(--accent)', fontSize: '20px' }}>Gravity</span>
             </button>
-            <p className="text-text-secondary max-w-sm">
-              {t('tagline')}
-            </p>
-            <div className="flex items-center gap-4 mt-6">
-              <a href="#" className="text-text-muted hover:text-accent transition-colors" aria-label="Twitter">
-                <TwitterLogo size={24} weight="fill" />
-              </a>
-              <a href="#" className="text-text-muted hover:text-accent transition-colors" aria-label="LinkedIn">
-                <LinkedinLogo size={24} weight="fill" />
-              </a>
-              <a href="#" className="text-text-muted hover:text-accent transition-colors" aria-label="GitHub">
-                <GithubLogo size={24} weight="fill" />
-              </a>
+            <p style={{ color: 'var(--text-3)', fontSize: '15px' }}>Siti web che convertono.</p>
+          </div>
+
+          <div className="flex gap-16 flex-wrap">
+            <div className="flex flex-col gap-4">
+              <span className="eyebrow">Azienda</span>
+              <button style={{ color: 'var(--text-3)', fontSize: '14px', textAlign: 'left', transition: '150ms' }} onMouseEnter={(e) => e.currentTarget.style.color = 'var(--text-2)'} onMouseLeave={(e) => e.currentTarget.style.color = 'var(--text-3)'} onClick={() => document.getElementById('about')?.scrollIntoView({ behavior: 'smooth' })}>Chi siamo</button>
+              <button style={{ color: 'var(--text-3)', fontSize: '14px', textAlign: 'left', transition: '150ms' }} onMouseEnter={(e) => e.currentTarget.style.color = 'var(--text-2)'} onMouseLeave={(e) => e.currentTarget.style.color = 'var(--text-3)'} onClick={() => document.getElementById('portfolio')?.scrollIntoView({ behavior: 'smooth' })}>Portfolio</button>
+              <button style={{ color: 'var(--text-3)', fontSize: '14px', textAlign: 'left', transition: '150ms' }} onMouseEnter={(e) => e.currentTarget.style.color = 'var(--text-2)'} onMouseLeave={(e) => e.currentTarget.style.color = 'var(--text-3)'} onClick={() => document.getElementById('pricing')?.scrollIntoView({ behavior: 'smooth' })}>Prezzi</button>
+            </div>
+            <div className="flex flex-col gap-4">
+              <span className="eyebrow">Social</span>
+              <a href="#" style={{ color: 'var(--text-3)', fontSize: '14px', transition: '150ms' }} onMouseEnter={(e) => e.currentTarget.style.color = 'var(--text-2)'} onMouseLeave={(e) => e.currentTarget.style.color = 'var(--text-3)'}>Instagram</a>
+              <a href="#" style={{ color: 'var(--text-3)', fontSize: '14px', transition: '150ms' }} onMouseEnter={(e) => e.currentTarget.style.color = 'var(--text-2)'} onMouseLeave={(e) => e.currentTarget.style.color = 'var(--text-3)'}>LinkedIn</a>
+              <a href="#" style={{ color: 'var(--text-3)', fontSize: '14px', transition: '150ms' }} onMouseEnter={(e) => e.currentTarget.style.color = 'var(--text-2)'} onMouseLeave={(e) => e.currentTarget.style.color = 'var(--text-3)'}>GitHub</a>
+            </div>
+            <div className="flex flex-col gap-4">
+              <span className="eyebrow">Legale</span>
+              <a href="#" style={{ color: 'var(--text-3)', fontSize: '14px', transition: '150ms' }} onMouseEnter={(e) => e.currentTarget.style.color = 'var(--text-2)'} onMouseLeave={(e) => e.currentTarget.style.color = 'var(--text-3)'}>Privacy Policy</a>
+              <a href="#" style={{ color: 'var(--text-3)', fontSize: '14px', transition: '150ms' }} onMouseEnter={(e) => e.currentTarget.style.color = 'var(--text-2)'} onMouseLeave={(e) => e.currentTarget.style.color = 'var(--text-3)'}>Cookie Policy</a>
+              <a href="#" style={{ color: 'var(--text-3)', fontSize: '14px', transition: '150ms' }} onMouseEnter={(e) => e.currentTarget.style.color = 'var(--text-2)'} onMouseLeave={(e) => e.currentTarget.style.color = 'var(--text-3)'}>Termini e Condizioni</a>
             </div>
           </div>
+        </div>
 
-          {/* Servizi */}
-          <div className="col-span-1">
-            <h3 className="text-sm font-semibold text-text-primary mb-4">{t('services.title')}</h3>
-            <ul className="flex flex-col gap-3" role="list">
-              {(t.raw('services.links') as string[]).map((link) => (
-                <li key={link}>
-                  <a href="#" className="text-sm text-text-muted hover:text-text-primary transition-colors">
-                    {link}
-                  </a>
-                </li>
-              ))}
-            </ul>
+        {/* Bottom riga */}
+        <div style={{
+          borderTop: '1px solid var(--border-subtle)',
+          paddingTop: '32px',
+          display: 'flex',
+          flexDirection: 'column',
+          gap: '16px',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+        }} className="md:flex-row">
+          <div style={{ color: 'var(--text-3)', fontSize: '13px' }}>
+            © {new Date().getFullYear()} Anti Gravity. P.IVA 0123456789. Tutti i diritti riservati.
           </div>
-
-          {/* Azienda */}
-          <div className="col-span-1">
-            <h3 className="text-sm font-semibold text-text-primary mb-4">{t('company.title')}</h3>
-            <ul className="flex flex-col gap-3" role="list">
-              {(t.raw('company.links') as string[]).map((link) => (
-                <li key={link}>
-                  <a href="#" className="text-sm text-text-muted hover:text-text-primary transition-colors">
-                    {link}
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          {/* Legale */}
-          <div className="col-span-2 md:col-span-1">
-            <h3 className="text-sm font-semibold text-text-primary mb-4">{t('legal.title')}</h3>
-            <ul className="flex flex-col gap-3" role="list">
-              {(t.raw('legal.links') as string[]).map((link) => (
-                <li key={link}>
-                  <a href="#" className="text-sm text-text-muted hover:text-text-primary transition-colors">
-                    {link}
-                  </a>
-                </li>
-              ))}
-            </ul>
+          <div style={{ color: 'var(--text-3)', fontSize: '13px' }}>
+            Made with ♥ in Italia
           </div>
         </div>
 
-        {/* Bottom Bar */}
-        <div className="pt-8 border-t border-[rgba(255,255,255,0.06)] flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-text-muted">
-          <p>{t('copyright')}</p>
-          <p>{t('vat')}</p>
-        </div>
       </div>
     </footer>
   );

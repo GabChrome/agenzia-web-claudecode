@@ -35,6 +35,26 @@ export default async function LocaleLayout({
         <NextIntlClientProvider messages={messages}>
           {children}
         </NextIntlClientProvider>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "LocalBusiness",
+              "name": "Anti Gravity",
+              "image": "https://agenzia-web-claudecode.gabrielefornabaio.workers.dev/og-image.jpg",
+              "@id": "https://agenzia-web-claudecode.gabrielefornabaio.workers.dev",
+              "url": "https://agenzia-web-claudecode.gabrielefornabaio.workers.dev",
+              "telephone": "",
+              "priceRange": "€€",
+              "address": {
+                "@type": "PostalAddress",
+                "addressLocality": "Italia",
+                "addressCountry": "IT"
+              }
+            })
+          }}
+        />
       </body>
     </html>
   );

@@ -8,6 +8,15 @@ import Contact from '@/components/sections/Contact';
 import Footer from '@/components/sections/Footer';
 
 import { unstable_setRequestLocale } from 'next-intl/server';
+import { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: 'Anti Gravity | Siti web che convertono',
+  description: 'Agenzia web specializzata in siti web, e-commerce e web app ad alte prestazioni per PMI e startup italiane.',
+  openGraph: {
+    images: ['/og-image.jpg']
+  }
+};
 
 export default function Home({ params: { locale } }: { params: { locale: string } }) {
   unstable_setRequestLocale(locale);

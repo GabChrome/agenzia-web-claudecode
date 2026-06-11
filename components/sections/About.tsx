@@ -1,66 +1,91 @@
 'use client';
 
-import { useTranslations } from 'next-intl';
-import { motion, useReducedMotion } from 'framer-motion';
-import { Lightning, Palette, Headset } from '@phosphor-icons/react';
 import AnimatedSection from '@/components/ui/AnimatedSection';
 
-const FEATURES = [
-  { key: 'speed', Icon: Lightning },
-  { key: 'design', Icon: Palette },
-  { key: 'support', Icon: Headset },
-] as const;
-
 export default function About() {
-  const t = useTranslations('about');
-  const reduce = useReducedMotion();
-
   return (
-    <section id="about" className="py-24 lg:py-32">
+    <section id="about" style={{ padding: '120px 0' }}>
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
-        {/* Header — no eyebrow (sezione 2, policy: max 1 ogni 3) */}
-        <AnimatedSection className="max-w-2xl mb-16 lg:mb-20">
-          <h2 className="text-display-md font-bold text-text-primary mb-6 text-balance">
-            {t('headline')}
-          </h2>
-          <p className="text-lg text-text-secondary leading-relaxed text-pretty">
-            {t('body')}
-          </p>
-        </AnimatedSection>
-
-        {/* Feature cards — variazione di dimensione per non essere identiche */}
-        <div className="grid md:grid-cols-3 gap-px bg-[rgba(255,255,255,0.06)] rounded-2xl overflow-hidden">
-          {FEATURES.map(({ key, Icon }, i) => (
-            <motion.div
-              key={key}
-              initial={reduce ? false : { opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, amount: 0.3 }}
-              transition={{
-                duration: 0.5,
-                delay: i * 0.1,
-                ease: [0.16, 1, 0.3, 1],
+        <AnimatedSection className="grid grid-cols-1 md:grid-cols-[60%_40%] gap-20 items-start">
+          
+          {/* Colonna Sinistra */}
+          <div className="flex flex-col items-start">
+            <span className="eyebrow" style={{ marginBottom: '16px' }}>
+              Chi siamo
+            </span>
+            <h2 style={{
+              fontSize: 'clamp(32px, 4vw, 52px)',
+              fontWeight: 700,
+              letterSpacing: '-0.02em',
+              color: 'var(--text-1)',
+              lineHeight: 1.1
+            }}>
+              Non una fabbrica<br />di siti.
+            </h2>
+            <p style={{
+              color: 'var(--text-2)',
+              fontSize: '16px',
+              lineHeight: 1.8,
+              maxWidth: '480px',
+              marginTop: '20px'
+            }}>
+              Siamo un piccolo team ossessionato dalla qualità. 
+              Non usiamo template, non esternalizziamo e non prendiamo più progetti di quanti ne possiamo curare. 
+              Ogni riga di codice che scriviamo ha uno scopo preciso: far crescere il tuo business.
+            </p>
+            <button
+              style={{
+                color: 'var(--accent)',
+                fontWeight: 600,
+                fontSize: '14px',
+                marginTop: '28px',
+                transition: 'opacity 200ms',
+                background: 'transparent',
+                border: 'none',
+                cursor: 'pointer'
               }}
-              className="bg-surface p-8 lg:p-10 group hover:bg-surface-high transition-colors duration-200"
+              onMouseEnter={(e) => e.currentTarget.style.opacity = '0.8'}
+              onMouseLeave={(e) => e.currentTarget.style.opacity = '1'}
+              onClick={() => document.getElementById('portfolio')?.scrollIntoView({ behavior: 'smooth' })}
             >
-              {/* Icon con sfondo accent muted */}
-              <div className="w-11 h-11 rounded-xl bg-[rgba(108,99,255,0.12)] flex items-center justify-center mb-6 group-hover:bg-[rgba(108,99,255,0.2)] transition-colors duration-200">
-                <Icon
-                  size={22}
-                  weight="bold"
-                  className="text-accent"
-                  aria-hidden="true"
-                />
+              Scopri il processo →
+            </button>
+          </div>
+
+          {/* Colonna Destra (Stats) */}
+          <div style={{
+            display: 'flex',
+            flexDirection: 'column',
+          }}>
+            {[
+              { num: '50+', label: 'Progetti' },
+              { num: '4 sett.', label: 'Consegna media' },
+              { num: '90+', label: 'Lighthouse' }
+            ].map((stat, i, arr) => (
+              <div key={i} style={{
+                padding: '24px 0',
+                borderBottom: i !== arr.length - 1 ? '1px solid var(--border-subtle)' : 'none',
+              }}>
+                <div style={{
+                  fontSize: '52px',
+                  fontWeight: 700,
+                  color: 'var(--accent)',
+                  lineHeight: 1
+                }}>
+                  {stat.num}
+                </div>
+                <div style={{
+                  color: 'var(--text-3)',
+                  fontSize: '13px',
+                  marginTop: '4px'
+                }}>
+                  {stat.label}
+                </div>
               </div>
-              <h3 className="text-lg font-semibold text-text-primary mb-3">
-                {t(`${key}.title`)}
-              </h3>
-              <p className="text-text-secondary leading-relaxed">
-                {t(`${key}.desc`)}
-              </p>
-            </motion.div>
-          ))}
-        </div>
+            ))}
+          </div>
+
+        </AnimatedSection>
       </div>
     </section>
   );
