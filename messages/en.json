@@ -216,7 +216,9 @@
         "role": "Co-founder — Artigiani del Sud",
         "image": "https://randomuser.me/api/portraits/men/28.jpg"
       }
-    ]
+    ],
+    "ariaPrev": "Previous testimonial",
+    "ariaNext": "Next testimonial"
   },
   "contact": {
     "headline": "Tell us about your project.",

@@ -24,20 +24,38 @@ export default function Pricing() {
   }));
 
   return (
-    <section id="pricing" className="py-16 md:py-[120px]">
-      <div className="max-w-7xl mx-auto px-6 lg:px-8">
+    <section
+      id="pricing"
+      className="py-16 md:py-[120px]"
+      style={{ background: 'var(--dark-bg)', position: 'relative', overflow: 'hidden' }}
+    >
+      {/* Glow ambientali, coerenti con la scena 3D */}
+      <div style={{
+        position: 'absolute', top: '-10%', right: '-5%',
+        width: '560px', height: '560px',
+        background: 'radial-gradient(circle, rgba(200,160,64,0.09) 0%, transparent 70%)',
+        pointerEvents: 'none',
+      }} aria-hidden="true" />
+      <div style={{
+        position: 'absolute', bottom: '-15%', left: '-8%',
+        width: '480px', height: '480px',
+        background: 'radial-gradient(circle, rgba(138,100,32,0.08) 0%, transparent 70%)',
+        pointerEvents: 'none',
+      }} aria-hidden="true" />
+
+      <div className="max-w-7xl mx-auto px-6 lg:px-8" style={{ position: 'relative', zIndex: 1 }}>
 
         <AnimatedSection className="flex flex-col items-center text-center mb-16">
           <h2 style={{
             fontSize: 'clamp(32px, 4vw, 52px)',
             fontWeight: 700,
-            color: 'var(--text-1)',
+            color: 'var(--dark-text-1)',
             marginBottom: '16px',
             lineHeight: 1.1,
           }}>
             {t('headline')}
           </h2>
-          <p style={{ color: 'var(--text-2)', fontSize: '18px', maxWidth: '500px' }}>
+          <p style={{ color: 'var(--dark-text-2)', fontSize: '18px', maxWidth: '500px' }}>
             {t('sub')}
           </p>
         </AnimatedSection>
@@ -46,22 +64,24 @@ export default function Pricing() {
           {plans.map((plan, i) => (
             <AnimatedSection delay={i * 0.1} key={plan.id} className="h-full">
               <div
-                className={plan.popular ? 'border-gradient' : ''}
+                className="glass-card"
                 style={{
                   height: '100%',
                   display: 'flex',
                   flexDirection: 'column',
-                  background: plan.popular ? 'var(--surface-2)' : 'var(--surface-1)',
-                  border: plan.popular ? 'none' : '1px solid var(--border-subtle)',
-                  borderRadius: '16px',
                   padding: 'clamp(20px, 4vw, 32px)',
                   position: 'relative',
+                  ...(plan.popular && {
+                    background: 'rgba(200,160,64,0.07)',
+                    border: '1px solid rgba(200,160,64,0.50)',
+                    boxShadow: '0 0 48px rgba(200,160,64,0.12)',
+                  }),
                 }}
               >
                 {plan.popular && (
                   <div style={{
                     position: 'absolute', top: '-13px', left: '50%', transform: 'translateX(-50%)',
-                    background: 'var(--accent)', color: '#F8F5F0', fontSize: '11px', fontWeight: 700,
+                    background: 'var(--accent-bright)', color: '#14120E', fontSize: '11px', fontWeight: 700,
                     padding: '4px 14px', borderRadius: '999px', whiteSpace: 'nowrap',
                   }}>
                     {t('popularBadge')}
@@ -70,24 +90,24 @@ export default function Pricing() {
 
                 {/* Intestazione */}
                 <div style={{ marginBottom: '28px' }}>
-                  <div className="eyebrow" style={{ marginBottom: '16px' }}>{plan.name}</div>
+                  <div className="eyebrow" style={{ marginBottom: '16px', color: 'var(--dark-text-3)' }}>{plan.name}</div>
 
                   {/* Prezzo setup */}
                   <div style={{ display: 'flex', alignItems: 'baseline' }}>
-                    <span style={{ fontSize: '40px', fontWeight: 700, color: 'var(--text-1)', lineHeight: 1 }}>
+                    <span style={{ fontSize: '40px', fontWeight: 700, color: 'var(--dark-text-1)', lineHeight: 1 }}>
                       {plan.setup}
                     </span>
-                    <span style={{ fontSize: '13px', color: 'var(--text-3)', marginLeft: '6px' }}>
+                    <span style={{ fontSize: '13px', color: 'var(--dark-text-3)', marginLeft: '6px' }}>
                       {t('onetimeLabel')}
                     </span>
                   </div>
 
                   {/* Canone mensile */}
-                  <div style={{ marginTop: '8px', fontSize: '15px', color: 'var(--text-2)' }}>
-                    +&nbsp;<span style={{ color: 'var(--accent)', fontWeight: 600 }}>{plan.monthly}</span>
+                  <div style={{ marginTop: '8px', fontSize: '15px', color: 'var(--dark-text-2)' }}>
+                    +&nbsp;<span style={{ color: 'var(--accent-bright)', fontWeight: 600 }}>{plan.monthly}</span>
                   </div>
 
-                  <p style={{ fontSize: '14px', color: 'var(--text-2)', lineHeight: 1.6, marginTop: '16px' }}>
+                  <p style={{ fontSize: '14px', color: 'var(--dark-text-2)', lineHeight: 1.6, marginTop: '16px' }}>
                     {plan.desc}
                   </p>
                 </div>
@@ -95,15 +115,15 @@ export default function Pricing() {
                 {/* Feature list */}
                 <ul style={{ display: 'flex', flexDirection: 'column', gap: '10px', flex: 1, marginBottom: '16px' }}>
                   {plan.features.map(f => (
-                    <li key={f} style={{ display: 'flex', alignItems: 'flex-start', gap: '10px', fontSize: '14px', color: 'var(--text-2)' }}>
-                      <span style={{ color: 'var(--accent)', fontWeight: 700, flexShrink: 0 }}>✓</span>
+                    <li key={f} style={{ display: 'flex', alignItems: 'flex-start', gap: '10px', fontSize: '14px', color: 'var(--dark-text-2)' }}>
+                      <span style={{ color: 'var(--accent-bright)', fontWeight: 700, flexShrink: 0 }}>✓</span>
                       {f}
                     </li>
                   ))}
                 </ul>
 
                 {/* Nota */}
-                <p style={{ fontSize: '12px', color: 'var(--text-3)', marginBottom: '24px', lineHeight: 1.5 }}>
+                <p style={{ fontSize: '12px', color: 'var(--dark-text-3)', marginBottom: '24px', lineHeight: 1.5 }}>
                   {plan.note}
                 </p>
 
@@ -112,9 +132,9 @@ export default function Pricing() {
                   className={plan.popular ? 'btn-glow' : ''}
                   style={{
                     width: '100%',
-                    background: plan.popular ? 'var(--accent)' : 'transparent',
-                    border: plan.popular ? 'none' : '1px solid var(--border-default)',
-                    color: plan.popular ? '#F8F5F0' : 'var(--text-1)',
+                    background: plan.popular ? 'var(--accent-bright)' : 'rgba(255,255,255,0.04)',
+                    border: plan.popular ? 'none' : '1px solid rgba(255,255,255,0.18)',
+                    color: plan.popular ? '#14120E' : 'var(--dark-text-1)',
                     padding: '12px',
                     borderRadius: '8px',
                     fontSize: '14px',
@@ -125,14 +145,14 @@ export default function Pricing() {
                   }}
                   onMouseEnter={(e) => {
                     if (!plan.popular) {
-                      e.currentTarget.style.borderColor = 'var(--border-strong)';
-                      e.currentTarget.style.background = 'rgba(0,0,0,0.04)';
+                      e.currentTarget.style.borderColor = 'rgba(255,255,255,0.40)';
+                      e.currentTarget.style.background = 'rgba(255,255,255,0.08)';
                     }
                   }}
                   onMouseLeave={(e) => {
                     if (!plan.popular) {
-                      e.currentTarget.style.borderColor = 'var(--border-default)';
-                      e.currentTarget.style.background = 'transparent';
+                      e.currentTarget.style.borderColor = 'rgba(255,255,255,0.18)';
+                      e.currentTarget.style.background = 'rgba(255,255,255,0.04)';
                     }
                   }}
                   onClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })}

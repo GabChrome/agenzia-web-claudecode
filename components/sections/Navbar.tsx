@@ -52,14 +52,14 @@ export default function Navbar() {
         transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
       >
         <div className="max-w-7xl mx-auto px-6 lg:px-8 h-full flex items-center justify-between">
-          {/* Logo testuale — solo mobile */}
+          {/* Logo testuale — solo mobile (chiaro sopra la hero scura, scuro dopo lo scroll) */}
           <button
             onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
             className="tracking-tight hover:opacity-80 transition-opacity lg:hidden"
             aria-label={t('ariaScrollTop')}
           >
-            <span style={{ fontWeight: 700, color: 'var(--text-1)' }}>Anti</span>
-            <span style={{ fontWeight: 700, color: 'var(--accent)' }}>Gravity</span>
+            <span style={{ fontWeight: 700, color: scrolled || mobileOpen ? 'var(--text-1)' : 'var(--dark-text-1)' }}>Anti</span>
+            <span style={{ fontWeight: 700, color: scrolled || mobileOpen ? 'var(--accent)' : 'var(--accent-bright)' }}>Gravity</span>
           </button>
 
           {/* Pill nav — solo desktop */}
@@ -80,8 +80,8 @@ export default function Navbar() {
 
           {/* Desktop right */}
           <div className="hidden lg:flex items-center gap-5">
-            <LanguageSwitcher />
-            <div style={{ width: '1px', height: '14px', background: 'var(--border-subtle)' }} />
+            <LanguageSwitcher light={!scrolled} />
+            <div style={{ width: '1px', height: '14px', background: scrolled ? 'var(--border-subtle)' : 'rgba(255,255,255,0.15)' }} />
             <button
               className="btn-glow"
               onClick={() => scrollTo('contact')}
@@ -104,7 +104,7 @@ export default function Navbar() {
           {/* Mobile hamburger */}
           <button
             className="lg:hidden p-2 rounded-lg"
-            style={{ color: 'var(--text-1)' }}
+            style={{ color: scrolled || mobileOpen ? 'var(--text-1)' : 'var(--dark-text-1)' }}
             onClick={() => setMobileOpen(!mobileOpen)}
             aria-label={mobileOpen ? t('ariaCloseMenu') : t('ariaOpenMenu')}
           >

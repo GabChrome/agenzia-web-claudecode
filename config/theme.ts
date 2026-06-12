@@ -28,6 +28,18 @@ export const theme = {
     success:         '#2D8A4E',
     error:           '#C0392B',
   },
+  // Palette immersiva condivisa tra hero 3D, pricing e testimonials,
+  // estratta dai materiali della scena (oro, bronzo, avorio su fondo scuro)
+  darkColors: {
+    bg:            '#0E0D0B',
+    surface:       'rgba(255,255,255,0.045)',
+    border:        'rgba(255,255,255,0.09)',
+    textPrimary:   '#F2EEE7',
+    textSecondary: '#B5AEA2',
+    textTertiary:  '#8C8578',
+    accentBright:  '#C8A040',
+    accentBronze:  '#8A6420',
+  },
   fonts: {
     sans:  '"Plus Jakarta Sans", sans-serif',
     serif: '"Instrument Serif", serif',
