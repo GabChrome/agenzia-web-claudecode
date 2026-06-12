@@ -24,7 +24,8 @@ export const TestimonialsColumn = (props: {
           ease: "linear",
           repeatType: "loop",
         }}
-        style={{ display: "flex", flexDirection: "column", gap: "28px", paddingBottom: "28px" }}
+        /* gap ridotto a 14px: separati ma non distanti */
+        style={{ display: "flex", flexDirection: "column", gap: "14px", paddingBottom: "14px" }}
       >
         {[...new Array(2).fill(0).map((_, index) => (
           <React.Fragment key={index}>
@@ -32,52 +33,44 @@ export const TestimonialsColumn = (props: {
               <div
                 key={i}
                 style={{
-                  background: "linear-gradient(145deg, #1e1e1e 0%, var(--surface-2) 100%)",
-                  /* Bordi asimmetrici: top-left più chiari (luce), bottom-right più scuri (ombra) */
-                  borderTop: "1px solid rgba(255,255,255,0.13)",
-                  borderLeft: "1px solid rgba(255,255,255,0.09)",
-                  borderRight: "1px solid rgba(255,255,255,0.03)",
-                  borderBottom: "1px solid rgba(255,255,255,0.02)",
-                  borderRadius: "14px",
-                  padding: "22px",
+                  /* bg #050505 → leggermente più scuro del bg principale (#080808) */
+                  background: "#050505",
+                  border: "1px solid rgba(255,255,255,0.09)",
+                  borderRadius: "12px",
+                  padding: "20px",
                   maxWidth: "300px",
                   width: "100%",
-                  /* Ombra direzionale 3D: offset bottom-right + profondità */
-                  boxShadow: [
-                    "4px 8px 20px rgba(0,0,0,0.55)",   /* ombra principale offset */
-                    "1px 2px 0px rgba(0,0,0,0.8)",      /* bordo tight per depth */
-                    "inset 0 1px 0 rgba(255,255,255,0.06)", /* highlight interno top */
-                  ].join(", "),
+                  /* Nessuna ombra tra i blocchi, solo una shadow diffusa neutra */
+                  boxShadow: "0 2px 12px rgba(0,0,0,0.5)",
                   position: "relative",
                   overflow: "hidden",
-                  /* Piccola rotazione 3D percettiva */
-                  transform: "perspective(600px) rotateX(1deg)",
-                  transformStyle: "preserve-3d",
                 }}
               >
-                {/* Virgoletta decorativa accent */}
+                {/* Virgoletta decorativa */}
                 <div style={{
-                  position: "absolute", top: "10px", right: "14px",
-                  fontFamily: "var(--font-serif)", fontSize: "52px", lineHeight: 1,
-                  color: "var(--accent)", opacity: 0.13, userSelect: "none",
+                  position: "absolute", top: "8px", right: "14px",
+                  fontFamily: "var(--font-serif)", fontSize: "48px", lineHeight: 1,
+                  color: "var(--accent)", opacity: 0.14, userSelect: "none",
                   pointerEvents: "none",
                 }}>
                   &quot;
                 </div>
 
+                {/* Testo citazione: colore chiaro per massima leggibilità */}
                 <p style={{
-                  color: "var(--text-2)",
+                  color: "#C8C8C8",
                   fontSize: "13.5px",
-                  lineHeight: 1.72,
+                  lineHeight: 1.75,
                   fontStyle: "italic",
                   position: "relative",
                   zIndex: 1,
+                  margin: 0,
                 }}>
                   {text}
                 </p>
 
                 <div style={{
-                  borderTop: "1px solid var(--border-subtle)",
+                  borderTop: "1px solid rgba(255,255,255,0.07)",
                   paddingTop: "14px",
                   marginTop: "14px",
                   display: "flex",
@@ -88,22 +81,23 @@ export const TestimonialsColumn = (props: {
                   <img
                     src={image}
                     alt={name}
-                    width={34}
-                    height={34}
+                    width={32}
+                    height={32}
                     style={{
                       borderRadius: "50%",
                       objectFit: "cover",
-                      border: "1px solid var(--border-default)",
-                      width: "34px",
-                      height: "34px",
+                      border: "1px solid rgba(255,255,255,0.12)",
+                      width: "32px",
+                      height: "32px",
                       flexShrink: 0,
                     }}
                   />
                   <div style={{ minWidth: 0 }}>
+                    {/* Nome: bianco pieno, ben visibile */}
                     <div style={{
-                      color: "var(--text-1)",
+                      color: "#FFFFFF",
                       fontSize: "13px",
-                      fontWeight: 600,
+                      fontWeight: 700,
                       lineHeight: 1.3,
                       whiteSpace: "nowrap",
                       overflow: "hidden",
@@ -111,8 +105,9 @@ export const TestimonialsColumn = (props: {
                     }}>
                       {name}
                     </div>
+                    {/* Ruolo: grigio medio leggibile */}
                     <div style={{
-                      color: "var(--text-3)",
+                      color: "#666",
                       fontSize: "11.5px",
                       lineHeight: 1.4,
                     }}>
