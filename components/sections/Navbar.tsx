@@ -29,7 +29,7 @@ export default function Navbar() {
         className="fixed top-0 left-0 right-0 z-50 transition-all duration-300"
         style={{
           height: '60px',
-          background: scrolled ? 'rgba(8,8,8,0.85)' : 'rgba(8,8,8,0)',
+          background: scrolled ? 'rgba(248,245,240,0.93)' : 'rgba(248,245,240,0)',
           backdropFilter: scrolled ? 'blur(20px)' : 'none',
           WebkitBackdropFilter: scrolled ? 'blur(20px)' : 'none',
           borderBottom: scrolled ? '1px solid var(--border-subtle)' : '1px solid transparent'
@@ -78,7 +78,7 @@ export default function Navbar() {
               onClick={() => scrollTo('contact')}
               style={{
                 background: 'var(--accent)',
-                color: 'white',
+                color: '#F8F5F0',
                 padding: '8px 18px',
                 borderRadius: '8px',
                 fontSize: '14px',
@@ -106,7 +106,7 @@ export default function Navbar() {
 
       {/* Mobile menu */}
       <div
-        className={`fixed inset-0 z-40 bg-[rgba(8,8,8,0.98)] backdrop-blur-[12px] lg:hidden flex flex-col pt-24 px-6 transition-opacity duration-300 ${
+        className={`fixed inset-0 z-40 bg-[rgba(248,245,240,0.98)] backdrop-blur-[12px] lg:hidden flex flex-col pt-24 px-6 transition-opacity duration-300 ${
           mobileOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'
         }`}
       >
@@ -130,7 +130,7 @@ export default function Navbar() {
             onClick={() => scrollTo('contact')}
             style={{
               background: 'var(--accent)',
-              color: 'white',
+              color: '#F8F5F0',
               padding: '12px 24px',
               borderRadius: '8px',
               fontSize: '16px',

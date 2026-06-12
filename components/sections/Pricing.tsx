@@ -68,7 +68,7 @@ export default function Pricing() {
                 borderRadius: '999px',
                 fontSize: '14px',
                 fontWeight: 600,
-                color: !isAnnual ? 'white' : 'var(--text-3)',
+                color: !isAnnual ? '#F8F5F0' : 'var(--text-3)',
                 background: !isAnnual ? 'var(--accent)' : 'transparent',
                 transition: 'all 200ms'
               }}
@@ -82,7 +82,7 @@ export default function Pricing() {
                 borderRadius: '999px',
                 fontSize: '14px',
                 fontWeight: 600,
-                color: isAnnual ? 'white' : 'var(--text-3)',
+                color: isAnnual ? '#F8F5F0' : 'var(--text-3)',
                 background: isAnnual ? 'var(--accent)' : 'transparent',
                 transition: 'all 200ms',
                 display: 'flex',
@@ -116,7 +116,7 @@ export default function Pricing() {
                 {plan.popular && (
                   <div style={{
                     position: 'absolute', top: '-13px', left: '50%', transform: 'translateX(-50%)',
-                    background: 'var(--accent)', color: 'white', fontSize: '11px', fontWeight: 700,
+                    background: 'var(--accent)', color: '#F8F5F0', fontSize: '11px', fontWeight: 700,
                     padding: '4px 14px', borderRadius: '999px'
                   }}>
                     {t('popularBadge')}
@@ -149,7 +149,7 @@ export default function Pricing() {
                     width: '100%',
                     background: plan.popular ? 'var(--accent)' : 'transparent',
                     border: plan.popular ? 'none' : '1px solid var(--border-default)',
-                    color: plan.popular ? 'white' : 'var(--text-1)',
+                    color: plan.popular ? '#F8F5F0' : 'var(--text-1)',
                     padding: '12px',
                     borderRadius: '8px',
                     fontSize: '14px',
@@ -160,7 +160,7 @@ export default function Pricing() {
                   onMouseEnter={(e) => {
                     if (!plan.popular) {
                       e.currentTarget.style.borderColor = 'var(--border-strong)';
-                      e.currentTarget.style.background = 'rgba(255,255,255,0.04)';
+                      e.currentTarget.style.background = 'rgba(0,0,0,0.04)';
                     }
                   }}
                   onMouseLeave={(e) => {

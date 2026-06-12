@@ -23,7 +23,7 @@ function Icosahedron() {
       <mesh ref={meshRef}>
         <icosahedronGeometry args={[1.4, 1]} />
         <meshBasicMaterial
-          color="#7C6EF8"
+          color="#9A7830"
           wireframe
           transparent
           opacity={0.55}
@@ -33,7 +33,7 @@ function Icosahedron() {
       <mesh rotation={[0.5, 0, 0.3]}>
         <icosahedronGeometry args={[0.7, 1]} />
         <meshBasicMaterial
-          color="#7C6EF8"
+          color="#9A7830"
           wireframe
           transparent
           opacity={0.25}
@@ -58,7 +58,7 @@ export default function HeroScene() {
       <div style={{
         position: 'absolute',
         inset: '20%',
-        background: 'radial-gradient(circle, rgba(124,110,248,0.18) 0%, transparent 70%)',
+        background: 'radial-gradient(circle, rgba(154,120,48,0.15) 0%, transparent 70%)',
         borderRadius: '50%',
         filter: 'blur(40px)',
         zIndex: 0,
@@ -68,8 +68,8 @@ export default function HeroScene() {
         gl={{ alpha: true, antialias: true }}
         style={{ position: 'relative', zIndex: 1 }}
       >
-        <ambientLight color="#7C6EF8" intensity={0.5} />
-        <pointLight position={[2, 2, 2]} color="#ffffff" intensity={0.3} />
+        <ambientLight color="#C8A040" intensity={0.4} />
+        <pointLight position={[2, 2, 2]} color="#F5E8C0" intensity={0.5} />
         <Suspense fallback={null}>
           <Icosahedron />
         </Suspense>

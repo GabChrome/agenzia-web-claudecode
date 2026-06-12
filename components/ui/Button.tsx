@@ -28,9 +28,9 @@ export default function Button({
     primary:
       'bg-accent text-white hover:bg-accent-hover active:scale-[0.98]',
     secondary:
-      'bg-transparent text-text-primary border border-[#1F1F1F] hover:border-[rgba(255,255,255,0.2)] hover:bg-[rgba(255,255,255,0.04)] active:scale-[0.98]',
+      'bg-transparent text-text-primary border border-[rgba(0,0,0,0.15)] hover:border-[rgba(0,0,0,0.25)] hover:bg-[rgba(0,0,0,0.04)] active:scale-[0.98]',
     ghost:
-      'bg-transparent text-text-secondary hover:text-text-primary hover:bg-[rgba(255,255,255,0.04)] active:scale-[0.98]',
+      'bg-transparent text-text-secondary hover:text-text-primary hover:bg-[rgba(0,0,0,0.04)] active:scale-[0.98]',
   };
 
   const sizes = {

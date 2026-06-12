@@ -30,7 +30,7 @@ export default function LanguageSwitcher() {
       >
         IT
       </motion.button>
-      <span className="text-[#1F1F1F]" aria-hidden="true">|</span>
+      <span className="text-[rgba(0,0,0,0.2)]" aria-hidden="true">|</span>
       <motion.button
         whileHover={{ opacity: 1 }}
         onClick={() => switchLocale('en')}

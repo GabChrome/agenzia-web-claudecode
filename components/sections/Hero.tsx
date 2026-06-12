@@ -24,7 +24,7 @@ export default function Hero() {
             <div style={{
               display: 'inline-flex', alignItems: 'center', gap: 8,
               border: '1px solid var(--border-default)',
-              background: 'rgba(124,110,248,0.06)',
+              background: 'rgba(154,120,48,0.07)',
               borderRadius: 999, padding: '5px 14px',
               fontSize: 12, color: 'var(--text-2)', marginBottom: 28,
             }}>
@@ -58,7 +58,7 @@ export default function Hero() {
                 className="btn-glow"
                 style={{
                   background: 'var(--accent)',
-                  color: 'white',
+                  color: '#F8F5F0',
                   padding: '13px 26px',
                   borderRadius: '10px',
                   fontWeight: 600,

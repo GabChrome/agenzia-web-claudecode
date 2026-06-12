@@ -5,19 +5,19 @@
 @tailwind utilities;
 
 :root {
-  --bg:             #080808;
-  --surface-1:      #0F0F0F;
-  --surface-2:      #161616;
-  --border-subtle:  rgba(255,255,255,0.06);
-  --border-default: rgba(255,255,255,0.10);
-  --border-strong:  rgba(255,255,255,0.18);
-  --accent:         #7C6EF8;
-  --accent-glow:    rgba(124,110,248,0.15);
-  --text-1:         #EDEDED;
-  --text-2:         #888888;
-  --text-3:         #555555;
-  --success:        #4ADE80;
-  --error:          #F87171;
+  --bg:             #F8F5F0;
+  --surface-1:      #EFEAE3;
+  --surface-2:      #E6DFD6;
+  --border-subtle:  rgba(0,0,0,0.07);
+  --border-default: rgba(0,0,0,0.12);
+  --border-strong:  rgba(0,0,0,0.22);
+  --accent:         #9A7830;
+  --accent-glow:    rgba(154,120,48,0.12);
+  --text-1:         #1A1814;
+  --text-2:         #5E5850;
+  --text-3:         #8A837D;
+  --success:        #2D8A4E;
+  --error:          #C0392B;
   --font-sans:      'Plus Jakarta Sans', sans-serif;
   --font-serif:     'Instrument Serif', serif;
 }
@@ -27,7 +27,11 @@
 html { scroll-behavior: smooth; }
 
 body {
-  background: var(--bg);
+  background-color: var(--bg);
+  background-image:
+    radial-gradient(ellipse 90% 70% at 8% 18%, rgba(255,252,248,0.85) 0%, transparent 100%),
+    radial-gradient(ellipse 70% 90% at 88% 80%, rgba(238,228,212,0.45) 0%, transparent 100%),
+    linear-gradient(128deg, rgba(255,255,255,0.25) 0%, transparent 28%);
   color: var(--text-1);
   font-family: var(--font-sans);
   font-size: 16px;
@@ -42,7 +46,7 @@ body::before {
   inset: 0;
   z-index: 0;
   pointer-events: none;
-  opacity: 0.025;
+  opacity: 0.04;
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
 }
 
@@ -52,25 +56,25 @@ body::before {
 ::-webkit-scrollbar-thumb { background: var(--surface-2); border-radius: 2px; }
 
 /* Selection */
-::selection { background: rgba(124,110,248,0.25); color: var(--text-1); }
+::selection { background: rgba(154,120,48,0.18); color: var(--text-1); }
 
 /* Focus */
 :focus-visible {
-  outline: 2px solid rgba(124,110,248,0.6);
+  outline: 2px solid rgba(154,120,48,0.55);
   outline-offset: 2px;
 }
 
-/* Bordo con gradiente utility */
+/* Bordo card con rifinitura dorata */
 .border-gradient {
   border: 1px solid transparent;
   background:
-    linear-gradient(var(--surface-1), var(--surface-1)) padding-box,
-    linear-gradient(135deg, rgba(255,255,255,0.12), rgba(255,255,255,0.03)) border-box;
+    linear-gradient(var(--surface-2), var(--surface-2)) padding-box,
+    linear-gradient(135deg, rgba(154,120,48,0.50), rgba(154,120,48,0.12)) border-box;
 }
 
 /* Glow bottone accent */
 .btn-glow:hover {
-  box-shadow: 0 0 28px rgba(124,110,248,0.4);
+  box-shadow: 0 0 28px rgba(154,120,48,0.30);
 }
 
 /* Eyebrow label riutilizzabile */
@@ -80,6 +84,13 @@ body::before {
   letter-spacing: 0.12em;
   text-transform: uppercase;
   color: var(--text-3);
+}
+
+/* Linea decorativa dorata */
+.gold-divider {
+  height: 1px;
+  background: linear-gradient(90deg, transparent 0%, var(--accent) 35%, var(--accent) 65%, transparent 100%);
+  opacity: 0.3;
 }
 
 @layer utilities {

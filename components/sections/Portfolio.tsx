@@ -62,8 +62,8 @@ export default function Portfolio() {
                   key={filter}
                   onClick={() => setActiveFilter(filter)}
                   style={{
-                    background: isActive ? 'rgba(124,110,248,0.12)' : 'var(--surface-1)',
-                    border: isActive ? '1px solid rgba(124,110,248,0.35)' : '1px solid var(--border-subtle)',
+                    background: isActive ? 'rgba(154,120,48,0.10)' : 'var(--surface-1)',
+                    border: isActive ? '1px solid rgba(154,120,48,0.40)' : '1px solid var(--border-subtle)',
                     color: isActive ? 'var(--accent)' : 'var(--text-3)',
                     borderRadius: '999px',
                     padding: '6px 16px',
@@ -89,7 +89,7 @@ export default function Portfolio() {
                 exit={{ opacity: 0, scale: 0.9 }}
                 transition={{ duration: 0.3 }}
                 key={project.name}
-                className="group relative overflow-hidden bg-[#0F0F0F] cursor-pointer"
+                className="group relative overflow-hidden bg-[var(--surface-1)] cursor-pointer"
                 style={{
                   borderRadius: '12px',
                   border: '1px solid var(--border-subtle)',
@@ -106,10 +106,10 @@ export default function Portfolio() {
 
                 <div className="absolute inset-0 transition-all duration-300 flex flex-col justify-end p-6"
                      style={{
-                       background: 'rgba(8,8,8,0)',
+                       background: 'rgba(26,24,20,0)',
                      }}
                 >
-                  <div className="absolute inset-0 bg-[rgba(8,8,8,0.88)] opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                  <div className="absolute inset-0 bg-[rgba(20,18,14,0.90)] opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                   
                   <div className="relative translate-y-4 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-300 z-10 flex flex-col justify-end h-full">
                     <div className="flex flex-wrap gap-[6px] mb-3">
@@ -117,8 +117,8 @@ export default function Portfolio() {
                         <span
                           key={tag}
                           style={{
-                            background: 'rgba(124,110,248,0.15)',
-                            border: '1px solid rgba(124,110,248,0.3)',
+                            background: 'rgba(154,120,48,0.18)',
+                            border: '1px solid rgba(154,120,48,0.40)',
                             borderRadius: '4px',
                             fontSize: '11px',
                             color: 'var(--accent)',
