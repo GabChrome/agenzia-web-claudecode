@@ -24,7 +24,7 @@ export const TestimonialsColumn = (props: {
           ease: "linear",
           repeatType: "loop",
         }}
-        style={{ display: "flex", flexDirection: "column", gap: "16px", paddingBottom: "16px" }}
+        style={{ display: "flex", flexDirection: "column", gap: "28px", paddingBottom: "28px" }}
       >
         {[...new Array(2).fill(0).map((_, index) => (
           <React.Fragment key={index}>
@@ -32,26 +32,34 @@ export const TestimonialsColumn = (props: {
               <div
                 key={i}
                 style={{
-                  /* Usa surface-2 (#161616) come sfondo card:
-                     più chiaro del bg (#080808) e di surface-1 (#0F0F0F),
-                     quindi si stacca visivamente senza sembrare "nero puro" */
-                  background: "var(--surface-2)",
-                  border: "1px solid var(--border-default)",
+                  background: "linear-gradient(145deg, #1e1e1e 0%, var(--surface-2) 100%)",
+                  /* Bordi asimmetrici: top-left più chiari (luce), bottom-right più scuri (ombra) */
+                  borderTop: "1px solid rgba(255,255,255,0.13)",
+                  borderLeft: "1px solid rgba(255,255,255,0.09)",
+                  borderRight: "1px solid rgba(255,255,255,0.03)",
+                  borderBottom: "1px solid rgba(255,255,255,0.02)",
                   borderRadius: "14px",
                   padding: "22px",
                   maxWidth: "300px",
                   width: "100%",
-                  /* Glow accent sottile sul bordo inferiore */
-                  boxShadow: "0 2px 0 rgba(124,110,248,0.18), 0 8px 32px rgba(0,0,0,0.4)",
+                  /* Ombra direzionale 3D: offset bottom-right + profondità */
+                  boxShadow: [
+                    "4px 8px 20px rgba(0,0,0,0.55)",   /* ombra principale offset */
+                    "1px 2px 0px rgba(0,0,0,0.8)",      /* bordo tight per depth */
+                    "inset 0 1px 0 rgba(255,255,255,0.06)", /* highlight interno top */
+                  ].join(", "),
                   position: "relative",
                   overflow: "hidden",
+                  /* Piccola rotazione 3D percettiva */
+                  transform: "perspective(600px) rotateX(1deg)",
+                  transformStyle: "preserve-3d",
                 }}
               >
                 {/* Virgoletta decorativa accent */}
                 <div style={{
                   position: "absolute", top: "10px", right: "14px",
                   fontFamily: "var(--font-serif)", fontSize: "52px", lineHeight: 1,
-                  color: "var(--accent)", opacity: 0.14, userSelect: "none",
+                  color: "var(--accent)", opacity: 0.13, userSelect: "none",
                   pointerEvents: "none",
                 }}>
                   &quot;
