@@ -4,30 +4,42 @@
     "portfolio": "Portfolio",
     "pricing": "Prezzi",
     "contact": "Contatti",
-    "cta": "Prenota una call"
+    "cta": "Prenota una call",
+    "ariaScrollTop": "Anti Gravity – torna in cima",
+    "ariaOpenMenu": "Apri menu",
+    "ariaCloseMenu": "Chiudi menu",
+    "ariaLang": "Seleziona lingua"
   },
   "hero": {
     "headline": "Siti web che convertono.",
     "sub": "Progettiamo esperienze digitali su misura per PMI e startup italiane. Dalla strategia al codice, ogni dettaglio è pensato per far crescere il tuo business.",
     "cta1": "Inizia il tuo progetto",
     "cta2": "Guarda il portfolio",
-    "badge": "Agenzia web italiana"
+    "badge": "Agenzia italiana · Consegna in 4 settimane",
+    "headlineEm": "Siti web",
+    "headlineStrong": "che convertono.",
+    "socialProof": "50+ progetti · 98% soddisfazione · Lighthouse 90+"
   },
   "about": {
-    "headline": "Costruiamo con intenzione.",
-    "body": "Non siamo una fabbrica di siti. Siamo un piccolo team ossessionato dalla qualità: ogni progetto riceve attenzione, ogni riga di codice ha uno scopo.",
-    "speed": {
-      "title": "Velocità",
-      "desc": "Performance ottimizzate per ogni dispositivo. Lighthouse > 90 su ogni progetto che consegniamo."
-    },
-    "design": {
-      "title": "Design",
-      "desc": "Interfacce premium che riflettono il tuo brand. Nessun template, nessuna scorciatoia."
-    },
-    "support": {
-      "title": "Supporto",
-      "desc": "Non sparisci dopo il lancio. Siamo qui per iterare, ottimizzare e far crescere il sito con te."
-    }
+    "eyebrow": "Chi siamo",
+    "headline1": "Non una fabbrica",
+    "headline2": "di siti.",
+    "body": "Siamo un piccolo team ossessionato dalla qualità. Non usiamo template, non esternalizziamo e non prendiamo più progetti di quanti ne possiamo curare. Ogni riga di codice che scriviamo ha uno scopo preciso: far crescere il tuo business.",
+    "link": "Scopri il processo →",
+    "stats": [
+      {
+        "num": "50+",
+        "label": "Progetti"
+      },
+      {
+        "num": "4 sett.",
+        "label": "Consegna media"
+      },
+      {
+        "num": "90+",
+        "label": "Lighthouse"
+      }
+    ]
   },
   "portfolio": {
     "headline": "Lavori selezionati",
@@ -88,7 +100,8 @@
           "Calendar"
         ]
       }
-    ]
+    ],
+    "filterAll": "Tutti"
   },
   "pricing": {
     "headline": "Piani chiari, nessuna sorpresa.",
@@ -198,45 +211,33 @@
       "errors": {
         "nameRequired": "Il nome è obbligatorio",
         "emailInvalid": "Inserisci un'email valida",
-        "messageMin": "Il messaggio deve essere di almeno 10 caratteri"
-      }
+        "messageMin": "Il messaggio deve avere almeno 10 caratteri",
+        "nameMin": "Il nome deve avere almeno 2 caratteri"
+      },
+      "error": "Si è verificato un errore, riprova."
     },
     "info": {
       "email": "ciao@antigravity.it",
       "hours": "Lun–Ven, 9:00–18:00 CET",
       "location": "Roma, Italia"
-    }
+    },
+    "infoEmail": "Email",
+    "infoLocation": "Sede",
+    "infoHours": "Orari"
   },
   "footer": {
-    "tagline": "Progettiamo il digitale che fa crescere.",
-    "services": {
-      "title": "Servizi",
-      "links": [
-        "Siti web",
-        "E-commerce",
-        "Landing page",
-        "Web app",
-        "SEO"
-      ]
-    },
-    "company": {
-      "title": "Azienda",
-      "links": [
-        "Chi siamo",
-        "Portfolio",
-        "Blog",
-        "Carriere"
-      ]
-    },
-    "legal": {
-      "title": "Legale",
-      "links": [
-        "Privacy policy",
-        "Cookie policy",
-        "Termini di servizio"
-      ]
-    },
-    "copyright": "© 2024 Anti Gravity. Tutti i diritti riservati.",
-    "vat": "P.IVA 12345678901"
+    "tagline": "Siti web che convertono.",
+    "ariaScrollTop": "Anti Gravity – torna in cima",
+    "sectionCompany": "Azienda",
+    "linkAbout": "Chi siamo",
+    "linkPortfolio": "Portfolio",
+    "linkPricing": "Prezzi",
+    "sectionSocial": "Social",
+    "sectionLegal": "Legale",
+    "linkPrivacy": "Privacy Policy",
+    "linkCookie": "Cookie Policy",
+    "linkTerms": "Termini e Condizioni",
+    "rights": "Tutti i diritti riservati.",
+    "madeWith": "Made with ♥ in Italia"
   }
 }

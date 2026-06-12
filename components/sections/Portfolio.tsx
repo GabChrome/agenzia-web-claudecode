@@ -29,11 +29,12 @@ export default function Portfolio() {
   const allTags = Array.from(new Set(projects.flatMap(p => p.tags)));
   // Prendiamo i 4 tag più frequenti o usiamo una lista fissa se preferito. 
   // Per ora usiamo tutti i tag univoci se sono pochi, altrimenti i primi 4.
-  const filters = ['Tutti', ...allTags.slice(0, 4)];
-  const [activeFilter, setActiveFilter] = useState('Tutti');
+  const filterAll = t('filterAll');
+  const filters = [filterAll, ...allTags.slice(0, 4)];
+  const [activeFilter, setActiveFilter] = useState(filterAll);
 
-  const filteredProjects = activeFilter === 'Tutti' 
-    ? projects 
+  const filteredProjects = activeFilter === filterAll
+    ? projects
     : projects.filter(p => p.tags.includes(activeFilter));
 
   return (

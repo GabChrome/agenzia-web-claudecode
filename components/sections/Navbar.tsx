@@ -43,7 +43,7 @@ export default function Navbar() {
           <button
             onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
             className="tracking-tight hover:opacity-80 transition-opacity"
-            aria-label="Anti Gravity - torna in cima"
+            aria-label={t('ariaScrollTop')}
           >
             <span style={{ fontWeight: 700, color: 'var(--text-1)' }}>Anti</span>
             <span style={{ fontWeight: 700, color: 'var(--accent)' }}>Gravity</span>
@@ -97,7 +97,7 @@ export default function Navbar() {
             className="lg:hidden p-2 rounded-lg"
             style={{ color: 'var(--text-1)' }}
             onClick={() => setMobileOpen(!mobileOpen)}
-            aria-label={mobileOpen ? 'Chiudi menu' : 'Apri menu'}
+            aria-label={mobileOpen ? t('ariaCloseMenu') : t('ariaOpenMenu')}
           >
             {mobileOpen ? <X size={22} /> : <Menu size={22} />}
           </button>
