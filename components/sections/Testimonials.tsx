@@ -41,7 +41,7 @@ export default function Testimonials() {
           {testimonials.map((test, i) => (
             <AnimatedSection key={test.name} delay={i * 0.1}>
               <blockquote style={{
-                background: 'var(--surface-1)',
+                background: '#0F0F0F',
                 border: '1px solid var(--border-subtle)',
                 borderRadius: '12px',
                 padding: '28px',
