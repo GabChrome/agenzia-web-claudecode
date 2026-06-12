@@ -18,7 +18,7 @@ export default function Hero() {
     <section id="hero" className="relative min-h-[100dvh] flex items-center overflow-hidden pt-24 pb-16">
       <div className="max-w-7xl mx-auto px-6 lg:px-8 w-full">
         <div className="grid grid-cols-1 md:grid-cols-[55%_45%] gap-8 items-center">
-          
+
           <AnimatedSection className="flex flex-col items-start">
             {/* Badge */}
             <div style={{
@@ -29,15 +29,15 @@ export default function Hero() {
               fontSize: 12, color: 'var(--text-2)', marginBottom: 28,
             }}>
               <span style={{ color: 'var(--accent)' }}>✦</span>
-              Agenzia italiana · Consegna in 4 settimane
+              {t('badge')}
             </div>
 
             {/* Headline */}
             <h1 style={{ fontSize: 'clamp(44px, 6.5vw, 84px)', lineHeight: 1.0, letterSpacing: '-0.03em', color: 'var(--text-1)' }}>
               <em style={{ fontFamily: 'var(--font-serif)', fontStyle: 'italic', fontWeight: 400 }}>
-                Siti web{' '}
+                {t('headlineEm')}{' '}
               </em>
-              <span style={{ fontWeight: 800 }}>che convertono.</span>
+              <span style={{ fontWeight: 800 }}>{t('headlineStrong')}</span>
             </h1>
 
             {/* Sottotitolo */}
@@ -69,7 +69,7 @@ export default function Hero() {
                   fontSize: '15px'
                 }}
               >
-                Inizia il tuo progetto
+                {t('cta1')}
                 <ArrowRight size={18} />
               </button>
               <button
@@ -97,21 +97,24 @@ export default function Hero() {
                 }}
               >
                 <Play size={16} fill="currentColor" />
-                Guarda il portfolio
+                {t('cta2')}
               </button>
             </div>
 
             {/* Social proof */}
-            <div style={{
-              marginTop: '48px',
-              fontSize: '13px',
-              color: 'var(--text-3)'
-            }}>
-              50+ progetti <span style={{ color: 'var(--accent)' }}>·</span> 98% soddisfazione <span style={{ color: 'var(--accent)' }}>·</span> Lighthouse 90+
+            <div style={{ marginTop: '48px', fontSize: '13px', color: 'var(--text-3)' }}>
+              {t('socialProof').split('·').map((part, i, arr) => (
+                <span key={i}>
+                  {part.trim()}
+                  {i < arr.length - 1 && (
+                    <span style={{ color: 'var(--accent)', margin: '0 6px' }}>·</span>
+                  )}
+                </span>
+              ))}
             </div>
           </AnimatedSection>
 
-          {/* Right — 3D scene (nascosta su mobile, ma su md flex) */}
+          {/* Right — 3D scene */}
           <AnimatedSection delay={0.2} className="hidden md:flex justify-center items-center w-full h-full relative">
              <HeroScene />
           </AnimatedSection>

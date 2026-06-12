@@ -4,30 +4,42 @@
     "portfolio": "Portfolio",
     "pricing": "Pricing",
     "contact": "Contact",
-    "cta": "Book a call"
+    "cta": "Book a call",
+    "ariaScrollTop": "Anti Gravity – back to top",
+    "ariaOpenMenu": "Open menu",
+    "ariaCloseMenu": "Close menu",
+    "ariaLang": "Select language"
   },
   "hero": {
     "headline": "Websites that convert.",
     "sub": "We design digital experiences tailored for Italian SMEs and startups. From strategy to code, every detail is crafted to grow your business.",
     "cta1": "Start your project",
     "cta2": "See our work",
-    "badge": "Italian web agency"
+    "badge": "Italian agency · 4-week delivery",
+    "headlineEm": "Websites",
+    "headlineStrong": "that convert.",
+    "socialProof": "50+ projects · 98% satisfaction · Lighthouse 90+"
   },
   "about": {
-    "headline": "We build with intention.",
-    "body": "We are not a website factory. We are a small team obsessed with quality: every project receives full attention, every line of code has a purpose.",
-    "speed": {
-      "title": "Speed",
-      "desc": "Performance optimised for every device. Lighthouse > 90 on every project we deliver."
-    },
-    "design": {
-      "title": "Design",
-      "desc": "Premium interfaces that reflect your brand. No templates, no shortcuts."
-    },
-    "support": {
-      "title": "Support",
-      "desc": "We do not disappear after launch. We are here to iterate, optimise and grow the site with you."
-    }
+    "eyebrow": "About us",
+    "headline1": "Not a website",
+    "headline2": "factory.",
+    "body": "We are a small team obsessed with quality. We do not use templates, we do not outsource, and we never take on more projects than we can properly care for. Every line of code we write has one purpose: to grow your business.",
+    "link": "Discover the process →",
+    "stats": [
+      {
+        "num": "50+",
+        "label": "Projects"
+      },
+      {
+        "num": "4 wks",
+        "label": "Avg. delivery"
+      },
+      {
+        "num": "90+",
+        "label": "Lighthouse"
+      }
+    ]
   },
   "portfolio": {
     "headline": "Selected work",
@@ -37,80 +49,112 @@
       {
         "name": "Olio Meridiano",
         "desc": "E-commerce for EVO oil producer",
-        "tags": ["Next.js", "Shopify", "Design System"]
+        "tags": [
+          "Next.js",
+          "Shopify",
+          "Design System"
+        ]
       },
       {
         "name": "Studio Ferretti",
         "desc": "Institutional site for law firm",
-        "tags": ["Next.js", "CMS", "SEO"]
+        "tags": [
+          "Next.js",
+          "CMS",
+          "SEO"
+        ]
       },
       {
         "name": "Volta Fintech",
         "desc": "Landing page for fintech startup",
-        "tags": ["React", "Framer Motion", "Conversion"]
+        "tags": [
+          "React",
+          "Framer Motion",
+          "Conversion"
+        ]
       },
       {
         "name": "Artigiani del Sud",
         "desc": "Marketplace for local artisans",
-        "tags": ["Next.js", "Firebase", "Maps"]
+        "tags": [
+          "Next.js",
+          "Firebase",
+          "Maps"
+        ]
       },
       {
         "name": "MedFlow",
         "desc": "Dashboard for medical clinic",
-        "tags": ["React", "TypeScript", "HIPAA"]
+        "tags": [
+          "React",
+          "TypeScript",
+          "HIPAA"
+        ]
       },
       {
         "name": "Terrazza Roma",
         "desc": "Booking system for events venue",
-        "tags": ["Next.js", "Stripe", "Calendar"]
+        "tags": [
+          "Next.js",
+          "Stripe",
+          "Calendar"
+        ]
       }
-    ]
+    ],
+    "filterAll": "All"
   },
   "pricing": {
     "headline": "Clear plans, no surprises.",
     "sub": "Choose the plan that fits your project.",
-    "popular": "Most popular",
-    "cta": "Get started",
+    "popularBadge": "Most popular",
+    "onetimeLabel": "one-time",
     "plans": [
       {
-        "name": "Base",
-        "price": "€499",
-        "desc": "For those who need a professional online presence.",
+        "name": "Showcase",
+        "setup": "€399",
+        "monthly": "€19/mo",
+        "desc": "For those who need a professional online presence",
         "features": [
-          "Up to 5 pages",
+          "Showcase site up to 5 pages",
           "Custom design",
           "Mobile responsive",
           "Basic SEO",
-          "1 revision"
-        ]
+          "Hosting + SSL + backup included",
+          "1 revision at delivery"
+        ],
+        "note": "Extra edits: €25 / 30 min",
+        "cta": "Get started"
       },
       {
-        "name": "Pro",
-        "price": "€999",
-        "desc": "For those who want to grow online with high performance.",
+        "name": "Showcase + Bookings",
+        "setup": "€699",
+        "monthly": "€39/mo",
+        "desc": "For those who want to manage online appointments independently",
         "features": [
-          "Up to 15 pages",
-          "Premium design",
-          "Custom animations",
-          "Advanced SEO",
-          "CMS integration",
-          "3 revisions",
-          "1 month support"
-        ]
+          "Everything in Showcase",
+          "Booking system with database",
+          "Admin panel to manage appointments",
+          "3 revisions at delivery",
+          "1 content edit incl./month (max 30 min)"
+        ],
+        "note": "Extra edits: €25 / 30 min",
+        "cta": "Get started"
       },
       {
-        "name": "Premium",
-        "price": "€1,999",
-        "desc": "For complex projects and teams who want the best.",
+        "name": "Custom",
+        "setup": "From €1,500",
+        "monthly": "From €59/mo",
+        "desc": "For complex projects: e-commerce, integrations, CRM",
         "features": [
           "Unlimited pages",
           "Full design system",
-          "E-commerce or webapp",
-          "SEO + Analytics",
-          "CI/CD + Deploy",
-          "Unlimited revisions",
-          "6 months support"
-        ]
+          "E-commerce or web app",
+          "Custom integrations (CRM, payments, API)",
+          "Unlimited revisions at delivery",
+          "2 hours/month support & edits included"
+        ],
+        "note": "SLA response within 24-48h",
+        "cta": "Request a quote"
       }
     ]
   },
@@ -167,30 +211,33 @@
       "errors": {
         "nameRequired": "Name is required",
         "emailInvalid": "Please enter a valid email",
-        "messageMin": "Message must be at least 10 characters"
-      }
+        "messageMin": "Message must be at least 10 characters",
+        "nameMin": "Name must be at least 2 characters"
+      },
+      "error": "An error occurred, please try again."
     },
     "info": {
       "email": "hello@antigravity.it",
       "hours": "Mon–Fri, 9:00–18:00 CET",
       "location": "Rome, Italy"
-    }
+    },
+    "infoEmail": "Email",
+    "infoLocation": "Location",
+    "infoHours": "Hours"
   },
   "footer": {
-    "tagline": "We design the digital that drives growth.",
-    "services": {
-      "title": "Services",
-      "links": ["Websites", "E-commerce", "Landing pages", "Web apps", "SEO"]
-    },
-    "company": {
-      "title": "Company",
-      "links": ["About", "Portfolio", "Blog", "Careers"]
-    },
-    "legal": {
-      "title": "Legal",
-      "links": ["Privacy policy", "Cookie policy", "Terms of service"]
-    },
-    "copyright": "© 2024 Anti Gravity. All rights reserved.",
-    "vat": "VAT IT12345678901"
+    "tagline": "Websites that convert.",
+    "ariaScrollTop": "Anti Gravity – back to top",
+    "sectionCompany": "Company",
+    "linkAbout": "About us",
+    "linkPortfolio": "Portfolio",
+    "linkPricing": "Pricing",
+    "sectionSocial": "Social",
+    "sectionLegal": "Legal",
+    "linkPrivacy": "Privacy Policy",
+    "linkCookie": "Cookie Policy",
+    "linkTerms": "Terms & Conditions",
+    "rights": "All rights reserved.",
+    "madeWith": "Made with ♥ in Italy"
   }
 }

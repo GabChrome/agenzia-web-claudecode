@@ -1,8 +1,12 @@
 'use client';
 
+import { useTranslations } from 'next-intl';
 import AnimatedSection from '@/components/ui/AnimatedSection';
 
 export default function About() {
+  const t = useTranslations('about');
+  const stats = t.raw('stats') as Array<{ num: string; label: string }>;
+
   return (
     <section id="about" style={{ padding: '120px 0', position: 'relative' }}>
       <div style={{
@@ -11,13 +15,14 @@ export default function About() {
         background: 'linear-gradient(90deg, transparent 0%, var(--accent) 35%, var(--accent) 65%, transparent 100%)',
         opacity: 0.25
       }} aria-hidden="true" />
+
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
         <AnimatedSection className="grid grid-cols-1 md:grid-cols-[60%_40%] gap-20 items-start">
-          
+
           {/* Colonna Sinistra */}
           <div className="flex flex-col items-start">
             <span className="eyebrow" style={{ marginBottom: '16px' }}>
-              Chi siamo
+              {t('eyebrow')}
             </span>
             <h2 style={{
               fontSize: 'clamp(32px, 4vw, 52px)',
@@ -26,7 +31,7 @@ export default function About() {
               color: 'var(--text-1)',
               lineHeight: 1.1
             }}>
-              Non una fabbrica<br />di siti.
+              {t('headline1')}<br />{t('headline2')}
             </h2>
             <p style={{
               color: 'var(--text-2)',
@@ -35,9 +40,7 @@ export default function About() {
               maxWidth: '480px',
               marginTop: '20px'
             }}>
-              Siamo un piccolo team ossessionato dalla qualità. 
-              Non usiamo template, non esternalizziamo e non prendiamo più progetti di quanti ne possiamo curare. 
-              Ogni riga di codice che scriviamo ha uno scopo preciso: far crescere il tuo business.
+              {t('body')}
             </p>
             <button
               style={{
@@ -54,37 +57,21 @@ export default function About() {
               onMouseLeave={(e) => e.currentTarget.style.opacity = '1'}
               onClick={() => document.getElementById('portfolio')?.scrollIntoView({ behavior: 'smooth' })}
             >
-              Scopri il processo →
+              {t('link')}
             </button>
           </div>
 
           {/* Colonna Destra (Stats) */}
-          <div style={{
-            display: 'flex',
-            flexDirection: 'column',
-          }}>
-            {[
-              { num: '50+', label: 'Progetti' },
-              { num: '4 sett.', label: 'Consegna media' },
-              { num: '90+', label: 'Lighthouse' }
-            ].map((stat, i, arr) => (
+          <div style={{ display: 'flex', flexDirection: 'column' }}>
+            {stats.map((stat, i) => (
               <div key={i} style={{
                 padding: '24px 0',
-                borderBottom: i !== arr.length - 1 ? '1px solid var(--border-subtle)' : 'none',
+                borderBottom: i !== stats.length - 1 ? '1px solid var(--border-subtle)' : 'none',
               }}>
-                <div style={{
-                  fontSize: '52px',
-                  fontWeight: 700,
-                  color: 'var(--accent)',
-                  lineHeight: 1
-                }}>
+                <div style={{ fontSize: '52px', fontWeight: 700, color: 'var(--accent)', lineHeight: 1 }}>
                   {stat.num}
                 </div>
-                <div style={{
-                  color: 'var(--text-3)',
-                  fontSize: '13px',
-                  marginTop: '4px'
-                }}>
+                <div style={{ color: 'var(--text-3)', fontSize: '13px', marginTop: '4px' }}>
                   {stat.label}
                 </div>
               </div>
