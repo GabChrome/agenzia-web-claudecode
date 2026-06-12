@@ -4,7 +4,13 @@ import AnimatedSection from '@/components/ui/AnimatedSection';
 
 export default function About() {
   return (
-    <section id="about" style={{ padding: '120px 0' }}>
+    <section id="about" style={{ padding: '120px 0', position: 'relative' }}>
+      <div style={{
+        position: 'absolute', top: 0, left: '50%', transform: 'translateX(-50%)',
+        width: '60%', height: '1px',
+        background: 'linear-gradient(90deg, transparent 0%, var(--accent) 35%, var(--accent) 65%, transparent 100%)',
+        opacity: 0.25
+      }} aria-hidden="true" />
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
         <AnimatedSection className="grid grid-cols-1 md:grid-cols-[60%_40%] gap-20 items-start">
           

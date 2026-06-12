@@ -66,8 +66,8 @@ export default function Contact() {
                     fontFamily: 'var(--font-sans)', fontSize: '15px', outline: 'none', transition: 'all 200ms'
                   }}
                   onFocus={(e) => {
-                    e.currentTarget.style.borderColor = 'rgba(124,110,248,0.5)';
-                    e.currentTarget.style.boxShadow = '0 0 0 3px rgba(124,110,248,0.08)';
+                    e.currentTarget.style.borderColor = 'rgba(154,120,48,0.55)';
+                    e.currentTarget.style.boxShadow = '0 0 0 3px rgba(154,120,48,0.10)';
                   }}
                   onBlur={(e) => {
                     e.currentTarget.style.borderColor = 'var(--border-subtle)';
@@ -90,8 +90,8 @@ export default function Contact() {
                     fontFamily: 'var(--font-sans)', fontSize: '15px', outline: 'none', transition: 'all 200ms'
                   }}
                   onFocus={(e) => {
-                    e.currentTarget.style.borderColor = 'rgba(124,110,248,0.5)';
-                    e.currentTarget.style.boxShadow = '0 0 0 3px rgba(124,110,248,0.08)';
+                    e.currentTarget.style.borderColor = 'rgba(154,120,48,0.55)';
+                    e.currentTarget.style.boxShadow = '0 0 0 3px rgba(154,120,48,0.10)';
                   }}
                   onBlur={(e) => {
                     e.currentTarget.style.borderColor = 'var(--border-subtle)';
@@ -113,8 +113,8 @@ export default function Contact() {
                     fontFamily: 'var(--font-sans)', fontSize: '15px', outline: 'none', transition: 'all 200ms'
                   }}
                   onFocus={(e) => {
-                    e.currentTarget.style.borderColor = 'rgba(124,110,248,0.5)';
-                    e.currentTarget.style.boxShadow = '0 0 0 3px rgba(124,110,248,0.08)';
+                    e.currentTarget.style.borderColor = 'rgba(154,120,48,0.55)';
+                    e.currentTarget.style.boxShadow = '0 0 0 3px rgba(154,120,48,0.10)';
                   }}
                   onBlur={(e) => {
                     e.currentTarget.style.borderColor = 'var(--border-subtle)';
@@ -132,7 +132,7 @@ export default function Contact() {
                   width: '100%',
                   background: status === 'success' ? 'rgba(74,222,128,0.1)' : 'var(--accent)',
                   border: status === 'success' ? '1px solid rgba(74,222,128,0.3)' : 'none',
-                  color: status === 'success' ? 'var(--success)' : 'white',
+                  color: status === 'success' ? 'var(--success)' : '#F8F5F0',
                   padding: '14px',
                   borderRadius: '8px',
                   fontSize: '15px',
