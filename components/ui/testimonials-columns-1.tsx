@@ -24,7 +24,7 @@ export const TestimonialsColumn = (props: {
           ease: "linear",
           repeatType: "loop",
         }}
-        style={{ display: "flex", flexDirection: "column", gap: "20px", paddingBottom: "20px" }}
+        style={{ display: "flex", flexDirection: "column", gap: "16px", paddingBottom: "16px" }}
       >
         {[...new Array(2).fill(0).map((_, index) => (
           <React.Fragment key={index}>
@@ -32,31 +32,35 @@ export const TestimonialsColumn = (props: {
               <div
                 key={i}
                 style={{
-                  background: "#0F0F0F",
-                  border: "1px solid rgba(255,255,255,0.07)",
-                  borderRadius: "16px",
-                  padding: "24px",
+                  /* Usa surface-2 (#161616) come sfondo card:
+                     più chiaro del bg (#080808) e di surface-1 (#0F0F0F),
+                     quindi si stacca visivamente senza sembrare "nero puro" */
+                  background: "var(--surface-2)",
+                  border: "1px solid var(--border-default)",
+                  borderRadius: "14px",
+                  padding: "22px",
                   maxWidth: "300px",
                   width: "100%",
-                  boxShadow: "0 4px 32px rgba(124,110,248,0.06)",
+                  /* Glow accent sottile sul bordo inferiore */
+                  boxShadow: "0 2px 0 rgba(124,110,248,0.18), 0 8px 32px rgba(0,0,0,0.4)",
                   position: "relative",
                   overflow: "hidden",
                 }}
               >
-                {/* Virgoletta decorativa */}
+                {/* Virgoletta decorativa accent */}
                 <div style={{
-                  position: "absolute", top: "12px", right: "16px",
-                  fontFamily: "var(--font-serif)", fontSize: "56px", lineHeight: 1,
-                  color: "var(--accent)", opacity: 0.12, userSelect: "none",
+                  position: "absolute", top: "10px", right: "14px",
+                  fontFamily: "var(--font-serif)", fontSize: "52px", lineHeight: 1,
+                  color: "var(--accent)", opacity: 0.14, userSelect: "none",
                   pointerEvents: "none",
                 }}>
                   &quot;
                 </div>
 
                 <p style={{
-                  color: "#888",
-                  fontSize: "14px",
-                  lineHeight: 1.7,
+                  color: "var(--text-2)",
+                  fontSize: "13.5px",
+                  lineHeight: 1.72,
                   fontStyle: "italic",
                   position: "relative",
                   zIndex: 1,
@@ -65,9 +69,9 @@ export const TestimonialsColumn = (props: {
                 </p>
 
                 <div style={{
-                  borderTop: "1px solid rgba(255,255,255,0.06)",
-                  paddingTop: "16px",
-                  marginTop: "16px",
+                  borderTop: "1px solid var(--border-subtle)",
+                  paddingTop: "14px",
+                  marginTop: "14px",
                   display: "flex",
                   alignItems: "center",
                   gap: "10px",
@@ -76,25 +80,44 @@ export const TestimonialsColumn = (props: {
                   <img
                     src={image}
                     alt={name}
-                    width={36}
-                    height={36}
+                    width={34}
+                    height={34}
                     style={{
                       borderRadius: "50%",
                       objectFit: "cover",
-                      border: "1px solid rgba(255,255,255,0.10)",
-                      width: "36px",
-                      height: "36px",
+                      border: "1px solid var(--border-default)",
+                      width: "34px",
+                      height: "34px",
+                      flexShrink: 0,
                     }}
                   />
-                  <div>
-                    <div style={{ color: "#EDEDED", fontSize: "13px", fontWeight: 600, lineHeight: 1.3 }}>
+                  <div style={{ minWidth: 0 }}>
+                    <div style={{
+                      color: "var(--text-1)",
+                      fontSize: "13px",
+                      fontWeight: 600,
+                      lineHeight: 1.3,
+                      whiteSpace: "nowrap",
+                      overflow: "hidden",
+                      textOverflow: "ellipsis",
+                    }}>
                       {name}
                     </div>
-                    <div style={{ color: "#555", fontSize: "12px", lineHeight: 1.4 }}>
+                    <div style={{
+                      color: "var(--text-3)",
+                      fontSize: "11.5px",
+                      lineHeight: 1.4,
+                    }}>
                       {role}
                     </div>
                   </div>
-                  <div style={{ marginLeft: "auto", color: "var(--accent)", fontSize: "11px", letterSpacing: "1px" }}>
+                  <div style={{
+                    marginLeft: "auto",
+                    color: "var(--accent)",
+                    fontSize: "10px",
+                    letterSpacing: "1px",
+                    flexShrink: 0,
+                  }}>
                     ★★★★★
                   </div>
                 </div>
