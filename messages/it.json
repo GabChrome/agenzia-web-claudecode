@@ -37,81 +37,111 @@
       {
         "name": "Olio Meridiano",
         "desc": "E-commerce per produttore di olio EVO",
-        "tags": ["Next.js", "Shopify", "Design System"]
+        "tags": [
+          "Next.js",
+          "Shopify",
+          "Design System"
+        ]
       },
       {
         "name": "Studio Ferretti",
         "desc": "Sito istituzionale per studio legale",
-        "tags": ["Next.js", "CMS", "SEO"]
+        "tags": [
+          "Next.js",
+          "CMS",
+          "SEO"
+        ]
       },
       {
         "name": "Volta Fintech",
         "desc": "Landing page per startup fintech",
-        "tags": ["React", "Framer Motion", "Conversion"]
+        "tags": [
+          "React",
+          "Framer Motion",
+          "Conversion"
+        ]
       },
       {
         "name": "Artigiani del Sud",
         "desc": "Marketplace per artigiani locali",
-        "tags": ["Next.js", "Firebase", "Maps"]
+        "tags": [
+          "Next.js",
+          "Firebase",
+          "Maps"
+        ]
       },
       {
         "name": "MedFlow",
         "desc": "Dashboard per clinica medica",
-        "tags": ["React", "TypeScript", "HIPAA"]
+        "tags": [
+          "React",
+          "TypeScript",
+          "HIPAA"
+        ]
       },
       {
         "name": "Terrazza Roma",
         "desc": "Booking system per locale eventi",
-        "tags": ["Next.js", "Stripe", "Calendar"]
+        "tags": [
+          "Next.js",
+          "Stripe",
+          "Calendar"
+        ]
       }
     ]
   },
   "pricing": {
     "headline": "Piani chiari, nessuna sorpresa.",
     "sub": "Scegli il piano più adatto al tuo progetto.",
-    "popular": "Più scelto",
-    "popularBadge": "Più popolare",
-    "cta": "Inizia ora",
+    "popularBadge": "Più scelto",
+    "onetimeLabel": "una tantum",
     "plans": [
       {
-        "name": "Base",
-        "price": "€499",
-        "desc": "Per chi ha bisogno di una presenza online professionale.",
+        "name": "Vetrina",
+        "setup": "€399",
+        "monthly": "€19/mese",
+        "desc": "Per chi ha bisogno di una presenza online professionale",
         "features": [
-          "Fino a 5 pagine",
+          "Sito vetrina fino a 5 pagine",
           "Design personalizzato",
           "Mobile responsive",
           "SEO base",
-          "1 revisione"
-        ]
+          "Hosting + SSL + backup incluso",
+          "1 revisione in fase di consegna"
+        ],
+        "note": "Modifiche extra: €25 / 30 min",
+        "cta": "Inizia ora"
       },
       {
-        "name": "Pro",
-        "price": "€999",
-        "desc": "Per chi vuole crescere online con performance elevate.",
+        "name": "Vetrina + Prenotazioni",
+        "setup": "€699",
+        "monthly": "€39/mese",
+        "desc": "Per chi vuole gestire appuntamenti online in autonomia",
         "features": [
-          "Fino a 15 pagine",
-          "Design premium",
-          "Animazioni custom",
-          "SEO avanzato",
-          "CMS integrato",
-          "3 revisioni",
-          "1 mese supporto"
-        ]
+          "Tutto del piano Vetrina",
+          "Sistema prenotazioni con database",
+          "Pannello admin per gestire gli appuntamenti",
+          "3 revisioni in fase di consegna",
+          "1 modifica contenuti incl. /mese (max 30 min)"
+        ],
+        "note": "Modifiche extra: €25 / 30 min",
+        "cta": "Inizia ora"
       },
       {
-        "name": "Premium",
-        "price": "€1.999",
-        "desc": "Per progetti complessi e team che vogliono il massimo.",
+        "name": "Su misura",
+        "setup": "Da €1.500",
+        "monthly": "Da €59/mese",
+        "desc": "Per progetti complessi: e-commerce, integrazioni, CRM",
         "features": [
           "Pagine illimitate",
           "Design system completo",
-          "E-commerce o webapp",
-          "SEO + Analytics",
-          "CI/CD + Deploy",
-          "Revisioni illimitate",
-          "6 mesi supporto"
-        ]
+          "E-commerce o web app",
+          "Integrazioni su misura (CRM, pagamenti, API)",
+          "Revisioni illimitate in fase di consegna",
+          "2 ore incluse/mese di supporto e modifiche"
+        ],
+        "note": "SLA risposta entro 24-48h",
+        "cta": "Richiedi preventivo"
       }
     ]
   },
@@ -181,15 +211,30 @@
     "tagline": "Progettiamo il digitale che fa crescere.",
     "services": {
       "title": "Servizi",
-      "links": ["Siti web", "E-commerce", "Landing page", "Web app", "SEO"]
+      "links": [
+        "Siti web",
+        "E-commerce",
+        "Landing page",
+        "Web app",
+        "SEO"
+      ]
     },
     "company": {
       "title": "Azienda",
-      "links": ["Chi siamo", "Portfolio", "Blog", "Carriere"]
+      "links": [
+        "Chi siamo",
+        "Portfolio",
+        "Blog",
+        "Carriere"
+      ]
     },
     "legal": {
       "title": "Legale",
-      "links": ["Privacy policy", "Cookie policy", "Termini di servizio"]
+      "links": [
+        "Privacy policy",
+        "Cookie policy",
+        "Termini di servizio"
+      ]
     },
     "copyright": "© 2024 Anti Gravity. Tutti i diritti riservati.",
     "vat": "P.IVA 12345678901"

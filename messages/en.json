@@ -37,81 +37,111 @@
       {
         "name": "Olio Meridiano",
         "desc": "E-commerce for EVO oil producer",
-        "tags": ["Next.js", "Shopify", "Design System"]
+        "tags": [
+          "Next.js",
+          "Shopify",
+          "Design System"
+        ]
       },
       {
         "name": "Studio Ferretti",
         "desc": "Institutional site for law firm",
-        "tags": ["Next.js", "CMS", "SEO"]
+        "tags": [
+          "Next.js",
+          "CMS",
+          "SEO"
+        ]
       },
       {
         "name": "Volta Fintech",
         "desc": "Landing page for fintech startup",
-        "tags": ["React", "Framer Motion", "Conversion"]
+        "tags": [
+          "React",
+          "Framer Motion",
+          "Conversion"
+        ]
       },
       {
         "name": "Artigiani del Sud",
         "desc": "Marketplace for local artisans",
-        "tags": ["Next.js", "Firebase", "Maps"]
+        "tags": [
+          "Next.js",
+          "Firebase",
+          "Maps"
+        ]
       },
       {
         "name": "MedFlow",
         "desc": "Dashboard for medical clinic",
-        "tags": ["React", "TypeScript", "HIPAA"]
+        "tags": [
+          "React",
+          "TypeScript",
+          "HIPAA"
+        ]
       },
       {
         "name": "Terrazza Roma",
         "desc": "Booking system for events venue",
-        "tags": ["Next.js", "Stripe", "Calendar"]
+        "tags": [
+          "Next.js",
+          "Stripe",
+          "Calendar"
+        ]
       }
     ]
   },
   "pricing": {
     "headline": "Clear plans, no surprises.",
     "sub": "Choose the plan that fits your project.",
-    "popular": "Most popular",
     "popularBadge": "Most popular",
-    "cta": "Get started",
+    "onetimeLabel": "one-time",
     "plans": [
       {
-        "name": "Base",
-        "price": "€499",
-        "desc": "For those who need a professional online presence.",
+        "name": "Showcase",
+        "setup": "€399",
+        "monthly": "€19/mo",
+        "desc": "For those who need a professional online presence",
         "features": [
-          "Up to 5 pages",
+          "Showcase site up to 5 pages",
           "Custom design",
           "Mobile responsive",
           "Basic SEO",
-          "1 revision"
-        ]
+          "Hosting + SSL + backup included",
+          "1 revision at delivery"
+        ],
+        "note": "Extra edits: €25 / 30 min",
+        "cta": "Get started"
       },
       {
-        "name": "Pro",
-        "price": "€999",
-        "desc": "For those who want to grow online with high performance.",
+        "name": "Showcase + Bookings",
+        "setup": "€699",
+        "monthly": "€39/mo",
+        "desc": "For those who want to manage online appointments independently",
         "features": [
-          "Up to 15 pages",
-          "Premium design",
-          "Custom animations",
-          "Advanced SEO",
-          "CMS integration",
-          "3 revisions",
-          "1 month support"
-        ]
+          "Everything in Showcase",
+          "Booking system with database",
+          "Admin panel to manage appointments",
+          "3 revisions at delivery",
+          "1 content edit incl./month (max 30 min)"
+        ],
+        "note": "Extra edits: €25 / 30 min",
+        "cta": "Get started"
       },
       {
-        "name": "Premium",
-        "price": "€1,999",
-        "desc": "For complex projects and teams who want the best.",
+        "name": "Custom",
+        "setup": "From €1,500",
+        "monthly": "From €59/mo",
+        "desc": "For complex projects: e-commerce, integrations, CRM",
         "features": [
           "Unlimited pages",
           "Full design system",
-          "E-commerce or webapp",
-          "SEO + Analytics",
-          "CI/CD + Deploy",
-          "Unlimited revisions",
-          "6 months support"
-        ]
+          "E-commerce or web app",
+          "Custom integrations (CRM, payments, API)",
+          "Unlimited revisions at delivery",
+          "2 hours/month support & edits included"
+        ],
+        "note": "SLA response within 24-48h",
+        "cta": "Request a quote"
       }
     ]
   },
@@ -181,15 +211,30 @@
     "tagline": "We design the digital that drives growth.",
     "services": {
       "title": "Services",
-      "links": ["Websites", "E-commerce", "Landing pages", "Web apps", "SEO"]
+      "links": [
+        "Websites",
+        "E-commerce",
+        "Landing pages",
+        "Web apps",
+        "SEO"
+      ]
     },
     "company": {
       "title": "Company",
-      "links": ["About", "Portfolio", "Blog", "Careers"]
+      "links": [
+        "About",
+        "Portfolio",
+        "Blog",
+        "Careers"
+      ]
     },
     "legal": {
       "title": "Legal",
-      "links": ["Privacy policy", "Cookie policy", "Terms of service"]
+      "links": [
+        "Privacy policy",
+        "Cookie policy",
+        "Terms of service"
+      ]
     },
     "copyright": "© 2024 Anti Gravity. All rights reserved.",
     "vat": "VAT IT12345678901"
