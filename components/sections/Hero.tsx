@@ -52,10 +52,10 @@ export default function Hero() {
             </p>
 
             {/* CTAs */}
-            <div style={{ display: 'flex', gap: '12px', marginTop: '36px', flexWrap: 'wrap' }}>
+            <div className="flex flex-col sm:flex-row flex-wrap gap-3" style={{ marginTop: '36px' }}>
               <button
                 onClick={() => scrollTo('contact')}
-                className="btn-glow"
+                className="btn-glow w-full sm:w-auto"
                 style={{
                   background: 'var(--accent)',
                   color: '#F8F5F0',
@@ -65,6 +65,7 @@ export default function Hero() {
                   transition: 'all 200ms ease',
                   display: 'flex',
                   alignItems: 'center',
+                  justifyContent: 'center',
                   gap: '8px',
                   fontSize: '15px'
                 }}
@@ -74,6 +75,7 @@ export default function Hero() {
               </button>
               <button
                 onClick={() => scrollTo('portfolio')}
+                className="w-full sm:w-auto"
                 style={{
                   border: '1px solid var(--border-default)',
                   background: 'transparent',
@@ -84,6 +86,7 @@ export default function Hero() {
                   transition: 'all 200ms ease',
                   display: 'flex',
                   alignItems: 'center',
+                  justifyContent: 'center',
                   gap: '8px',
                   fontSize: '15px'
                 }}

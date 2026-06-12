@@ -6,7 +6,7 @@ export default function Footer() {
   const t = useTranslations('footer');
 
   return (
-    <footer style={{ position: 'relative', paddingTop: '64px', paddingBottom: '32px' }}>
+    <footer className="pt-12 pb-8 md:pt-16 md:pb-8" style={{ position: 'relative' }}>
       {/* Linea dorata in cima */}
       <div style={{
         position: 'absolute', top: 0, left: 0, right: 0, height: '1px',

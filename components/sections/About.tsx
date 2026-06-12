@@ -8,7 +8,7 @@ export default function About() {
   const stats = t.raw('stats') as Array<{ num: string; label: string }>;
 
   return (
-    <section id="about" style={{ padding: '120px 0', position: 'relative' }}>
+    <section id="about" className="py-16 md:py-[120px]" style={{ position: 'relative' }}>
       <div style={{
         position: 'absolute', top: 0, left: '50%', transform: 'translateX(-50%)',
         width: '60%', height: '1px',
@@ -17,7 +17,7 @@ export default function About() {
       }} aria-hidden="true" />
 
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
-        <AnimatedSection className="grid grid-cols-1 md:grid-cols-[60%_40%] gap-20 items-start">
+        <AnimatedSection className="grid grid-cols-1 md:grid-cols-[60%_40%] gap-12 md:gap-20 items-start">
 
           {/* Colonna Sinistra */}
           <div className="flex flex-col items-start">

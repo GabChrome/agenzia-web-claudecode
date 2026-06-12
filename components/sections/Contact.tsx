@@ -47,7 +47,7 @@ export default function Contact() {
   };
 
   return (
-    <section id="contact" style={{ padding: '120px 0' }}>
+    <section id="contact" className="py-16 md:py-[120px]">
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
 
         <AnimatedSection className="mb-16">

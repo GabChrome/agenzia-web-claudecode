@@ -1,109 +1,96 @@
 'use client';
 
 import { useTranslations } from 'next-intl';
-import Image from 'next/image';
 import AnimatedSection from '@/components/ui/AnimatedSection';
-
-// Placeholder avatar (se non forniti nel json)
-const AVATARS = [
-  'https://picsum.photos/seed/giulia-ferretti/80/80',
-  'https://picsum.photos/seed/marco-benedetti/80/80',
-  'https://picsum.photos/seed/salvatore-amato/80/80',
-  'https://picsum.photos/seed/chiara-russo/80/80',
-];
+import { TestimonialsColumn, type TestimonialItem } from '@/components/ui/testimonials-columns-1';
 
 export default function Testimonials() {
   const t = useTranslations('testimonials');
 
-  const testimonials = t.raw('items') as Array<{
+  const items = t.raw('items') as Array<{
     quote: string;
     name: string;
     role: string;
-    company: string;
+    image: string;
   }>;
 
+  const testimonials: TestimonialItem[] = items.map((item) => ({
+    text: item.quote,
+    name: item.name,
+    role: item.role,
+    image: item.image,
+  }));
+
+  const col1 = testimonials.slice(0, 3);
+  const col2 = testimonials.slice(3, 6);
+  const col3 = testimonials.slice(6, 9);
+
   return (
-    <section id="testimonials" style={{ padding: '120px 0', background: 'var(--surface-1)' }}>
-      <div className="max-w-7xl mx-auto px-6 lg:px-8">
-        
-        <AnimatedSection className="max-w-lg mb-16">
+    <section
+      id="testimonials"
+      className="py-16 md:py-[120px]"
+      style={{ background: 'var(--surface-1)', position: 'relative', overflow: 'hidden' }}
+    >
+      <div style={{
+        position: 'absolute',
+        top: '50%', left: '50%',
+        transform: 'translate(-50%, -50%)',
+        width: '600px', height: '400px',
+        background: 'radial-gradient(ellipse at center, rgba(154,120,48,0.06) 0%, transparent 70%)',
+        pointerEvents: 'none',
+      }} aria-hidden="true" />
+
+      <div className="max-w-7xl mx-auto px-6 lg:px-8" style={{ position: 'relative', zIndex: 1 }}>
+
+        <AnimatedSection className="flex flex-col items-center text-center mb-12 md:mb-16">
+          <div style={{
+            display: 'inline-flex',
+            alignItems: 'center',
+            gap: '8px',
+            border: '1px solid rgba(154,120,48,0.3)',
+            background: 'rgba(154,120,48,0.07)',
+            borderRadius: '999px',
+            padding: '5px 16px',
+            marginBottom: '24px',
+          }}>
+            <span style={{ fontSize: '11px', fontWeight: 600, letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--accent)' }}>
+              Testimonials
+            </span>
+          </div>
+
           <h2 style={{
-            fontSize: 'clamp(32px, 4vw, 52px)',
+            fontSize: 'clamp(28px, 4vw, 52px)',
             fontWeight: 700,
+            letterSpacing: '-0.02em',
             color: 'var(--text-1)',
-            lineHeight: 1.1
+            lineHeight: 1.1,
+            maxWidth: '540px',
           }}>
             {t('headline')}
           </h2>
+          <p style={{
+            color: 'var(--text-2)',
+            fontSize: '16px',
+            lineHeight: 1.6,
+            marginTop: '16px',
+            maxWidth: '400px',
+          }}>
+            {t('subtitle')}
+          </p>
         </AnimatedSection>
 
-        <div className="grid md:grid-cols-2 gap-5">
-          {testimonials.map((test, i) => (
-            <AnimatedSection key={test.name} delay={i * 0.1}>
-              <blockquote style={{
-                background: '#0F0F0F',
-                border: '1px solid var(--border-subtle)',
-                borderRadius: '12px',
-                padding: '28px',
-                position: 'relative',
-                overflow: 'hidden',
-                display: 'flex',
-                flexDirection: 'column',
-                gap: '20px',
-                height: '100%'
-              }}>
-                {/* Decorazione virgolette */}
-                <div style={{
-                  position: 'absolute', top: '12px', right: '20px',
-                  fontFamily: 'var(--font-serif)', fontSize: '80px', lineHeight: 1,
-                  color: 'var(--accent)', opacity: 0.15, userSelect: 'none'
-                }} aria-hidden="true">
-                  &quot;
-                </div>
-
-                <p style={{
-                  color: 'var(--text-2)',
-                  fontSize: '15px',
-                  lineHeight: 1.75,
-                  fontStyle: 'italic',
-                  flex: 1,
-                  position: 'relative',
-                  zIndex: 1
-                }}>
-                  {test.quote}
-                </p>
-
-                <div style={{
-                  borderTop: '1px solid var(--border-subtle)',
-                  paddingTop: '20px',
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '12px'
-                }}>
-                  <Image
-                    src={AVATARS[i % AVATARS.length]}
-                    alt={test.name}
-                    width={40}
-                    height={40}
-                    style={{ borderRadius: '50%', objectFit: 'cover', border: '1px solid var(--border-default)' }}
-                  />
-                  <div style={{ display: 'flex', flexDirection: 'column' }}>
-                    <cite style={{ fontStyle: 'normal', fontSize: '14px', fontWeight: 600, color: 'var(--text-1)' }}>
-                      {test.name}
-                    </cite>
-                    <span style={{ fontSize: '12px', color: 'var(--text-3)' }}>
-                      {test.role} - {test.company}
-                    </span>
-                  </div>
-                  <div style={{ marginLeft: 'auto', display: 'flex', gap: '2px', color: 'var(--accent)' }} aria-label="5 stelle su 5">
-                    {[...Array(5)].map((_, i) => (
-                      <span key={i}>★</span>
-                    ))}
-                  </div>
-                </div>
-              </blockquote>
-            </AnimatedSection>
-          ))}
+        <div style={{
+          display: 'flex',
+          justifyContent: 'center',
+          gap: '16px',
+          maxHeight: '680px',
+          overflow: 'hidden',
+          maskImage: 'linear-gradient(to bottom, transparent, black 12%, black 88%, transparent)',
+          WebkitMaskImage: 'linear-gradient(to bottom, transparent, black 12%, black 88%, transparent)',
+        }}>
+          <TestimonialsColumn testimonials={col1} duration={18} />
+          <TestimonialsColumn testimonials={col2} duration={22} className="hidden md:block" />
+          <TestimonialsColumn testimonials={col3} duration={16} className="hidden lg:block" />
         </div>
       </div>
     </section>

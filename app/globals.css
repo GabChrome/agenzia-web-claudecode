@@ -93,6 +93,18 @@ body::before {
   opacity: 0.3;
 }
 
+/* Testimonials infinite scroll — CSS compositor, no JS jank */
+@keyframes testimonials-scroll {
+  from { transform: translateY(0); }
+  to   { transform: translateY(-50%); }
+}
+
+/* Portfolio: on touch/pointer-coarse devices show card info by default */
+@media (hover: none), (pointer: coarse) {
+  .portfolio-overlay { opacity: 0.88 !important; }
+  .portfolio-info    { opacity: 1 !important; transform: translateY(0) !important; }
+}
+
 @layer utilities {
   .text-balance {
     text-wrap: balance;

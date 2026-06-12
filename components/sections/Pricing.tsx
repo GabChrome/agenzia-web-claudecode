@@ -24,7 +24,7 @@ export default function Pricing() {
   }));
 
   return (
-    <section id="pricing" style={{ padding: '120px 0' }}>
+    <section id="pricing" className="py-16 md:py-[120px]">
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
 
         <AnimatedSection className="flex flex-col items-center text-center mb-16">
@@ -54,7 +54,7 @@ export default function Pricing() {
                   background: plan.popular ? 'var(--surface-2)' : 'var(--surface-1)',
                   border: plan.popular ? 'none' : '1px solid var(--border-subtle)',
                   borderRadius: '16px',
-                  padding: '32px',
+                  padding: 'clamp(20px, 4vw, 32px)',
                   position: 'relative',
                 }}
               >

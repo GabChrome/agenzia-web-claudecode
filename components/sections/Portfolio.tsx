@@ -38,7 +38,7 @@ export default function Portfolio() {
     : projects.filter(p => p.tags.includes(activeFilter));
 
   return (
-    <section id="portfolio" style={{ padding: '120px 0', background: 'var(--surface-1)' }}>
+    <section id="portfolio" className="py-16 md:py-[120px]" style={{ background: 'var(--surface-1)' }}>
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
         <AnimatedSection className="mb-12">
           <p className="eyebrow" style={{ marginBottom: '16px', color: 'var(--accent)' }}>
@@ -105,14 +105,10 @@ export default function Portfolio() {
                   className="object-cover transition-transform duration-500 group-hover:scale-105"
                 />
 
-                <div className="absolute inset-0 transition-all duration-300 flex flex-col justify-end p-6"
-                     style={{
-                       background: 'rgba(26,24,20,0)',
-                     }}
-                >
-                  <div className="absolute inset-0 bg-[rgba(20,18,14,0.90)] opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                  
-                  <div className="relative translate-y-4 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-300 z-10 flex flex-col justify-end h-full">
+                <div className="absolute inset-0 transition-all duration-300 flex flex-col justify-end p-6">
+                  <div className="portfolio-overlay absolute inset-0 bg-[rgba(20,18,14,0.90)] opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+
+                  <div className="portfolio-info relative translate-y-4 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-300 z-10 flex flex-col justify-end h-full">
                     <div className="flex flex-wrap gap-[6px] mb-3">
                       {project.tags.map((tag) => (
                         <span
