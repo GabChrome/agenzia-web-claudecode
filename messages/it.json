@@ -164,26 +164,56 @@
       {
         "quote": "Anti Gravity ha trasformato la nostra presenza online. Il nuovo sito ha aumentato le richieste di contatto del 40% nel primo mese.",
         "name": "Giulia Ferretti",
-        "role": "CEO",
-        "company": "Studio Ferretti"
+        "role": "CEO — Studio Ferretti",
+        "image": "https://randomuser.me/api/portraits/women/44.jpg"
       },
       {
         "quote": "Team straordinario. Puntuale, professionale e con un occhio per il design che non avevo mai visto in altre agenzie italiane.",
         "name": "Marco Benedetti",
-        "role": "Fondatore",
-        "company": "Volta Fintech"
+        "role": "Founder — Volta Fintech",
+        "image": "https://randomuser.me/api/portraits/men/32.jpg"
       },
       {
         "quote": "Il nostro e-commerce finalmente funziona e converte. Le vendite online sono cresciute del 60% rispetto all'anno scorso.",
         "name": "Salvatore Amato",
-        "role": "Titolare",
-        "company": "Olio Meridiano"
+        "role": "Titolare — Olio Meridiano",
+        "image": "https://randomuser.me/api/portraits/men/67.jpg"
       },
       {
         "quote": "Collaborazione senza intoppi dalla prima call al lancio. Sanno ascoltare e sanno tradurre le idee in prodotto.",
         "name": "Chiara Russo",
-        "role": "Marketing Manager",
-        "company": "MedFlow"
+        "role": "Marketing Manager — MedFlow",
+        "image": "https://randomuser.me/api/portraits/women/22.jpg"
+      },
+      {
+        "quote": "Avevo già provato altre due agenzie con risultati deludenti. Con Anti Gravity è stato tutto diverso: tempi rispettati, qualità superiore.",
+        "name": "Luca Marino",
+        "role": "CEO — Bricola Arredo",
+        "image": "https://randomuser.me/api/portraits/men/45.jpg"
+      },
+      {
+        "quote": "Il booking system per i nostri eventi funziona alla perfezione e ha ridotto i no-show del 30%. Investimento ripagato in 2 mesi.",
+        "name": "Federica Conti",
+        "role": "Event Manager — Terrazza Roma",
+        "image": "https://randomuser.me/api/portraits/women/68.jpg"
+      },
+      {
+        "quote": "Non pensavo fosse possibile avere un sito così bello in così poco tempo. Design impeccabile e codice pulito, hanno superato ogni aspettativa.",
+        "name": "Alessandro Ricci",
+        "role": "Founder — AlphaStart",
+        "image": "https://randomuser.me/api/portraits/men/12.jpg"
+      },
+      {
+        "quote": "La dashboard che hanno sviluppato per la nostra clinica ha semplificato il lavoro di 15 persone ogni giorno. Investimento che consiglio a tutti.",
+        "name": "Dott.ssa Paola Neri",
+        "role": "Direttore — Studio Medico Neri",
+        "image": "https://randomuser.me/api/portraits/women/57.jpg"
+      },
+      {
+        "quote": "Il marketplace che abbiamo costruito insieme ha già 200 artigiani attivi. Scalabilità, design e performance: non si può chiedere di più.",
+        "name": "Giovanni Esposito",
+        "role": "Co-founder — Artigiani del Sud",
+        "image": "https://randomuser.me/api/portraits/men/28.jpg"
       }
     ]
   },

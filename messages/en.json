@@ -164,26 +164,56 @@
       {
         "quote": "Anti Gravity transformed our online presence. The new site increased contact requests by 40% in the first month.",
         "name": "Giulia Ferretti",
-        "role": "CEO",
-        "company": "Studio Ferretti"
+        "role": "CEO — Studio Ferretti",
+        "image": "https://randomuser.me/api/portraits/women/44.jpg"
       },
       {
-        "quote": "Extraordinary team. Punctual, professional and with an eye for design I had never seen in other agencies.",
+        "quote": "Extraordinary team. Punctual, professional, and with an eye for design I had never seen in other agencies.",
         "name": "Marco Benedetti",
-        "role": "Founder",
-        "company": "Volta Fintech"
+        "role": "Founder — Volta Fintech",
+        "image": "https://randomuser.me/api/portraits/men/32.jpg"
       },
       {
         "quote": "Our e-commerce finally works and converts. Online sales grew 60% compared to last year.",
         "name": "Salvatore Amato",
-        "role": "Owner",
-        "company": "Olio Meridiano"
+        "role": "Owner — Olio Meridiano",
+        "image": "https://randomuser.me/api/portraits/men/67.jpg"
       },
       {
         "quote": "Smooth collaboration from the first call to launch. They know how to listen and translate ideas into product.",
         "name": "Chiara Russo",
-        "role": "Marketing Manager",
-        "company": "MedFlow"
+        "role": "Marketing Manager — MedFlow",
+        "image": "https://randomuser.me/api/portraits/women/22.jpg"
+      },
+      {
+        "quote": "I had tried two other agencies with disappointing results. With Anti Gravity everything was different: deadlines met, superior quality.",
+        "name": "Luca Marino",
+        "role": "CEO — Bricola Arredo",
+        "image": "https://randomuser.me/api/portraits/men/45.jpg"
+      },
+      {
+        "quote": "The booking system for our events works perfectly and reduced no-shows by 30%. Investment paid back in 2 months.",
+        "name": "Federica Conti",
+        "role": "Event Manager — Terrazza Roma",
+        "image": "https://randomuser.me/api/portraits/women/68.jpg"
+      },
+      {
+        "quote": "I did not think it was possible to have such a beautiful site in so little time. Impeccable design and clean code — exceeded every expectation.",
+        "name": "Alessandro Ricci",
+        "role": "Founder — AlphaStart",
+        "image": "https://randomuser.me/api/portraits/men/12.jpg"
+      },
+      {
+        "quote": "The dashboard they built for our clinic has simplified the work of 15 people every day. An investment I recommend to everyone.",
+        "name": "Dr. Paola Neri",
+        "role": "Director — Studio Medico Neri",
+        "image": "https://randomuser.me/api/portraits/women/57.jpg"
+      },
+      {
+        "quote": "The marketplace we built together already has 200 active artisans. Scalability, design and performance — you could not ask for more.",
+        "name": "Giovanni Esposito",
+        "role": "Co-founder — Artigiani del Sud",
+        "image": "https://randomuser.me/api/portraits/men/28.jpg"
       }
     ]
   },
