@@ -70,6 +70,7 @@
     "headline": "Clear plans, no surprises.",
     "sub": "Choose the plan that fits your project.",
     "popular": "Most popular",
+    "popularBadge": "Most popular",
     "cta": "Get started",
     "plans": [
       {
