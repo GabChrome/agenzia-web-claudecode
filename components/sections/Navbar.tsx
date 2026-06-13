@@ -16,7 +16,14 @@ export default function Navbar() {
 
   const { scrollY } = useScroll();
   useMotionValueEvent(scrollY, 'change', (latest) => {
-    setScrolled(latest > 20);
+    const hero = document.getElementById('hero');
+    // Rimani in dark mode per tutta la hero animata (300vh);
+    // passa a light solo quando il cursore esce dalla sezione.
+    if (hero && hero.offsetHeight > window.innerHeight * 1.5) {
+      setScrolled(latest >= hero.offsetHeight - window.innerHeight);
+    } else {
+      setScrolled(latest > 20);
+    }
   });
 
   const scrollTo = (id: string) => {

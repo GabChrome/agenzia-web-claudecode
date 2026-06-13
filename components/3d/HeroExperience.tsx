@@ -124,7 +124,7 @@ export default function HeroExperience() {
         ) : (
           <Canvas
             camera={{ position: [0, 1.05, 5.2], fov: 40 }}
-            onCreated={({ camera }) => camera.lookAt(0, 0, 0)}
+            onCreated={({ camera }) => camera.lookAt(0, 0.2, 0)}
             dpr={[1, 1.5]}
             frameloop={staticMode ? 'demand' : 'always'}
             gl={{ antialias: true, powerPreference: 'high-performance' }}
@@ -210,7 +210,7 @@ export default function HeroExperience() {
         {/* CTA finali — appaiono a sito composto */}
         <div
           ref={ctaRef}
-          className="absolute inset-x-0 z-10 flex flex-col sm:flex-row items-center justify-center gap-3 px-6"
+          className="absolute inset-x-0 z-20 flex flex-col sm:flex-row items-center justify-center gap-3 px-6"
           style={{ bottom: '9vh', opacity: 0, pointerEvents: 'none' }}
         >
           <button
@@ -251,8 +251,8 @@ export default function HeroExperience() {
           aria-hidden="true"
           style={{
             position: 'absolute', bottom: 0, left: 0, right: 0,
-            height: '24vh',
-            background: 'linear-gradient(to bottom, transparent, var(--bg) 92%)',
+            height: '10vh',
+            background: 'linear-gradient(to bottom, transparent, var(--bg) 95%)',
             pointerEvents: 'none',
           }}
         />
