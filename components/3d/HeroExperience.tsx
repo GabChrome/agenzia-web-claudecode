@@ -1,8 +1,10 @@
 'use client';
 
-import { Suspense, useEffect, useRef } from 'react';
-import { Canvas } from '@react-three/fiber';
+import { Suspense, useEffect, useMemo, useRef } from 'react';
+import { Canvas, useFrame, useThree } from '@react-three/fiber';
+import { Environment, Lightformer } from '@react-three/drei';
 import { EffectComposer, Bloom } from '@react-three/postprocessing';
+import * as THREE from 'three';
 import { useTranslations } from 'next-intl';
 import { ArrowRight, ChevronDown, Play } from 'lucide-react';
 import Laptop from './Laptop';
@@ -30,6 +32,47 @@ const smooth = (a: number, b: number, x: number) => {
   const k = clamp((x - a) / (b - a), 0, 1);
   return k * k * (3 - 2 * k);
 };
+
+const _v = new THREE.Vector3();
+
+/**
+ * Inquadratura 3/4 dei reference (laptop leggermente ruotato), con respiro
+ * continuo della camera e leggera parallasse sul mouse (solo desktop).
+ * La camera converge verso la posizione target con un lerp morbido,
+ * così l'angolo resta coerente in tutte le fasi senza scatti.
+ */
+function CameraRig({ isMobile }: { isMobile: boolean }) {
+  const { camera } = useThree();
+  const mouse = useRef({ x: 0, y: 0 });
+
+  const base = useMemo(
+    () => (isMobile ? new THREE.Vector3(0.7, 0.95, 5.3) : new THREE.Vector3(1.9, 1.15, 4.9)),
+    [isMobile]
+  );
+  const target = useMemo(
+    () => (isMobile ? new THREE.Vector3(0, -0.28, 0.1) : new THREE.Vector3(0, 0.08, 0.15)),
+    [isMobile]
+  );
+
+  useEffect(() => {
+    const onMove = (e: MouseEvent) => {
+      mouse.current.x = e.clientX / window.innerWidth - 0.5;
+      mouse.current.y = e.clientY / window.innerHeight - 0.5;
+    };
+    window.addEventListener('mousemove', onMove);
+    return () => window.removeEventListener('mousemove', onMove);
+  }, []);
+
+  useFrame((state) => {
+    const t = state.clock.elapsedTime;
+    const px = base.x + Math.sin(t * 0.3) * 0.06 + (isMobile ? 0 : mouse.current.x * 0.45);
+    const py = base.y + Math.cos(t * 0.24) * 0.04 - (isMobile ? 0 : mouse.current.y * 0.28);
+    camera.position.lerp(_v.set(px, py, base.z), 0.06);
+    camera.lookAt(target);
+  });
+
+  return null;
+}
 
 /**
  * Orchestratore della hero scroll-driven:
@@ -123,21 +166,33 @@ export default function HeroExperience() {
           <SceneFallback />
         ) : (
           <Canvas
-            camera={{ position: [0, 1.05, 5.2], fov: 40 }}
-            onCreated={({ camera }) => camera.lookAt(0, 0.2, 0)}
+            camera={{ position: [1.9, 1.15, 4.9], fov: 40 }}
+            onCreated={({ camera }) => camera.lookAt(0, 0.08, 0.15)}
             dpr={[1, 1.5]}
             frameloop={staticMode ? 'demand' : 'always'}
             gl={{ antialias: true, powerPreference: 'high-performance' }}
             style={{ position: 'absolute', inset: 0, pointerEvents: 'none' }}
           >
-            <color attach="background" args={['#0E0D0B']} />
-            <fog attach="fog" args={['#0E0D0B', 8, 15]} />
+            <color attach="background" args={['#0D0B08']} />
+            <fog attach="fog" args={['#0D0B08', 8, 16]} />
 
-            <ambientLight intensity={0.5} color="#F5E8C0" />
-            <directionalLight position={[3, 5, 4]} intensity={1.0} color="#FFF4D8" />
-            <pointLight position={[-4, 1.5, 2]} intensity={0.45} color="#C8A040" />
+            {!staticMode && <CameraRig isMobile={isMobile} />}
+
+            <ambientLight intensity={0.35} color="#F5E8C0" />
+            <directionalLight position={[3, 5, 4]} intensity={1.1} color="#FFF0CC" />
+            <pointLight position={[-4, 1.5, 2.5]} intensity={0.8} color="#D4AF37" />
+            <pointLight position={[2.5, -1, 3]} intensity={0.4} color="#FFD98A" />
 
             <Suspense fallback={null}>
+              {/* Environment procedurale (nessun HDRI da rete): le superfici
+                  metalliche riflettono questi pannelli di luce caldi →
+                  oro lucido e profondo come nei frame di riferimento */}
+              <Environment resolution={256} frames={1}>
+                <Lightformer intensity={2.2} color="#FFE3A0" position={[3, 3, 3]} scale={[7, 7, 1]} />
+                <Lightformer intensity={1.3} color="#D4AF37" position={[-5, 1, 2]} scale={[6, 6, 1]} />
+                <Lightformer intensity={0.7} color="#FFFFFF" position={[0, -4, 2]} scale={[10, 4, 1]} />
+              </Environment>
+
               <group
                 scale={isMobile ? LAPTOP_SCALE_MOBILE : LAPTOP_SCALE}
                 position={[0, isMobile ? LAPTOP_Y_MOBILE : LAPTOP_Y, 0]}
@@ -155,7 +210,7 @@ export default function HeroExperience() {
               )}
               {!isMobile && (
                 <EffectComposer multisampling={0}>
-                  <Bloom luminanceThreshold={0.9} intensity={0.7} mipmapBlur />
+                  <Bloom luminanceThreshold={0.82} intensity={1.0} radius={0.7} mipmapBlur />
                 </EffectComposer>
               )}
             </Suspense>

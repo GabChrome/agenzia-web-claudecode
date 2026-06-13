@@ -20,15 +20,16 @@
   --error:          #C0392B;
 
   /* Palette immersiva — estratta dai materiali della scena 3D
-     (oro metallico #C8A040, bronzo #8A6420, avorio #F2EAD8, fondo #0E0D0B) */
-  --dark-bg:        #0E0D0B;
+     (oro metallico #D4AF37, oro caldo #C9A227, avorio #F5EFE0, fondo #0D0B08) */
+  --dark-bg:        #0D0B08;
   --dark-surface:   rgba(255,255,255,0.045);
   --dark-border:    rgba(255,255,255,0.09);
-  --dark-text-1:    #F2EEE7;
+  --dark-text-1:    #F5EFE0;
   --dark-text-2:    #B5AEA2;
   --dark-text-3:    #8C8578;
-  --accent-bright:  #C8A040;
-  --accent-bronze:  #8A6420;
+  --accent-bright:  #D4AF37;
+  --accent-bronze:  #C9A227;
+  --accent-glow:    #FFD98A;
   --font-sans:      'Plus Jakarta Sans', sans-serif;
   --font-serif:     'Instrument Serif', serif;
 }

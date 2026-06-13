@@ -6,8 +6,8 @@ import * as THREE from 'three';
 import { CONVERGENCE_START, CONVERGENCE_SPREAD, CONVERGENCE_END } from './heroTimings';
 import { DISPLAY_CENTER } from './Laptop';
 
-// Palette estratta dai materiali della scena, pesata su oro e avorio
-const PALETTE = ['#C8A040', '#C8A040', '#F2EAD8', '#F2EAD8', '#B5AEA2', '#8A6420'];
+// Palette dei reference: dominante oro metallico, pochi accenti avorio
+const PALETTE = ['#D4AF37', '#D4AF37', '#C9A227', '#E8C766', '#F5EFE0', '#A07A1E'];
 
 // Brevi stringhe "da codice" renderizzate su CanvasTexture (nessun font remoto)
 const TEXTS = ['01', '10', '</>', '{ }', '404', '==', '#', '42'];
@@ -153,10 +153,14 @@ export default function FloatingElements({
     ];
     return kinds.map((k) => ({
       geo: k.geo,
+      // Oro metallico lucido (metalness alta) con un velo emissivo caldo:
+      // riflette l'Environment procedurale e brilla sul fondo nero (bloom).
       mat: new THREE.MeshStandardMaterial({
         color: '#FFFFFF',
-        metalness: 0.35,
-        roughness: 0.5,
+        metalness: 0.92,
+        roughness: 0.26,
+        emissive: '#2A1D04',
+        emissiveIntensity: 0.55,
         side: k.side ? THREE.DoubleSide : THREE.FrontSide,
       }),
       cfgs: Array.from({ length: Math.max(1, Math.round(shapeCount * k.share)) }, () =>
@@ -170,7 +174,7 @@ export default function FloatingElements({
     () =>
       TEXTS.slice(0, textCount).map((txt, i) => ({
         cfg: makeCfg(laptopScale, laptopY),
-        tex: makeTextTexture(txt, i % 3 === 0 ? '#C8A040' : '#D8D2C6'),
+        tex: makeTextTexture(txt, i % 4 === 0 ? '#F5EFE0' : '#D4AF37'),
       })),
     [textCount, laptopScale, laptopY]
   );

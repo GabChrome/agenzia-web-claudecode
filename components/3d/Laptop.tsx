@@ -30,9 +30,9 @@ const KEY_STEP = KEY_W + KEY_GAP; // 0.22
  * bianco spento → rampa flash → assestamento sul glow di regime.
  */
 function screenGlow(p: number): number {
-  const OFF = 0.12;
-  const PEAK = 2.6;
-  const ON = 0.62;
+  const OFF = 0.02;   // schermo praticamente spento (scuro, come nei reference)
+  const PEAK = 3.0;   // picco del flash dorato (ben sopra la soglia bloom)
+  const ON = 0.62;    // glow di regime con il sito visibile
   if (p < SCREEN_ON_THRESHOLD) return OFF;
   if (p < SCREEN_FLASH_PEAK) {
     const k = (p - SCREEN_ON_THRESHOLD) / (SCREEN_FLASH_PEAK - SCREEN_ON_THRESHOLD);
@@ -130,16 +130,18 @@ export default function Laptop({ progressRef }: { progressRef: MutableRefObject<
           <meshStandardMaterial color="#2E2A24" metalness={0.85} roughness={0.18} />
         </RoundedBox>
 
-        {/* DISPLAY — la mesh che si accende (coordinate mondo ≈ DISPLAY_CENTER) */}
+        {/* DISPLAY — la mesh che si accende (coordinate mondo ≈ DISPLAY_CENTER).
+            Da spento è scuro con un riflesso vetroso; si accende di luce
+            calda dorata (emissive warm) come nei frame di riferimento. */}
         <mesh position={[0, 1.05, 0.04]}>
           <planeGeometry args={[DISPLAY_W, DISPLAY_H]} />
           <meshStandardMaterial
             ref={displayMat}
-            color="#F7F4ED"
-            emissive="#FFFFFF"
-            emissiveIntensity={0.12}
-            roughness={0.9}
-            metalness={0}
+            color="#0C0A06"
+            emissive="#FFE0A0"
+            emissiveIntensity={0.02}
+            roughness={0.35}
+            metalness={0.1}
           />
         </mesh>
       </group>
