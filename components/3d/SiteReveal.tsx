@@ -79,7 +79,6 @@ export default function SiteReveal({
             width: MOCK_W,
             height: MOCK_H,
             background: '#F8F5F0',
-            borderRadius: 6,
             overflow: 'hidden',
             opacity: 0,
             fontFamily: 'var(--font-sans), sans-serif',

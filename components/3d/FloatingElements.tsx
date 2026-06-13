@@ -143,13 +143,13 @@ export default function FloatingElements({
   const shapeCount = count - textCount;
 
   const groups = useMemo<ShapeGroup[]>(() => {
-    // Mix di forme: cubi, anelli, tetraedri, linee sottili, piani colorati
+    // Mix di forme morbide e organiche
     const kinds = [
-      { geo: new THREE.BoxGeometry(0.16, 0.16, 0.16), share: 0.25, side: false },
-      { geo: new THREE.TorusGeometry(0.09, 0.024, 8, 24), share: 0.2, side: false },
-      { geo: new THREE.TetrahedronGeometry(0.13), share: 0.2, side: false },
-      { geo: new THREE.BoxGeometry(0.55, 0.02, 0.02), share: 0.15, side: false }, // linee
-      { geo: new THREE.PlaneGeometry(0.24, 0.17), share: 0.2, side: true },       // blocchetti
+      { geo: new THREE.SphereGeometry(0.1, 14, 14), share: 0.22, side: false },
+      { geo: new THREE.TorusGeometry(0.09, 0.028, 10, 32), share: 0.18, side: false },
+      { geo: new THREE.IcosahedronGeometry(0.11, 1), share: 0.20, side: false },
+      { geo: new THREE.CapsuleGeometry(0.014, 0.38, 4, 12), share: 0.18, side: false },
+      { geo: new THREE.TorusKnotGeometry(0.065, 0.020, 80, 8), share: 0.22, side: false },
     ];
     return kinds.map((k) => ({
       geo: k.geo,
