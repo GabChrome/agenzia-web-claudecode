@@ -39,7 +39,7 @@ export default function Hero() {
         }}
       />
 
-      <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-8 w-full pt-24 pb-16">
+      <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-8 w-full pt-20 sm:pt-24 pb-12 sm:pb-16">
         <AnimatedSection className="flex flex-col items-start max-w-2xl">
           {/* Badge */}
           <div style={{
@@ -56,7 +56,7 @@ export default function Hero() {
           </div>
 
           {/* Headline */}
-          <h1 style={{ fontSize: 'clamp(44px, 6.5vw, 84px)', lineHeight: 1.0, letterSpacing: '-0.03em', color: 'var(--dark-text-1)' }}>
+          <h1 style={{ fontSize: 'clamp(38px, 6.5vw, 84px)', lineHeight: 1.05, letterSpacing: '-0.03em', color: 'var(--dark-text-1)' }}>
             <em style={{ fontFamily: 'var(--font-serif)', fontStyle: 'italic', fontWeight: 400 }}>
               {t('headlineEm')}{' '}
             </em>
@@ -67,15 +67,15 @@ export default function Hero() {
           <p style={{
             color: 'var(--dark-text-2)',
             maxWidth: '460px',
-            fontSize: '17px',
+            fontSize: 'clamp(15px, 2vw, 17px)',
             lineHeight: 1.75,
-            marginTop: '24px'
+            marginTop: '20px'
           }}>
             {t('sub')}
           </p>
 
           {/* CTAs */}
-          <div className="flex flex-col sm:flex-row flex-wrap gap-3" style={{ marginTop: '36px' }}>
+          <div className="flex flex-col sm:flex-row flex-wrap gap-3" style={{ marginTop: '28px' }}>
             <button
               onClick={() => scrollTo('contact')}
               className="btn-glow w-full sm:w-auto"
@@ -130,7 +130,7 @@ export default function Hero() {
           </div>
 
           {/* Social proof */}
-          <div style={{ marginTop: '48px', fontSize: '13px', color: 'var(--dark-text-3)' }}>
+          <div style={{ marginTop: '32px', fontSize: '13px', color: 'var(--dark-text-3)' }}>
             {t('socialProof').split('·').map((part, i, arr) => (
               <span key={i}>
                 {part.trim()}

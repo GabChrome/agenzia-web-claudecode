@@ -17,7 +17,7 @@ export default function About() {
       }} aria-hidden="true" />
 
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
-        <AnimatedSection className="grid grid-cols-1 md:grid-cols-[60%_40%] gap-12 md:gap-20 items-start">
+        <AnimatedSection className="grid grid-cols-1 md:grid-cols-[60%_40%] gap-8 md:gap-20 items-start">
 
           {/* Colonna Sinistra */}
           <div className="flex flex-col items-start">
@@ -61,17 +61,21 @@ export default function About() {
             </button>
           </div>
 
-          {/* Colonna Destra (Stats) */}
-          <div style={{ display: 'flex', flexDirection: 'column' }}>
+          {/* Colonna Destra (Stats) — orizzontale su mobile, verticale da md */}
+          <div className="grid grid-cols-3 md:flex md:flex-col">
             {stats.map((stat, i) => (
-              <div key={i} style={{
-                padding: '24px 0',
-                borderBottom: i !== stats.length - 1 ? '1px solid var(--border-subtle)' : 'none',
-              }}>
-                <div style={{ fontSize: '52px', fontWeight: 700, color: 'var(--accent)', lineHeight: 1 }}>
+              <div
+                key={i}
+                className={`flex flex-col items-center text-center md:items-start md:text-left py-4 md:py-[24px] px-2 md:px-0${
+                  i !== stats.length - 1
+                    ? ' border-r md:border-r-0 md:border-b border-black/[.07] border-solid'
+                    : ''
+                }`}
+              >
+                <div style={{ fontSize: 'clamp(28px, 7vw, 52px)', fontWeight: 700, color: 'var(--accent)', lineHeight: 1 }}>
                   {stat.num}
                 </div>
-                <div style={{ color: 'var(--text-3)', fontSize: '13px', marginTop: '4px' }}>
+                <div style={{ color: 'var(--text-3)', fontSize: '12px', marginTop: '6px' }}>
                   {stat.label}
                 </div>
               </div>

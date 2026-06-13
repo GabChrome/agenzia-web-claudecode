@@ -50,7 +50,7 @@ export default function Contact() {
     <section id="contact" className="py-16 md:py-[120px]">
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
 
-        <AnimatedSection className="mb-16">
+        <AnimatedSection className="mb-10 md:mb-16">
           <p className="eyebrow" style={{ color: 'var(--accent)', marginBottom: '16px' }}>
             {t('headline')}
           </p>
@@ -59,7 +59,7 @@ export default function Contact() {
           </h2>
         </AnimatedSection>
 
-        <div className="grid lg:grid-cols-[60%_40%] gap-16">
+        <div className="grid lg:grid-cols-[60%_40%] gap-10 lg:gap-16">
           <AnimatedSection delay={0.1}>
             <form onSubmit={handleSubmit(onSubmit)} style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
 

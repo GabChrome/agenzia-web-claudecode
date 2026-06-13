@@ -1,23 +1,11 @@
 'use client';
 
-import { Component, Suspense, useEffect, useRef, useState, type ReactNode } from 'react';
+import { Suspense, useEffect, useRef, useState } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
-import { Environment, OrbitControls } from '@react-three/drei';
+import { Environment, Lightformer, OrbitControls } from '@react-three/drei';
 import { EffectComposer, Bloom } from '@react-three/postprocessing';
 import * as THREE from 'three';
 import { SceneFallback } from './SceneLoader';
-
-/* L'HDRI di Environment viene scaricato a runtime: se la rete fallisce
-   la scena deve sopravvivere con le sole luci esplicite. */
-class SilentBoundary extends Component<{ children: ReactNode }, { failed: boolean }> {
-  state = { failed: false };
-  static getDerivedStateFromError() {
-    return { failed: true };
-  }
-  render() {
-    return this.state.failed ? null : this.props.children;
-  }
-}
 
 function usePrefersReducedMotion() {
   const [reduced, setReduced] = useState(false);
@@ -150,9 +138,12 @@ export default function HeroScene() {
       <pointLight position={[-4, 2, -2]} intensity={0.5} color="#C8A040" />
 
       <Suspense fallback={null}>
-        <SilentBoundary>
-          <Environment preset="city" />
-        </SilentBoundary>
+        {/* Environment procedurale: nessun HDRI da rete, reflections calde sui metalli */}
+        <Environment resolution={256} frames={1}>
+          <Lightformer intensity={2.0} color="#FFE3A0" position={[3, 3, 2]} scale={[8, 8, 1]} />
+          <Lightformer intensity={1.2} color="#C8A040" position={[-4, 1, 2]} scale={[6, 6, 1]} />
+          <Lightformer intensity={0.6} color="#FFFFFF" position={[0, -3, 2]} scale={[10, 4, 1]} />
+        </Environment>
         <SceneObjects animate={animate} />
         {!isMobile && (
           <EffectComposer multisampling={0}>

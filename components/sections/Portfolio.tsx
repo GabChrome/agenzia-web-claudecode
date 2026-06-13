@@ -40,7 +40,7 @@ export default function Portfolio() {
   return (
     <section id="portfolio" className="py-16 md:py-[120px]" style={{ background: 'var(--surface-1)' }}>
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
-        <AnimatedSection className="mb-12">
+        <AnimatedSection className="mb-8 md:mb-12">
           <p className="eyebrow" style={{ marginBottom: '16px', color: 'var(--accent)' }}>
             {t('headline')}
           </p>
