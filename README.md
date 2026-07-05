@@ -12,6 +12,13 @@ Sito istituzionale per l'agenzia web "Anti Gravity", sviluppato con Next.js 14, 
 - **Form Contatti:** React Hook Form + Zod per validazione real-time accessibile.
 - **Deploy:** Firebase Hosting tramite CI/CD (GitHub Actions).
 
+## Pannello gallerie per i clienti
+
+Nella cartella [`gallery-admin/`](./gallery-admin) c'è il pannello multi-cliente con cui
+ogni cliente gestisce da solo la vetrina foto/video del proprio sito (album, didascalie
+IT/EN, drag & drop, bozze). È un progetto separato che si deploya su Cloudflare Workers
+(D1 + R2): vedi il suo [README](./gallery-admin/README.md) per setup e integrazione.
+
 ## Sviluppo locale
 
 ```bash

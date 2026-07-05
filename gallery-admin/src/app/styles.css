@@ -1,0 +1,29 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Tema di default (agenzia). Il tema di ogni cliente sovrascrive queste
+   variabili a runtime: vedi theme.ts. */
+:root {
+  --bg: #f8f5f0;
+  --surface: #ffffff;
+  --surface2: #efeae3;
+  --border: rgba(0, 0, 0, 0.1);
+  --accent: #9a7830;
+  --accent-soft: rgba(154, 120, 48, 0.14);
+  --text: #1a1814;
+  --text-soft: #6b655d;
+  --radius: 14px;
+  --font: 'Plus Jakarta Sans', system-ui, -apple-system, 'Segoe UI', sans-serif;
+}
+
+html {
+  -webkit-font-smoothing: antialiased;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font);
+}
