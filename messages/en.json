@@ -269,5 +269,84 @@
     "linkTerms": "Terms & Conditions",
     "rights": "All rights reserved.",
     "madeWith": "Made with ♥ in Italy"
+  },
+  "reports": {
+    "title": "Site reports",
+    "subtitle": "Traffic and statistics for every client site we build. Data can be viewed by day, week, month or year.",
+    "logout": "Log out",
+    "backToSites": "All sites",
+    "visits30": "Visits in the last 30 days",
+    "openReport": "Open report",
+    "launched": "Live since {date}",
+    "demoNote": "Automatically generated demo data: the interface is ready to be wired to a real analytics source (GA4, Plausible, Umami…).",
+    "login": {
+      "title": "Restricted area",
+      "desc": "Reports are reserved for the Anti Gravity team and authorised clients.",
+      "password": "Password",
+      "submit": "Sign in",
+      "error": "Wrong password, try again.",
+      "note": "Need access? Get in touch and we will send you the credentials."
+    },
+    "periods": {
+      "day": "Today",
+      "week": "7 days",
+      "month": "30 days",
+      "year": "12 months"
+    },
+    "vsPrev": {
+      "day": "vs yesterday (same hours)",
+      "week": "vs previous 7 days",
+      "month": "vs previous 30 days",
+      "year": "vs previous 12 months"
+    },
+    "kpi": {
+      "visits": "Visits",
+      "uniques": "Unique visitors",
+      "bounce": "Bounce rate",
+      "session": "Avg. session duration"
+    },
+    "chart": {
+      "title": "Visits over time",
+      "chartView": "Chart",
+      "tableView": "Table",
+      "bucket": "Interval"
+    },
+    "sources": {
+      "title": "Traffic sources",
+      "organic": "Organic search",
+      "direct": "Direct",
+      "social": "Social",
+      "referral": "Referral",
+      "email": "Email"
+    },
+    "devices": {
+      "title": "Devices",
+      "mobile": "Mobile",
+      "desktop": "Desktop",
+      "tablet": "Tablet"
+    },
+    "countries": {
+      "title": "Geography",
+      "it": "Italy",
+      "ch": "Switzerland",
+      "de": "Germany",
+      "fr": "France",
+      "us": "United States",
+      "other": "Other countries"
+    },
+    "engagement": {
+      "title": "Engagement",
+      "newVisitors": "New visitors",
+      "returning": "Returning",
+      "pagesPerSession": "Pages per session",
+      "pageviews": "Page views"
+    },
+    "export": {
+      "csv": "Export CSV",
+      "pdf": "Export PDF",
+      "period": "Period",
+      "sessionSeconds": "Avg. session duration (seconds)",
+      "newShare": "New visitor share"
+    }
   }
 }

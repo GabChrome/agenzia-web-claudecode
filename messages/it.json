@@ -269,5 +269,84 @@
     "linkTerms": "Termini e Condizioni",
     "rights": "Tutti i diritti riservati.",
     "madeWith": "Made with ♥ in Italia"
+  },
+  "reports": {
+    "title": "Report siti",
+    "subtitle": "Andamento e statistiche di tutti i siti realizzati per i clienti. Dati aggiornati e consultabili per giorno, settimana, mese o anno.",
+    "logout": "Esci",
+    "backToSites": "Tutti i siti",
+    "visits30": "Visite negli ultimi 30 giorni",
+    "openReport": "Apri report",
+    "launched": "Online dal {date}",
+    "demoNote": "Dati dimostrativi generati automaticamente: l'interfaccia è pronta per essere collegata a una fonte analytics reale (GA4, Plausible, Umami…).",
+    "login": {
+      "title": "Area riservata",
+      "desc": "I report sono riservati al team Anti Gravity e ai clienti autorizzati.",
+      "password": "Password",
+      "submit": "Accedi",
+      "error": "Password errata, riprova.",
+      "note": "Hai bisogno dell'accesso? Scrivici e ti invieremo le credenziali."
+    },
+    "periods": {
+      "day": "Oggi",
+      "week": "7 giorni",
+      "month": "30 giorni",
+      "year": "12 mesi"
+    },
+    "vsPrev": {
+      "day": "vs ieri (stesse ore)",
+      "week": "vs 7 giorni precedenti",
+      "month": "vs 30 giorni precedenti",
+      "year": "vs 12 mesi precedenti"
+    },
+    "kpi": {
+      "visits": "Visite",
+      "uniques": "Visitatori unici",
+      "bounce": "Frequenza di rimbalzo",
+      "session": "Durata media sessione"
+    },
+    "chart": {
+      "title": "Andamento visite",
+      "chartView": "Grafico",
+      "tableView": "Tabella",
+      "bucket": "Intervallo"
+    },
+    "sources": {
+      "title": "Sorgenti di traffico",
+      "organic": "Ricerca organica",
+      "direct": "Diretto",
+      "social": "Social",
+      "referral": "Referral",
+      "email": "Email"
+    },
+    "devices": {
+      "title": "Dispositivi",
+      "mobile": "Mobile",
+      "desktop": "Desktop",
+      "tablet": "Tablet"
+    },
+    "countries": {
+      "title": "Geografia",
+      "it": "Italia",
+      "ch": "Svizzera",
+      "de": "Germania",
+      "fr": "Francia",
+      "us": "Stati Uniti",
+      "other": "Altri paesi"
+    },
+    "engagement": {
+      "title": "Engagement",
+      "newVisitors": "Nuovi visitatori",
+      "returning": "Di ritorno",
+      "pagesPerSession": "Pagine per sessione",
+      "pageviews": "Pagine viste"
+    },
+    "export": {
+      "csv": "Esporta CSV",
+      "pdf": "Esporta PDF",
+      "period": "Periodo",
+      "sessionSeconds": "Durata media sessione (secondi)",
+      "newShare": "Quota nuovi visitatori"
+    }
   }
 }
