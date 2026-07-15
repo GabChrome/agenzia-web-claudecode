@@ -1,56 +1,41 @@
 /**
- * Backend prenotazioni del sito Anti Gravity.
+ * Proxy verso il backend prenotazioni WebAgency_BookingSystem
+ * (https://github.com/SadSonny/WebAgency_BookingSystem, deploy su Railway).
  *
- * Un unico Worker serve sia le pagine statiche (binding ASSETS → out/)
- * sia le API sotto /api/*. Le prenotazioni vivono in un Durable Object
- * (BookingStore) con storage persistente: nessun database da creare a mano.
+ * Un unico Worker serve le pagine statiche (binding ASSETS → out/) e inoltra
+ * le richieste /api/* al backend. Il proxy esiste per due motivi:
  *
- * Endpoint pubblici:
- *   GET  /api/health                     stato del backend
- *   GET  /api/bookings/slots?date=…      orari già occupati per una data
- *   POST /api/bookings                   crea una prenotazione
+ * 1. la X-Api-Key del tenant resta un secret lato server (mai nel bundle JS);
+ * 2. il CORS del backend consente solo GET/POST/DELETE e gli header
+ *    X-Api-Key/Content-Type: le chiamate admin (Authorization + PATCH)
+ *    dal browser sarebbero bloccate, mentre da Worker a backend il CORS
+ *    non si applica.
  *
- * Endpoint admin (header `Authorization: Bearer <BOOKINGS_ADMIN_KEY>`):
- *   GET    /api/bookings?date=…&status=…  elenco prenotazioni
- *   PATCH  /api/bookings/:id              cambia stato (pending/confirmed/cancelled)
- *   DELETE /api/bookings/:id              elimina una prenotazione
+ * Rotte esposte al sito (stessa origine):
+ *   GET    /api/health                 stato del collegamento col backend
+ *   GET    /api/services               → GET  /api/v1/services
+ *   GET    /api/availability?…         → GET  /api/v1/availability?…
+ *   POST   /api/bookings               → POST /api/v1/bookings
+ *   GET    /api/bookings/:id?token=…   → GET  /api/v1/bookings/:id?token=…
+ *   DELETE /api/bookings/:id?token=…   → DELETE /api/v1/bookings/:id?token=…
+ *   POST   /api/admin/token            → POST /api/v1/admin/auth/token
+ *   GET    /api/admin/bookings?…       → GET  /api/v1/admin/bookings?…      (Bearer)
+ *   PATCH  /api/admin/bookings/:id     → PATCH /api/v1/admin/bookings/:id  (Bearer)
  *
- * CORS aperto su /api/* per poter testare il backend anche da localhost
- * o da una copia del sito ospitata altrove (es. Firebase Hosting).
+ * Config (wrangler.toml / dashboard):
+ *   BOOKING_API_URL  base URL del backend (default: deploy Railway)
+ *   BOOKING_API_KEY  secret → `npx wrangler secret put BOOKING_API_KEY`
+ *                    Senza chiave /api/health risponde ok:false e il sito
+ *                    resta in modalità demo.
  */
-
-import {
-  bookingWindowDays,
-  addDaysISO,
-  getBookingService,
-  isOpenDay,
-  slotTimes,
-  todayISO,
-} from '../config/bookings';
 
 export interface Env {
   ASSETS: Fetcher;
-  BOOKINGS: DurableObjectNamespace;
-  BOOKINGS_ADMIN_KEY?: string;
+  BOOKING_API_URL?: string;
+  BOOKING_API_KEY?: string;
 }
 
-export type BookingStatus = 'pending' | 'confirmed' | 'cancelled';
-
-export interface Booking {
-  id: string;
-  name: string;
-  email: string;
-  phone: string;
-  service: string;
-  date: string; // YYYY-MM-DD
-  time: string; // HH:MM
-  notes: string;
-  status: BookingStatus;
-  createdAt: string; // ISO 8601
-}
-
-const STATUSES: BookingStatus[] = ['pending', 'confirmed', 'cancelled'];
-const MAX_BOOKINGS = 1000;
+const DEFAULT_API_URL = 'https://webagencybookingsystem-production.up.railway.app';
 
 const CORS_HEADERS: Record<string, string> = {
   'Access-Control-Allow-Origin': '*',
@@ -66,153 +51,46 @@ function json(data: unknown, status = 200): Response {
   });
 }
 
-function isAdmin(request: Request, env: Env): boolean {
-  const key = env.BOOKINGS_ADMIN_KEY || 'antigravity';
-  const header = request.headers.get('Authorization') ?? '';
-  return header === `Bearer ${key}`;
+function apiBase(env: Env): string {
+  return (env.BOOKING_API_URL || DEFAULT_API_URL).replace(/\/+$/, '');
 }
 
-/* ------------------------------------------------------------ validazione --- */
+/** Inoltra la richiesta al backend e restituisce la risposta con CORS aperto. */
+async function forward(
+  request: Request,
+  env: Env,
+  upstreamPath: string,
+  opts: { withApiKey?: boolean; withAuth?: boolean } = {}
+): Promise<Response> {
+  const url = new URL(request.url);
+  const target = `${apiBase(env)}${upstreamPath}${url.search}`;
 
-type ValidationResult =
-  | { ok: true; value: Omit<Booking, 'id' | 'status' | 'createdAt'> }
-  | { ok: false; error: string };
-
-const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-const DATE_RE = /^\d{4}-\d{2}-\d{2}$/;
-
-function str(v: unknown): string {
-  return typeof v === 'string' ? v.trim() : '';
-}
-
-function validateBooking(body: unknown): ValidationResult {
-  if (typeof body !== 'object' || body === null) return { ok: false, error: 'invalid_json' };
-  const b = body as Record<string, unknown>;
-
-  const name = str(b.name);
-  if (name.length < 2 || name.length > 80) return { ok: false, error: 'invalid_name' };
-
-  const email = str(b.email);
-  if (!EMAIL_RE.test(email) || email.length > 120) return { ok: false, error: 'invalid_email' };
-
-  const phone = str(b.phone);
-  if (phone.length > 30) return { ok: false, error: 'invalid_phone' };
-
-  const service = str(b.service);
-  if (!getBookingService(service)) return { ok: false, error: 'invalid_service' };
-
-  const date = str(b.date);
-  if (!DATE_RE.test(date)) return { ok: false, error: 'invalid_date' };
-  const today = todayISO();
-  if (date < today || date > addDaysISO(today, bookingWindowDays)) {
-    return { ok: false, error: 'date_out_of_range' };
-  }
-  if (!isOpenDay(date)) return { ok: false, error: 'closed_day' };
-
-  const time = str(b.time);
-  if (!slotTimes.includes(time)) return { ok: false, error: 'invalid_time' };
-
-  const notes = str(b.notes);
-  if (notes.length > 500) return { ok: false, error: 'invalid_notes' };
-
-  return { ok: true, value: { name, email, phone, service, date, time, notes } };
-}
-
-/* -------------------------------------------------------------- Durable Object --- */
-
-export class BookingStore {
-  constructor(private state: DurableObjectState) {}
-
-  private async all(): Promise<Booking[]> {
-    const map = await this.state.storage.list<Booking>({ prefix: 'booking:' });
-    return [...map.values()].sort((a, b) =>
-      `${a.date} ${a.time}`.localeCompare(`${b.date} ${b.time}`)
-    );
+  const headers = new Headers();
+  const ct = request.headers.get('Content-Type');
+  if (ct) headers.set('Content-Type', ct);
+  if (opts.withApiKey) headers.set('X-Api-Key', env.BOOKING_API_KEY ?? '');
+  if (opts.withAuth) {
+    const auth = request.headers.get('Authorization');
+    if (auth) headers.set('Authorization', auth);
   }
 
-  async fetch(request: Request): Promise<Response> {
-    const url = new URL(request.url);
-    const path = url.pathname.replace(/\/+$/, '');
-    const method = request.method;
-
-    if (path === '/api/bookings/slots' && method === 'GET') {
-      const date = url.searchParams.get('date') ?? '';
-      if (!DATE_RE.test(date)) return json({ error: 'invalid_date' }, 400);
-      const taken = (await this.all())
-        .filter((b) => b.date === date && b.status !== 'cancelled')
-        .map((b) => ({ service: b.service, time: b.time }));
-      return json({ date, taken });
-    }
-
-    if (path === '/api/bookings' && method === 'GET') {
-      const date = url.searchParams.get('date');
-      const status = url.searchParams.get('status');
-      let list = await this.all();
-      if (date) list = list.filter((b) => b.date === date);
-      if (status) list = list.filter((b) => b.status === status);
-      return json({ bookings: list });
-    }
-
-    if (path === '/api/bookings' && method === 'POST') {
-      let body: unknown;
-      try {
-        body = await request.json();
-      } catch {
-        return json({ error: 'invalid_json' }, 400);
-      }
-      const result = validateBooking(body);
-      if (!result.ok) return json({ error: result.error }, 400);
-
-      const list = await this.all();
-      if (list.length >= MAX_BOOKINGS) return json({ error: 'too_many_bookings' }, 429);
-
-      const { date, time, service } = result.value;
-      const conflict = list.some(
-        (b) => b.date === date && b.time === time && b.service === service && b.status !== 'cancelled'
-      );
-      if (conflict) return json({ error: 'slot_taken' }, 409);
-
-      const booking: Booking = {
-        id: crypto.randomUUID(),
-        ...result.value,
-        status: 'pending',
-        createdAt: new Date().toISOString(),
-      };
-      await this.state.storage.put(`booking:${booking.id}`, booking);
-      return json({ booking }, 201);
-    }
-
-    const idMatch = path.match(/^\/api\/bookings\/([0-9a-f-]{36})$/);
-    if (idMatch) {
-      const key = `booking:${idMatch[1]}`;
-      const booking = await this.state.storage.get<Booking>(key);
-      if (!booking) return json({ error: 'not_found' }, 404);
-
-      if (method === 'PATCH') {
-        let body: unknown;
-        try {
-          body = await request.json();
-        } catch {
-          return json({ error: 'invalid_json' }, 400);
-        }
-        const status = str((body as Record<string, unknown>)?.status) as BookingStatus;
-        if (!STATUSES.includes(status)) return json({ error: 'invalid_status' }, 400);
-        const updated: Booking = { ...booking, status };
-        await this.state.storage.put(key, updated);
-        return json({ booking: updated });
-      }
-
-      if (method === 'DELETE') {
-        await this.state.storage.delete(key);
-        return json({ deleted: true });
-      }
-    }
-
-    return json({ error: 'not_found' }, 404);
+  let upstream: Response;
+  try {
+    upstream = await fetch(target, {
+      method: request.method,
+      headers,
+      body: request.method === 'GET' || request.method === 'HEAD' ? undefined : request.body,
+    });
+  } catch {
+    return json({ error: 'backend_unavailable' }, 502);
   }
+
+  const respHeaders = new Headers(CORS_HEADERS);
+  respHeaders.set('Content-Type', upstream.headers.get('Content-Type') ?? 'application/json; charset=utf-8');
+  return new Response(upstream.body, { status: upstream.status, headers: respHeaders });
 }
 
-/* ------------------------------------------------------------------- Worker --- */
+const UUID_RE = '[0-9a-fA-F-]{36}';
 
 async function handleApi(request: Request, env: Env, url: URL): Promise<Response> {
   if (request.method === 'OPTIONS') {
@@ -220,20 +98,53 @@ async function handleApi(request: Request, env: Env, url: URL): Promise<Response
   }
 
   const path = url.pathname.replace(/\/+$/, '');
+  const method = request.method;
 
-  if (path === '/api/health') {
-    return json({ ok: true, service: 'bookings', storage: 'durable-object', time: new Date().toISOString() });
+  if (path === '/api/health' && method === 'GET') {
+    const hasApiKey = Boolean(env.BOOKING_API_KEY);
+    let upstreamOk = false;
+    try {
+      const res = await fetch(`${apiBase(env)}/api/v1/health/live`, {
+        signal: AbortSignal.timeout(5000),
+      });
+      upstreamOk = res.ok;
+    } catch {}
+    return json({
+      ok: hasApiKey && upstreamOk,
+      backend: apiBase(env),
+      upstream: upstreamOk,
+      apiKeyConfigured: hasApiKey,
+    });
   }
 
-  if (path === '/api/bookings' || path.startsWith('/api/bookings/')) {
-    const needsAdmin =
-      (path === '/api/bookings' && request.method === 'GET') ||
-      request.method === 'PATCH' ||
-      request.method === 'DELETE';
-    if (needsAdmin && !isAdmin(request, env)) return json({ error: 'unauthorized' }, 401);
+  if (path === '/api/services' && method === 'GET') {
+    return forward(request, env, '/api/v1/services', { withApiKey: true });
+  }
 
-    const stub = env.BOOKINGS.get(env.BOOKINGS.idFromName('default'));
-    return stub.fetch(request);
+  if (path === '/api/availability' && method === 'GET') {
+    return forward(request, env, '/api/v1/availability', { withApiKey: true });
+  }
+
+  if (path === '/api/bookings' && method === 'POST') {
+    return forward(request, env, '/api/v1/bookings', { withApiKey: true });
+  }
+
+  const bookingMatch = path.match(new RegExp(`^/api/bookings/(${UUID_RE})$`));
+  if (bookingMatch && (method === 'GET' || method === 'DELETE')) {
+    return forward(request, env, `/api/v1/bookings/${bookingMatch[1]}`, { withApiKey: true });
+  }
+
+  if (path === '/api/admin/token' && method === 'POST') {
+    return forward(request, env, '/api/v1/admin/auth/token');
+  }
+
+  if (path === '/api/admin/bookings' && method === 'GET') {
+    return forward(request, env, '/api/v1/admin/bookings', { withAuth: true });
+  }
+
+  const adminMatch = path.match(new RegExp(`^/api/admin/bookings/(${UUID_RE})$`));
+  if (adminMatch && method === 'PATCH') {
+    return forward(request, env, `/api/v1/admin/bookings/${adminMatch[1]}`, { withAuth: true });
   }
 
   return json({ error: 'not_found' }, 404);

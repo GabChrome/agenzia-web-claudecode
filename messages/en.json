@@ -357,11 +357,13 @@
     "title": "Book a call",
     "subtitle": "Pick the service, day and time you prefer: your request goes straight to our booking system and you can follow it from the management panel.",
     "backHome": "Back to the site",
-    "closedDay": "We are closed on this day: please pick a weekday (Monday to Friday).",
+    "loadingServices": "Loading services…",
+    "noServices": "No services available right now: please try again later.",
     "loadingSlots": "Loading available times…",
+    "noSlots": "No times available on this day: please try another date.",
     "mode": {
       "checking": "Checking the backend…",
-      "remote": "Backend online — data is saved on the server",
+      "remote": "Backend online — connected to the booking system",
       "demo": "Demo mode — backend unreachable, data stays in this browser only"
     },
     "steps": {
@@ -369,20 +371,6 @@
       "date": "2 · Day",
       "time": "3 · Time",
       "details": "4 · Your details"
-    },
-    "services": {
-      "discovery-call": {
-        "name": "Discovery call",
-        "desc": "Let's talk about your project and figure out how we can help."
-      },
-      "project-kickoff": {
-        "name": "Project kickoff",
-        "desc": "We define goals, timeline and budget to get your new website started."
-      },
-      "site-review": {
-        "name": "Website review",
-        "desc": "We analyse your current website: performance, SEO and conversions."
-      }
     },
     "form": {
       "name": "Name",
@@ -393,41 +381,50 @@
       "notes": "Notes",
       "notesPlaceholder": "Anything we should know before the call…",
       "optional": "optional",
+      "gdpr": "I consent to the processing of my personal data for managing this booking (GDPR).",
       "submit": "Confirm booking",
       "errors": {
         "nameMin": "Name must be at least 2 characters",
         "emailInvalid": "Please enter a valid email",
-        "notesMax": "Notes can be at most 500 characters"
+        "phoneRequired": "Please enter a valid phone number",
+        "notesMax": "Notes can be at most 500 characters",
+        "gdprRequired": "Consent to data processing is required to book"
       }
     },
     "errors": {
       "noSlot": "Select a time to complete your booking.",
       "slot_taken": "This time was just taken: please pick another one.",
-      "closed_day": "We are closed on this day.",
-      "date_out_of_range": "The date must be within the next 60 days.",
+      "invalid_data": "Invalid data: please check the fields and try again.",
       "backend_unavailable": "The backend is unreachable, please try again shortly.",
-      "too_many_bookings": "The system reached the maximum number of test bookings.",
+      "too_many_requests": "Too many requests: please wait a minute and try again.",
       "generic": "Something went wrong, please try again."
     },
     "success": {
-      "title": "Booking received!",
-      "desc": "We registered your request: you will receive a confirmation by email.",
+      "title": "Booking confirmed!",
+      "desc": "Your booking has been registered: you will receive a confirmation by email.",
       "service": "Service",
       "when": "When",
-      "code": "Code",
-      "note": "The booking stays “pending” until the team confirms it from the management panel.",
+      "code": "Booking code",
+      "cancelToken": "Cancellation code",
+      "note": "Keep the cancellation code: it lets you cancel the booking without signing up.",
       "again": "New booking",
-      "home": "Back to the site"
+      "home": "Back to the site",
+      "cancel": "Cancel booking",
+      "cancelError": "Cancellation failed, please try again.",
+      "cancelledTitle": "Booking cancelled",
+      "cancelledDesc": "The booking has been cancelled: the time slot is available again."
     },
     "admin": {
       "gateTitle": "Booking management",
-      "gateDesc": "Team-only area: enter the admin key to view and manage bookings.",
-      "gateKey": "Admin key",
+      "gateDesc": "Team-only area: sign in with the booking system's admin credentials.",
+      "gateEmail": "Email",
+      "gatePassword": "Password",
       "gateSubmit": "Sign in",
-      "gateError": "Invalid key, please try again.",
-      "gateNote": "The key is defined in the Worker's BOOKINGS_ADMIN_KEY variable (default: antigravity).",
+      "gateError": "Invalid credentials, please try again.",
+      "gateNote": "Use the tenant admin account credentials of the booking system.",
+      "gateNoteDemo": "Demo mode: any email and password “antigravity”.",
       "title": "Bookings",
-      "subtitle": "All requests received from the booking page: confirm, cancel or delete.",
+      "subtitle": "All bookings received: mark as completed, no-show or cancelled.",
       "backToBooking": "Booking page",
       "logout": "Log out",
       "filterDate": "Filter by day",
@@ -448,14 +445,14 @@
         "actions": "Actions"
       },
       "status": {
-        "pending": "Pending",
         "confirmed": "Confirmed",
+        "completed": "Completed",
+        "no_show": "No-show",
         "cancelled": "Cancelled"
       },
-      "actionConfirm": "Confirm",
-      "actionCancel": "Cancel",
-      "actionDelete": "Delete",
-      "confirmDelete": "Permanently delete this booking?"
+      "actionComplete": "Mark as completed",
+      "actionNoShow": "Mark as no-show",
+      "actionCancel": "Cancel"
     }
   }
 }

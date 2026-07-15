@@ -3,9 +3,9 @@
 import { FormEvent, useCallback, useEffect, useState } from 'react';
 import Link from 'next/link';
 import { useLocale, useTranslations } from 'next-intl';
-import { Loader2, RefreshCw, Trash2, Check, X, ArrowLeft } from 'lucide-react';
+import { Loader2, RefreshCw, Check, X, ArrowLeft, UserX } from 'lucide-react';
 import {
-  Booking,
+  AdminBooking,
   BookingApiError,
   BookingClient,
   BookingStatus,
@@ -14,31 +14,33 @@ import {
 } from '@/lib/bookings';
 import BackendBadge from './BackendBadge';
 
-const KEY_STORAGE = 'ag-bookings-admin-key';
+const TOKEN_STORAGE = 'ag-bookings-admin-jwt';
 
 const statusStyle: Record<BookingStatus, { color: string; bg: string }> = {
-  pending: { color: 'var(--accent)', bg: 'rgba(154,120,48,0.10)' },
   confirmed: { color: 'var(--success)', bg: 'rgba(74,222,128,0.10)' },
+  completed: { color: 'var(--accent)', bg: 'rgba(154,120,48,0.10)' },
+  no_show: { color: '#c2660a', bg: 'rgba(194,102,10,0.10)' },
   cancelled: { color: 'var(--error)', bg: 'rgba(220,80,80,0.10)' },
 };
 
 /**
- * Pannello di gestione prenotazioni: elenca, conferma, annulla ed elimina.
- * L'accesso richiede la chiave admin (BOOKINGS_ADMIN_KEY sul Worker,
- * default "antigravity"), inviata come Bearer token a ogni richiesta.
+ * Pannello di gestione prenotazioni, collegato al backend
+ * WebAgency_BookingSystem: login con email e password dell'account admin
+ * del tenant (JWT), elenco filtrabile e cambio stato
+ * (confermata / completata / no-show / annullata).
  */
 export default function BookingAdmin() {
   const t = useTranslations('booking.admin');
-  const tb = useTranslations('booking');
   const locale = useLocale();
 
   const [client, setClient] = useState<BookingClient | null>(null);
-  const [adminKey, setAdminKey] = useState<string | null>(null);
-  const [keyInput, setKeyInput] = useState('');
+  const [token, setToken] = useState<string | null>(null);
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const [gateError, setGateError] = useState(false);
-  const [checkingKey, setCheckingKey] = useState(false);
+  const [checking, setChecking] = useState(false);
 
-  const [bookings, setBookings] = useState<Booking[] | null>(null);
+  const [bookings, setBookings] = useState<AdminBooking[] | null>(null);
   const [filterDate, setFilterDate] = useState('');
   const [filterStatus, setFilterStatus] = useState<'' | BookingStatus>('');
   const [busyId, setBusyId] = useState<string | null>(null);
@@ -47,89 +49,77 @@ export default function BookingAdmin() {
   useEffect(() => {
     detectBackend().then((mode) => setClient(createBookingClient(mode)));
     try {
-      const saved = sessionStorage.getItem(KEY_STORAGE);
-      if (saved) setAdminKey(saved);
+      const saved = sessionStorage.getItem(TOKEN_STORAGE);
+      if (saved) setToken(saved);
     } catch {}
   }, []);
 
+  const logout = useCallback(() => {
+    try {
+      sessionStorage.removeItem(TOKEN_STORAGE);
+    } catch {}
+    setToken(null);
+    setPassword('');
+    setBookings(null);
+  }, []);
+
   const load = useCallback(async () => {
-    if (!client || !adminKey) return;
+    if (!client || !token) return;
     setBookings(null);
     setLoadError(false);
     try {
-      const list = await client.list(adminKey, {
+      const list = await client.adminList(token, {
         date: filterDate || undefined,
         status: filterStatus || undefined,
       });
       setBookings(list);
     } catch (err) {
       if (err instanceof BookingApiError && err.status === 401) {
-        // Chiave non più valida: torna al gate
-        try {
-          sessionStorage.removeItem(KEY_STORAGE);
-        } catch {}
-        setAdminKey(null);
+        // Token scaduto o non valido: torna al login
+        logout();
         setGateError(true);
       } else {
         setLoadError(true);
         setBookings([]);
       }
     }
-  }, [client, adminKey, filterDate, filterStatus]);
+  }, [client, token, filterDate, filterStatus, logout]);
 
   useEffect(() => {
     load();
   }, [load]);
 
-  const submitKey = async (e: FormEvent) => {
+  const submitLogin = async (e: FormEvent) => {
     e.preventDefault();
-    if (!client || !keyInput) return;
-    setCheckingKey(true);
+    if (!client || !email || !password) return;
+    setChecking(true);
     setGateError(false);
     try {
-      await client.list(keyInput);
+      const jwt = await client.adminLogin(email, password);
       try {
-        sessionStorage.setItem(KEY_STORAGE, keyInput);
+        sessionStorage.setItem(TOKEN_STORAGE, jwt);
       } catch {}
-      setAdminKey(keyInput);
+      setToken(jwt);
     } catch {
       setGateError(true);
     } finally {
-      setCheckingKey(false);
+      setChecking(false);
     }
-  };
-
-  const logout = () => {
-    try {
-      sessionStorage.removeItem(KEY_STORAGE);
-    } catch {}
-    setAdminKey(null);
-    setKeyInput('');
-    setBookings(null);
   };
 
   const changeStatus = async (id: string, status: BookingStatus) => {
-    if (!client || !adminKey) return;
+    if (!client || !token) return;
     setBusyId(id);
     try {
-      const updated = await client.setStatus(adminKey, id, status);
+      const updated = await client.adminSetStatus(token, id, status);
       setBookings((list) => (list ?? []).map((b) => (b.id === id ? updated : b)));
-    } catch {
-      setLoadError(true);
-    } finally {
-      setBusyId(null);
-    }
-  };
-
-  const remove = async (id: string) => {
-    if (!client || !adminKey) return;
-    if (!window.confirm(t('confirmDelete'))) return;
-    setBusyId(id);
-    try {
-      await client.remove(adminKey, id);
-      setBookings((list) => (list ?? []).filter((b) => b.id !== id));
-    } catch {
-      setLoadError(true);
+    } catch (err) {
+      if (err instanceof BookingApiError && err.status === 401) {
+        logout();
+        setGateError(true);
+      } else {
+        setLoadError(true);
+      }
     } finally {
       setBusyId(null);
     }
@@ -137,7 +127,7 @@ export default function BookingAdmin() {
 
   /* ------------------------------------------------------------------ gate --- */
 
-  if (!adminKey) {
+  if (!token) {
     return (
       <div className="flex min-h-screen items-center justify-center px-6">
         <div className="border-gradient w-full max-w-sm rounded-2xl p-8 animate-fade-in">
@@ -145,37 +135,58 @@ export default function BookingAdmin() {
           <h1 className="mt-2 font-serif text-3xl text-text-1">{t('gateTitle')}</h1>
           <p className="mt-2 text-sm text-text-2">{t('gateDesc')}</p>
           <BackendBadge mode={client?.mode ?? null} />
-          <form onSubmit={submitKey} className="mt-6">
-            <label htmlFor="admin-key" className="block text-sm font-semibold text-text-1">
-              {t('gateKey')}
-            </label>
-            <input
-              id="admin-key"
-              type="password"
-              autoFocus
-              value={keyInput}
-              onChange={(e) => {
-                setKeyInput(e.target.value);
-                setGateError(false);
-              }}
-              className="mt-1.5 w-full rounded-lg border border-border-default bg-bg px-3.5 py-2.5 text-text-1 outline-none transition-colors focus:border-accent"
-              aria-invalid={gateError}
-            />
+          <form onSubmit={submitLogin} className="mt-6 space-y-4">
+            <div>
+              <label htmlFor="admin-email" className="block text-sm font-semibold text-text-1">
+                {t('gateEmail')}
+              </label>
+              <input
+                id="admin-email"
+                type="email"
+                autoFocus
+                autoComplete="username"
+                value={email}
+                onChange={(e) => {
+                  setEmail(e.target.value);
+                  setGateError(false);
+                }}
+                className="mt-1.5 w-full rounded-lg border border-border-default bg-bg px-3.5 py-2.5 text-text-1 outline-none transition-colors focus:border-accent"
+              />
+            </div>
+            <div>
+              <label htmlFor="admin-password" className="block text-sm font-semibold text-text-1">
+                {t('gatePassword')}
+              </label>
+              <input
+                id="admin-password"
+                type="password"
+                autoComplete="current-password"
+                value={password}
+                onChange={(e) => {
+                  setPassword(e.target.value);
+                  setGateError(false);
+                }}
+                className="mt-1.5 w-full rounded-lg border border-border-default bg-bg px-3.5 py-2.5 text-text-1 outline-none transition-colors focus:border-accent"
+                aria-invalid={gateError}
+              />
+            </div>
             {gateError && (
-              <p role="alert" className="mt-2 text-sm" style={{ color: 'var(--error)' }}>
+              <p role="alert" className="text-sm" style={{ color: 'var(--error)' }}>
                 {t('gateError')}
               </p>
             )}
             <button
               type="submit"
-              disabled={checkingKey || !client}
-              className="btn-glow mt-4 flex w-full items-center justify-center gap-2 rounded-lg bg-accent px-5 py-2.5 text-sm font-semibold text-white transition-transform active:scale-[0.98] disabled:opacity-60"
+              disabled={checking || !client}
+              className="btn-glow flex w-full items-center justify-center gap-2 rounded-lg bg-accent px-5 py-2.5 text-sm font-semibold text-white transition-transform active:scale-[0.98] disabled:opacity-60"
             >
-              {checkingKey && <Loader2 size={15} className="animate-spin" />}
+              {checking && <Loader2 size={15} className="animate-spin" />}
               {t('gateSubmit')}
             </button>
           </form>
-          <p className="mt-4 text-xs text-text-3">{t('gateNote')}</p>
+          <p className="mt-4 text-xs text-text-3">
+            {client?.mode === 'demo' ? t('gateNoteDemo') : t('gateNote')}
+          </p>
         </div>
       </div>
     );
@@ -232,8 +243,9 @@ export default function BookingAdmin() {
             className="mt-1 rounded-lg border border-border-subtle bg-surface-1 px-3 py-2 text-sm text-text-1 outline-none focus:border-accent"
           >
             <option value="">{t('statusAll')}</option>
-            <option value="pending">{t('status.pending')}</option>
             <option value="confirmed">{t('status.confirmed')}</option>
+            <option value="completed">{t('status.completed')}</option>
+            <option value="no_show">{t('status.no_show')}</option>
             <option value="cancelled">{t('status.cancelled')}</option>
           </select>
         </div>
@@ -271,7 +283,7 @@ export default function BookingAdmin() {
         <>
           <p className="mt-6 text-sm text-text-3">{t('count', { count: bookings.length })}</p>
           <div className="mt-3 overflow-x-auto rounded-2xl border border-border-subtle bg-surface-1">
-            <table className="w-full min-w-[860px] text-left text-sm">
+            <table className="w-full min-w-[900px] text-left text-sm">
               <thead>
                 <tr className="border-b border-border-subtle text-xs uppercase tracking-wider text-text-3">
                   <th className="px-4 py-3 font-semibold">{t('col.when')}</th>
@@ -285,22 +297,23 @@ export default function BookingAdmin() {
               <tbody>
                 {bookings.map((b) => {
                   const busy = busyId === b.id;
-                  const s = statusStyle[b.status];
+                  const s = statusStyle[b.status] ?? statusStyle.confirmed;
                   return (
                     <tr key={b.id} className="border-b border-border-subtle last:border-b-0">
                       <td className="whitespace-nowrap px-4 py-3 font-semibold text-text-1">
                         {b.date} · {b.time}
+                        <span className="ml-1 text-xs font-normal text-text-3">({b.durationMin} min)</span>
                       </td>
-                      <td className="px-4 py-3 text-text-2">{tb(`services.${b.service}.name`)}</td>
+                      <td className="px-4 py-3 text-text-2">{b.service?.name ?? '—'}</td>
                       <td className="px-4 py-3">
-                        <div className="font-semibold text-text-1">{b.name}</div>
+                        <div className="font-semibold text-text-1">{b.customer.name}</div>
                         <div className="text-xs text-text-3">
-                          {b.email}
-                          {b.phone && ` · ${b.phone}`}
+                          {b.customer.email}
+                          {b.customer.phone && ` · ${b.customer.phone}`}
                         </div>
                       </td>
                       <td className="max-w-[220px] px-4 py-3 text-xs text-text-3">
-                        <span className="line-clamp-2">{b.notes || '—'}</span>
+                        <span className="line-clamp-2">{b.customer.notes || '—'}</span>
                       </td>
                       <td className="px-4 py-3">
                         <span
@@ -315,14 +328,24 @@ export default function BookingAdmin() {
                           <Loader2 size={15} className="ml-auto animate-spin text-text-3" />
                         ) : (
                           <span className="inline-flex items-center gap-1.5">
-                            {b.status !== 'confirmed' && (
+                            {b.status !== 'completed' && (
                               <button
-                                onClick={() => changeStatus(b.id, 'confirmed')}
-                                title={t('actionConfirm')}
+                                onClick={() => changeStatus(b.id, 'completed')}
+                                title={t('actionComplete')}
                                 className="rounded-md border border-border-subtle p-1.5 transition-colors hover:border-border-default"
                                 style={{ color: 'var(--success)' }}
                               >
                                 <Check size={14} />
+                              </button>
+                            )}
+                            {b.status !== 'no_show' && (
+                              <button
+                                onClick={() => changeStatus(b.id, 'no_show')}
+                                title={t('actionNoShow')}
+                                className="rounded-md border border-border-subtle p-1.5 transition-colors hover:border-border-default"
+                                style={{ color: '#c2660a' }}
+                              >
+                                <UserX size={14} />
                               </button>
                             )}
                             {b.status !== 'cancelled' && (
@@ -335,13 +358,6 @@ export default function BookingAdmin() {
                                 <X size={14} />
                               </button>
                             )}
-                            <button
-                              onClick={() => remove(b.id)}
-                              title={t('actionDelete')}
-                              className="rounded-md border border-border-subtle p-1.5 text-text-3 transition-colors hover:border-border-default hover:text-text-1"
-                            >
-                              <Trash2 size={14} />
-                            </button>
                           </span>
                         )}
                       </td>

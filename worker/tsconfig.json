@@ -11,5 +11,5 @@
     "isolatedModules": true,
     "forceConsistentCasingInFileNames": true
   },
-  "include": ["./**/*.ts", "../config/bookings.ts"]
+  "include": ["./**/*.ts"]
 }

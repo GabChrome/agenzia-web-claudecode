@@ -1,10 +1,12 @@
-# Sito + backend prenotazioni in un unico Worker:
+# Sito + proxy prenotazioni in un unico Worker:
 # le pagine statiche (out/) sono servite come assets, le richieste /api/*
-# arrivano al Worker in worker/index.ts.
+# vengono inoltrate al backend WebAgency_BookingSystem su Railway
+# (vedi worker/index.ts).
 #
-# Lo storage delle prenotazioni è un Durable Object con backend SQLite:
-# non richiede alcun provisioning manuale (niente `wrangler d1 create`),
-# al primo deploy è subito operativo. Richiede wrangler >= 3.79.
+# Dopo il primo deploy imposta la chiave API del tenant:
+#   npx wrangler secret put BOOKING_API_KEY
+# (oppure da dashboard: Workers → Settings → Variables and Secrets).
+# Senza chiave il sito resta in modalità demo.
 
 name = "agenzia-web-claudecode"
 main = "worker/index.ts"
@@ -19,14 +21,15 @@ binding = "ASSETS"
 not_found_handling = "404-page"
 
 [vars]
-# Chiave per gli endpoint admin delle prenotazioni (header Authorization: Bearer <chiave>).
-# In produzione sovrascrivibile da dashboard: Workers → Settings → Variables.
-BOOKINGS_ADMIN_KEY = "antigravity"
+# Base URL del backend prenotazioni.
+BOOKING_API_URL = "https://webagencybookingsystem-production.up.railway.app"
 
+# Storia delle migrazioni Durable Object: la v1 creava lo storage interno
+# BookingStore, sostituito dal backend esterno e rimosso nella v2.
 [[migrations]]
 tag = "v1"
 new_sqlite_classes = ["BookingStore"]
 
-[[durable_objects.bindings]]
-name = "BOOKINGS"
-class_name = "BookingStore"
+[[migrations]]
+tag = "v2"
+deleted_classes = ["BookingStore"]
