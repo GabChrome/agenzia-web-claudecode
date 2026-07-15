@@ -1,0 +1,24 @@
+# Pannello centrale di gestione gallerie — un solo Worker serve API + interfaccia.
+#
+# Prima del deploy:
+#   1. wrangler d1 create gallery-admin-db      → incolla il database_id qui sotto
+#   2. wrangler r2 bucket create gallery-admin-media
+#   3. npm run db:schema                        → applica lo schema al database remoto
+#   4. npm run deploy
+
+name = "gallery-admin"
+main = "src/worker/index.ts"
+compatibility_date = "2025-06-01"
+
+[assets]
+directory = "dist"
+binding = "ASSETS"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "gallery-admin-db"
+database_id = "REPLACE_WITH_D1_DATABASE_ID"
+
+[[r2_buckets]]
+binding = "MEDIA"
+bucket_name = "gallery-admin-media"
