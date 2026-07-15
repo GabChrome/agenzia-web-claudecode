@@ -268,7 +268,11 @@
     "linkCookie": "Cookie Policy",
     "linkTerms": "Terms & Conditions",
     "rights": "All rights reserved.",
-    "madeWith": "Made with ♥ in Italy"
+    "madeWith": "Made with ♥ in Italy",
+    "sectionReserved": "Reserved area",
+    "linkReports": "Site reports",
+    "linkBooking": "Book a call",
+    "linkBookingAdmin": "Booking management"
   },
   "reports": {
     "title": "Site reports",
@@ -347,6 +351,111 @@
       "period": "Period",
       "sessionSeconds": "Avg. session duration (seconds)",
       "newShare": "New visitor share"
+    }
+  },
+  "booking": {
+    "title": "Book a call",
+    "subtitle": "Pick the service, day and time you prefer: your request goes straight to our booking system and you can follow it from the management panel.",
+    "backHome": "Back to the site",
+    "closedDay": "We are closed on this day: please pick a weekday (Monday to Friday).",
+    "loadingSlots": "Loading available times…",
+    "mode": {
+      "checking": "Checking the backend…",
+      "remote": "Backend online — data is saved on the server",
+      "demo": "Demo mode — backend unreachable, data stays in this browser only"
+    },
+    "steps": {
+      "service": "1 · Service",
+      "date": "2 · Day",
+      "time": "3 · Time",
+      "details": "4 · Your details"
+    },
+    "services": {
+      "discovery-call": {
+        "name": "Discovery call",
+        "desc": "Let's talk about your project and figure out how we can help."
+      },
+      "project-kickoff": {
+        "name": "Project kickoff",
+        "desc": "We define goals, timeline and budget to get your new website started."
+      },
+      "site-review": {
+        "name": "Website review",
+        "desc": "We analyse your current website: performance, SEO and conversions."
+      }
+    },
+    "form": {
+      "name": "Name",
+      "namePlaceholder": "Your name",
+      "email": "Email",
+      "emailPlaceholder": "your@email.com",
+      "phone": "Phone",
+      "notes": "Notes",
+      "notesPlaceholder": "Anything we should know before the call…",
+      "optional": "optional",
+      "submit": "Confirm booking",
+      "errors": {
+        "nameMin": "Name must be at least 2 characters",
+        "emailInvalid": "Please enter a valid email",
+        "notesMax": "Notes can be at most 500 characters"
+      }
+    },
+    "errors": {
+      "noSlot": "Select a time to complete your booking.",
+      "slot_taken": "This time was just taken: please pick another one.",
+      "closed_day": "We are closed on this day.",
+      "date_out_of_range": "The date must be within the next 60 days.",
+      "backend_unavailable": "The backend is unreachable, please try again shortly.",
+      "too_many_bookings": "The system reached the maximum number of test bookings.",
+      "generic": "Something went wrong, please try again."
+    },
+    "success": {
+      "title": "Booking received!",
+      "desc": "We registered your request: you will receive a confirmation by email.",
+      "service": "Service",
+      "when": "When",
+      "code": "Code",
+      "note": "The booking stays “pending” until the team confirms it from the management panel.",
+      "again": "New booking",
+      "home": "Back to the site"
+    },
+    "admin": {
+      "gateTitle": "Booking management",
+      "gateDesc": "Team-only area: enter the admin key to view and manage bookings.",
+      "gateKey": "Admin key",
+      "gateSubmit": "Sign in",
+      "gateError": "Invalid key, please try again.",
+      "gateNote": "The key is defined in the Worker's BOOKINGS_ADMIN_KEY variable (default: antigravity).",
+      "title": "Bookings",
+      "subtitle": "All requests received from the booking page: confirm, cancel or delete.",
+      "backToBooking": "Booking page",
+      "logout": "Log out",
+      "filterDate": "Filter by day",
+      "filterStatus": "Status",
+      "statusAll": "All",
+      "clearDate": "All dates",
+      "refresh": "Refresh",
+      "loading": "Loading bookings…",
+      "loadError": "Operation failed, please try again.",
+      "empty": "No bookings found. Create one from the booking page to test the flow!",
+      "count": "{count, plural, one {# booking} other {# bookings}}",
+      "col": {
+        "when": "When",
+        "service": "Service",
+        "client": "Client",
+        "notes": "Notes",
+        "status": "Status",
+        "actions": "Actions"
+      },
+      "status": {
+        "pending": "Pending",
+        "confirmed": "Confirmed",
+        "cancelled": "Cancelled"
+      },
+      "actionConfirm": "Confirm",
+      "actionCancel": "Cancel",
+      "actionDelete": "Delete",
+      "confirmDelete": "Permanently delete this booking?"
     }
   }
 }

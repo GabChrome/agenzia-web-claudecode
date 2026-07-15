@@ -268,7 +268,11 @@
     "linkCookie": "Cookie Policy",
     "linkTerms": "Termini e Condizioni",
     "rights": "Tutti i diritti riservati.",
-    "madeWith": "Made with ♥ in Italia"
+    "madeWith": "Made with ♥ in Italia",
+    "sectionReserved": "Area riservata",
+    "linkReports": "Report siti",
+    "linkBooking": "Prenota una call",
+    "linkBookingAdmin": "Gestione prenotazioni"
   },
   "reports": {
     "title": "Report siti",
@@ -347,6 +351,111 @@
       "period": "Periodo",
       "sessionSeconds": "Durata media sessione (secondi)",
       "newShare": "Quota nuovi visitatori"
+    }
+  },
+  "booking": {
+    "title": "Prenota una call",
+    "subtitle": "Scegli il servizio, il giorno e l'orario che preferisci: la richiesta arriva subito al nostro sistema di prenotazioni e puoi seguirla dal pannello di gestione.",
+    "backHome": "Torna al sito",
+    "closedDay": "In questo giorno siamo chiusi: scegli un giorno dal lunedì al venerdì.",
+    "loadingSlots": "Carico gli orari disponibili…",
+    "mode": {
+      "checking": "Verifico il backend…",
+      "remote": "Backend online — i dati vengono salvati sul server",
+      "demo": "Modalità demo — backend non raggiungibile, i dati restano solo in questo browser"
+    },
+    "steps": {
+      "service": "1 · Servizio",
+      "date": "2 · Giorno",
+      "time": "3 · Orario",
+      "details": "4 · I tuoi dati"
+    },
+    "services": {
+      "discovery-call": {
+        "name": "Call conoscitiva",
+        "desc": "Parliamo del tuo progetto e capiamo insieme come possiamo aiutarti."
+      },
+      "project-kickoff": {
+        "name": "Kickoff di progetto",
+        "desc": "Definiamo obiettivi, tempi e budget per far partire il tuo nuovo sito."
+      },
+      "site-review": {
+        "name": "Revisione del sito",
+        "desc": "Analizziamo il tuo sito attuale: performance, SEO e conversioni."
+      }
+    },
+    "form": {
+      "name": "Nome",
+      "namePlaceholder": "Il tuo nome",
+      "email": "Email",
+      "emailPlaceholder": "tua@email.it",
+      "phone": "Telefono",
+      "notes": "Note",
+      "notesPlaceholder": "Qualcosa che dovremmo sapere prima della call…",
+      "optional": "facoltativo",
+      "submit": "Conferma prenotazione",
+      "errors": {
+        "nameMin": "Il nome deve avere almeno 2 caratteri",
+        "emailInvalid": "Inserisci un'email valida",
+        "notesMax": "Le note possono avere al massimo 500 caratteri"
+      }
+    },
+    "errors": {
+      "noSlot": "Seleziona un orario per completare la prenotazione.",
+      "slot_taken": "Questo orario è appena stato occupato: scegline un altro.",
+      "closed_day": "In questo giorno siamo chiusi.",
+      "date_out_of_range": "La data deve essere entro i prossimi 60 giorni.",
+      "backend_unavailable": "Il backend non è raggiungibile, riprova tra poco.",
+      "too_many_bookings": "Il sistema ha raggiunto il numero massimo di prenotazioni di test.",
+      "generic": "Si è verificato un errore, riprova."
+    },
+    "success": {
+      "title": "Prenotazione ricevuta!",
+      "desc": "Abbiamo registrato la tua richiesta: riceverai una conferma via email.",
+      "service": "Servizio",
+      "when": "Quando",
+      "code": "Codice",
+      "note": "La prenotazione resta «in attesa» finché il team non la conferma dal pannello di gestione.",
+      "again": "Nuova prenotazione",
+      "home": "Torna al sito"
+    },
+    "admin": {
+      "gateTitle": "Gestione prenotazioni",
+      "gateDesc": "Area riservata al team: inserisci la chiave admin per vedere e gestire le prenotazioni.",
+      "gateKey": "Chiave admin",
+      "gateSubmit": "Accedi",
+      "gateError": "Chiave non valida, riprova.",
+      "gateNote": "La chiave è definita nella variabile BOOKINGS_ADMIN_KEY del Worker (default: antigravity).",
+      "title": "Prenotazioni",
+      "subtitle": "Tutte le richieste ricevute dalla pagina di prenotazione: conferma, annulla o elimina.",
+      "backToBooking": "Pagina di prenotazione",
+      "logout": "Esci",
+      "filterDate": "Filtra per giorno",
+      "filterStatus": "Stato",
+      "statusAll": "Tutti",
+      "clearDate": "Tutte le date",
+      "refresh": "Aggiorna",
+      "loading": "Carico le prenotazioni…",
+      "loadError": "Operazione non riuscita, riprova.",
+      "empty": "Nessuna prenotazione trovata. Creane una dalla pagina di prenotazione per provare il flusso!",
+      "count": "{count, plural, one {# prenotazione} other {# prenotazioni}}",
+      "col": {
+        "when": "Quando",
+        "service": "Servizio",
+        "client": "Cliente",
+        "notes": "Note",
+        "status": "Stato",
+        "actions": "Azioni"
+      },
+      "status": {
+        "pending": "In attesa",
+        "confirmed": "Confermata",
+        "cancelled": "Annullata"
+      },
+      "actionConfirm": "Conferma",
+      "actionCancel": "Annulla",
+      "actionDelete": "Elimina",
+      "confirmDelete": "Eliminare definitivamente questa prenotazione?"
     }
   }
 }

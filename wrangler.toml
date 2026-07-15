@@ -1,4 +1,13 @@
+# Sito + backend prenotazioni in un unico Worker:
+# le pagine statiche (out/) sono servite come assets, le richieste /api/*
+# arrivano al Worker in worker/index.ts.
+#
+# Lo storage delle prenotazioni è un Durable Object con backend SQLite:
+# non richiede alcun provisioning manuale (niente `wrangler d1 create`),
+# al primo deploy è subito operativo. Richiede wrangler >= 3.79.
+
 name = "agenzia-web-claudecode"
+main = "worker/index.ts"
 compatibility_date = "2024-01-01"
 
 [build]
@@ -6,3 +15,18 @@ command = "npm run build"
 
 [assets]
 directory = "out"
+binding = "ASSETS"
+not_found_handling = "404-page"
+
+[vars]
+# Chiave per gli endpoint admin delle prenotazioni (header Authorization: Bearer <chiave>).
+# In produzione sovrascrivibile da dashboard: Workers → Settings → Variables.
+BOOKINGS_ADMIN_KEY = "antigravity"
+
+[[migrations]]
+tag = "v1"
+new_sqlite_classes = ["BookingStore"]
+
+[[durable_objects.bindings]]
+name = "BOOKINGS"
+class_name = "BookingStore"

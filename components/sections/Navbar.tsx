@@ -1,8 +1,9 @@
 'use client';
 
 import { useState } from 'react';
+import Link from 'next/link';
 import { motion, useScroll, useMotionValueEvent } from 'framer-motion';
-import { useTranslations } from 'next-intl';
+import { useLocale, useTranslations } from 'next-intl';
 import { Menu, X } from 'lucide-react';
 import LanguageSwitcher from '@/components/ui/LanguageSwitcher';
 
@@ -10,6 +11,7 @@ const NAV_LINKS = ['about', 'portfolio', 'pricing', 'contact'] as const;
 
 export default function Navbar() {
   const t = useTranslations('nav');
+  const locale = useLocale();
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   
@@ -73,9 +75,9 @@ export default function Navbar() {
           <div className="hidden lg:flex items-center gap-5">
             <LanguageSwitcher />
             <div style={{ width: '1px', height: '14px', background: 'var(--border-subtle)' }} />
-            <button
+            <Link
+              href={`/${locale}/prenotazioni/`}
               className="btn-glow"
-              onClick={() => scrollTo('contact')}
               style={{
                 background: 'var(--accent)',
                 color: '#F8F5F0',
@@ -89,7 +91,7 @@ export default function Navbar() {
               onMouseLeave={(e) => e.currentTarget.style.filter = 'brightness(1)'}
             >
               {t('cta')}
-            </button>
+            </Link>
           </div>
 
           {/* Mobile hamburger */}
@@ -125,9 +127,10 @@ export default function Navbar() {
         </ul>
         <div className="mt-8 flex items-center justify-between">
           <LanguageSwitcher />
-          <button
+          <Link
+            href={`/${locale}/prenotazioni/`}
             className="btn-glow"
-            onClick={() => scrollTo('contact')}
+            onClick={() => setMobileOpen(false)}
             style={{
               background: 'var(--accent)',
               color: '#F8F5F0',
@@ -138,7 +141,7 @@ export default function Navbar() {
             }}
           >
             {t('cta')}
-          </button>
+          </Link>
         </div>
       </div>
     </>

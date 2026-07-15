@@ -31,6 +31,17 @@ npm run dev
 
 Apri [http://localhost:3000](http://localhost:3000) per vedere il risultato.
 
+## Prenotazioni (`/prenotazioni`) — pagina + backend
+
+Sistema di prenotazioni completo, pensato anche come demo del pacchetto «Vetrina + Prenotazioni»:
+
+- **Pagina pubblica:** `/{locale}/prenotazioni/` — scelta di servizio, giorno e orario (slot da 30 min, lun–ven 9:00–17:30), dati di contatto e conferma. Gli orari già occupati risultano disabilitati.
+- **Pannello di gestione:** `/{locale}/prenotazioni/gestione/` — elenco prenotazioni con filtri per giorno e stato; conferma, annulla, elimina. Accesso con la chiave admin (`BOOKINGS_ADMIN_KEY` in `wrangler.toml`, default `antigravity`).
+- **Backend:** Cloudflare Worker in `worker/index.ts`, servito sullo **stesso dominio del sito** sotto `/api/*` (health check: `GET /api/health`). Le prenotazioni vivono in un Durable Object con storage persistente: nessun database da creare a mano, al primo deploy è già operativo (richiede wrangler ≥ 3.79).
+- **Modalità demo:** se il backend non è raggiungibile (es. `next dev` in locale o hosting solo statico come Firebase) la pagina lo segnala e continua a funzionare salvando i dati in `localStorage`. Un badge in cima alla pagina indica sempre la modalità attiva.
+- **API:** `POST /api/bookings` (crea), `GET /api/bookings/slots?date=YYYY-MM-DD` (orari occupati), e con header `Authorization: Bearer <chiave>`: `GET /api/bookings`, `PATCH /api/bookings/:id` (stato), `DELETE /api/bookings/:id`. CORS aperto per testare anche da localhost.
+- La configurazione (servizi, orari, finestra di prenotazione) è condivisa tra client e Worker in `config/bookings.ts`.
+
 ## Report siti (`/reports`)
 
 Area riservata (non linkata dal menu pubblico) con report interattivi per ogni sito cliente:
@@ -42,4 +53,9 @@ Area riservata (non linkata dal menu pubblico) con report interattivi per ogni s
 
 ## Deploy
 
-Il sito è configurato per l'export statico (`output: 'export'`) in Next.js e il deploy tramite Firebase Hosting. L'azione GitHub inclusa effettua il build e il deploy ad ogni push sul branch `main`.
+Il sito usa l'export statico di Next.js (`output: 'export'` → cartella `out/`) e viene pubblicato su due destinazioni:
+
+- **Cloudflare Workers** (deploy principale, `wrangler.toml`): un unico Worker serve le pagine statiche come assets **e** il backend prenotazioni sotto `/api/*`. È l'unica destinazione in cui il backend è attivo. Deploy manuale: `npx wrangler deploy`.
+- **Firebase Hosting** (GitHub Actions su push a `main`): solo le pagine statiche; la pagina prenotazioni funziona in modalità demo, oppure può puntare al Worker impostando `NEXT_PUBLIC_BOOKINGS_API` al momento della build.
+
+Il pannello `gallery-admin/` è un Worker separato con risorse proprie (D1 + R2) e si deploya a parte: vedi [gallery-admin/README.md](./gallery-admin/README.md).

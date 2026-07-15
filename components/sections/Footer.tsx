@@ -1,9 +1,17 @@
 'use client';
 
-import { useTranslations } from 'next-intl';
+import Link from 'next/link';
+import { useLocale, useTranslations } from 'next-intl';
+
+const reservedLinkStyle = { color: 'var(--text-3)', fontSize: '14px', transition: '150ms' } as const;
+const reservedLinkHover = {
+  onMouseEnter: (e: React.MouseEvent<HTMLAnchorElement>) => (e.currentTarget.style.color = 'var(--text-2)'),
+  onMouseLeave: (e: React.MouseEvent<HTMLAnchorElement>) => (e.currentTarget.style.color = 'var(--text-3)'),
+};
 
 export default function Footer() {
   const t = useTranslations('footer');
+  const locale = useLocale();
 
   return (
     <footer style={{ position: 'relative', paddingTop: '64px', paddingBottom: '32px' }}>
@@ -64,6 +72,19 @@ export default function Footer() {
               <a href="#" style={{ color: 'var(--text-3)', fontSize: '14px', transition: '150ms' }}
                 onMouseEnter={(e) => e.currentTarget.style.color = 'var(--text-2)'}
                 onMouseLeave={(e) => e.currentTarget.style.color = 'var(--text-3)'}>GitHub</a>
+            </div>
+
+            <div className="flex flex-col gap-4">
+              <span className="eyebrow">{t('sectionReserved')}</span>
+              <Link href={`/${locale}/prenotazioni/`} style={reservedLinkStyle} {...reservedLinkHover}>
+                {t('linkBooking')}
+              </Link>
+              <Link href={`/${locale}/prenotazioni/gestione/`} style={reservedLinkStyle} {...reservedLinkHover}>
+                {t('linkBookingAdmin')}
+              </Link>
+              <Link href={`/${locale}/reports/`} style={reservedLinkStyle} {...reservedLinkHover}>
+                {t('linkReports')}
+              </Link>
             </div>
 
             <div className="flex flex-col gap-4">
