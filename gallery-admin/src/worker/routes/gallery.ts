@@ -37,6 +37,18 @@ function readTexts(
   );
 }
 
+// Modifiche in sospeso: gli stessi campi di testo, tenuti da parte finché il
+// cliente non salva. Restano invisibili al sito.
+function parseDraft(json: string): Record<string, string> | null {
+  if (!json) return null;
+  try {
+    const parsed = JSON.parse(json);
+    return typeof parsed === 'object' && parsed !== null ? (parsed as Record<string, string>) : null;
+  } catch {
+    return null;
+  }
+}
+
 export function mediaDto(m: MediaRow) {
   return {
     id: m.id,
@@ -56,6 +68,9 @@ export function mediaDto(m: MediaRow) {
     alt_en: m.alt_en,
     position: m.position,
     published: m.published,
+    // Lavoro lasciato a metà: il pannello lo ripropone alla riapertura.
+    draft: parseDraft(m.draft_json),
+    draft_at: m.draft_at,
     // false finché il file non è stato caricato su R2 (upload interrotti).
     uploaded: m.kind === 'embed' || m.r2_key !== null,
   };
@@ -311,10 +326,12 @@ galleryRoutes.patch('/media/:id', async (c) => {
     embed_thumb_url = parsed.thumb_url;
   }
 
+  // Salvare applica le modifiche e chiude il lavoro in sospeso.
   await c.env.DB.prepare(
     `UPDATE media SET title_it = ?, title_en = ?, caption_it = ?, caption_en = ?,
                       description_it = ?, description_en = ?, alt_it = ?, alt_en = ?,
-                      published = ?, embed_url = ?, embed_thumb_url = ?
+                      published = ?, embed_url = ?, embed_thumb_url = ?,
+                      draft_json = '', draft_at = NULL
      WHERE id = ? AND tenant_id = ?`
   )
     .bind(
@@ -327,6 +344,61 @@ galleryRoutes.patch('/media/:id', async (c) => {
     )
     .run();
   return c.json({ ok: true });
+});
+
+// Salvataggio automatico mentre il cliente scrive: conserva il lavoro in corso
+// senza applicarlo ai testi pubblicati.
+galleryRoutes.put('/media/:id/draft', async (c) => {
+  const tenant = c.get('tenant');
+  const media = await c.env.DB.prepare('SELECT id FROM media WHERE id = ? AND tenant_id = ?')
+    .bind(c.req.param('id'), tenant.id)
+    .first<{ id: string }>();
+  if (!media) return c.json({ error: 'Elemento non trovato' }, 404);
+
+  const body = await c.req.json<Record<string, unknown>>().catch(() => ({}) as Record<string, unknown>);
+  const draft: Record<string, string> = {};
+  for (const [field, max] of MEDIA_TEXTS) {
+    if (body[field] !== undefined) draft[field] = cleanText(body[field], max);
+  }
+  if (body.published !== undefined) draft.published = body.published ? '1' : '0';
+  if (typeof body.embed_url === 'string') draft.embed_url = cleanText(body.embed_url, 500);
+
+  const now = new Date().toISOString();
+  await c.env.DB.prepare('UPDATE media SET draft_json = ?, draft_at = ? WHERE id = ? AND tenant_id = ?')
+    .bind(JSON.stringify(draft), now, media.id, tenant.id)
+    .run();
+  return c.json({ ok: true, draft_at: now });
+});
+
+// Il cliente sceglie di buttare via le modifiche in sospeso.
+galleryRoutes.delete('/media/:id/draft', async (c) => {
+  const tenant = c.get('tenant');
+  await c.env.DB.prepare(
+    "UPDATE media SET draft_json = '', draft_at = NULL WHERE id = ? AND tenant_id = ?"
+  )
+    .bind(c.req.param('id'), tenant.id)
+    .run();
+  return c.json({ ok: true });
+});
+
+// Pubblica (o rimette in bozza) più elementi con un solo comando.
+galleryRoutes.post('/media/publish', async (c) => {
+  const tenant = c.get('tenant');
+  const body = await c.req
+    .json<{ ids?: unknown; published?: unknown }>()
+    .catch(() => ({}) as never);
+  const ids = Array.isArray(body.ids)
+    ? body.ids.filter((x): x is string => typeof x === 'string')
+    : [];
+  if (ids.length === 0 || ids.length > 500) {
+    return c.json({ error: 'Elenco di elementi non valido' }, 400);
+  }
+  const published = body.published === false ? 0 : 1;
+  const stmt = c.env.DB.prepare(
+    'UPDATE media SET published = ? WHERE id = ? AND tenant_id = ?'
+  );
+  await c.env.DB.batch(ids.map((id) => stmt.bind(published, id, tenant.id)));
+  return c.json({ ok: true, count: ids.length, published: published === 1 });
 });
 
 galleryRoutes.delete('/media/:id', async (c) => {

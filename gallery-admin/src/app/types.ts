@@ -63,6 +63,10 @@ export interface Media {
   alt_en: string;
   position: number;
   published: number;
+  // Modifiche lasciate a metà, salvate automaticamente e riproposte alla
+  // riapertura del pannello. `null` quando non c'è nulla in sospeso.
+  draft: Record<string, string> | null;
+  draft_at: string | null;
   uploaded: boolean;
 }
 

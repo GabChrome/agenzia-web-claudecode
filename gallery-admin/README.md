@@ -17,6 +17,39 @@ Per **ogni elemento** (foto, video o link) il cliente può compilare, in entramb
 Il testo alternativo è facoltativo: se lasciato vuoto viene usata automaticamente la
 didascalia (e in mancanza il titolo), così ogni immagine ha sempre un `alt` valido.
 
+## Preparare oggi, pubblicare quando si vuole
+
+Il cliente può caricare materiale con calma e mandarlo online solo quando è pronto:
+
+- **Carica come bozza** — un interruttore accanto al pulsante di caricamento: i nuovi file
+  entrano nascosti, senza comparire sul sito.
+- **Pubblica tutto sul sito** — quando ci sono bozze pronte compare una barra con il
+  conteggio e un unico tasto che le manda online tutte insieme.
+- **Pubblica / Nascondi** sulla singola scheda, senza aprire nulla.
+- Lo stesso vale per gli **album interi**: un album in bozza resta invisibile con tutto il
+  suo contenuto.
+
+L'endpoint pubblico non espone mai le bozze, quindi finché il cliente non pubblica il sito
+resta esattamente com'era.
+
+## Il lavoro interrotto non si perde
+
+Se il cliente chiude il pannello (o il browser, o gli si scarica il telefono) mentre sta
+scrivendo, **le modifiche vengono conservate automaticamente** e alla riapertura riprende
+esattamente da dove aveva lasciato:
+
+1. Mentre scrive, il pannello salva da solo il lavoro in corso — sotto ai campi compare
+   *«Modifiche conservate: se chiudi ora, alla riapertura riprendi da qui»*.
+2. La scheda dell'elemento mostra l'etichetta **In sospeso** finché il lavoro non è
+   completato.
+3. Riaprendo l'elemento, i campi ripartono da quanto scritto, con l'avviso *«Ripreso da
+   dove avevi lasciato»* e la possibilità di **scartare** e tornare ai testi pubblicati.
+
+Il punto importante: **le modifiche in sospeso restano separate dai testi pubblicati**. Il
+sito continua a mostrare l'ultima versione salvata, quindi un testo scritto a metà non
+finisce mai online. Il salvataggio avviene sul server, non nel browser: il cliente può
+riprendere anche da un altro dispositivo.
+
 Un unico deploy serve tutti i clienti: ognuno accede con le proprie credenziali e vede
 **solo** la propria galleria, con il **proprio tema** (colori, logo, font) impostato
 dall'agenzia. I dati sono isolati per cliente a livello di API: ogni query filtra per il
@@ -318,7 +351,9 @@ database. Su un'installazione già attiva, prima del deploy:
 
 ```bash
 npx wrangler d1 execute gallery-admin-db --remote --file=./migrations/002_media_texts.sql
+npx wrangler d1 execute gallery-admin-db --remote --file=./migrations/003_media_draft.sql
 npm run deploy
 ```
 
+La `002` aggiunge i testi per elemento, la `003` la memoria del lavoro interrotto.
 Chi parte da zero non deve fare nulla: `schema.sql` contiene già tutto.

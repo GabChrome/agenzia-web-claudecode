@@ -54,6 +54,8 @@ export interface MediaRow {
   alt_en: string;
   position: number;
   published: number;
+  draft_json: string;
+  draft_at: string | null;
   created_at: string;
 }
 

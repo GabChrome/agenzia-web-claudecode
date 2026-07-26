@@ -62,6 +62,10 @@ CREATE TABLE IF NOT EXISTS media (
   alt_en TEXT NOT NULL DEFAULT '',
   position INTEGER NOT NULL DEFAULT 0,
   published INTEGER NOT NULL DEFAULT 1,
+  -- Modifiche in corso non ancora salvate: permettono di riprendere il lavoro
+  -- interrotto senza toccare i testi già pubblicati.
+  draft_json TEXT NOT NULL DEFAULT '',
+  draft_at TEXT,
   created_at TEXT NOT NULL DEFAULT (datetime('now')),
   FOREIGN KEY (tenant_id) REFERENCES tenants(id) ON DELETE CASCADE,
   FOREIGN KEY (album_id) REFERENCES albums(id) ON DELETE CASCADE

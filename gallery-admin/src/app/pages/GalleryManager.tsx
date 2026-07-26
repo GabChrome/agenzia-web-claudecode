@@ -62,7 +62,16 @@ export default function GalleryManager() {
   const [albumDialog, setAlbumDialog] = useState<{ album: Album | null } | null>(null);
   const [embedOpen, setEmbedOpen] = useState(false);
   const [fileOver, setFileOver] = useState(false);
+  // Preferenza di lavoro: caricare come bozza e pubblicare in un secondo
+  // momento. Resta memorizzata su questo dispositivo.
+  const [uploadAsDraft, setUploadAsDraft] = useState(
+    () => localStorage.getItem('gallery:uploadAsDraft') === '1'
+  );
   const { toasts, push } = useToasts();
+
+  useEffect(() => {
+    localStorage.setItem('gallery:uploadAsDraft', uploadAsDraft ? '1' : '0');
+  }, [uploadAsDraft]);
 
   const q = useCallback(
     (path: string, params: Record<string, string> = {}) => {
@@ -89,6 +98,8 @@ export default function GalleryManager() {
   }, [load]);
 
   const selected = data?.albums.find((a) => a.id === selectedId) ?? null;
+  // Elementi caricati ma non ancora online, pronti per la pubblicazione.
+  const draftMedia = (selected?.media ?? []).filter((m) => m.published !== 1 && m.uploaded);
 
   /* ---------- Album ---------- */
 
@@ -148,6 +159,34 @@ export default function GalleryManager() {
     await load();
   }
 
+  // Salvataggio automatico del lavoro in corso: non tocca i testi pubblicati,
+  // quindi sul sito non cambia nulla finché il cliente non salva davvero.
+  async function saveDraft(media: Media, fields: MediaFields) {
+    await api(q(`/api/gallery/media/${media.id}/draft`), { method: 'PUT', body: fields });
+    await load();
+  }
+
+  async function discardDraft(media: Media) {
+    await api(q(`/api/gallery/media/${media.id}/draft`), { method: 'DELETE' });
+    await load();
+  }
+
+  // Manda online (o rimette in bozza) più elementi in un colpo solo.
+  async function publishMany(ids: string[], published: boolean) {
+    if (ids.length === 0) return;
+    try {
+      await api(q('/api/gallery/media/publish'), { body: { ids, published } });
+      await load();
+      push(
+        published
+          ? `${ids.length === 1 ? 'Elemento pubblicato' : ids.length + ' elementi pubblicati'} sul sito`
+          : `${ids.length === 1 ? 'Elemento rimesso' : ids.length + ' elementi rimessi'} in bozza`
+      );
+    } catch (err) {
+      push(errorMessage(err));
+    }
+  }
+
   async function deleteMedia(media: Media) {
     await api(q(`/api/gallery/media/${media.id}`), { method: 'DELETE' });
     await load();
@@ -204,7 +243,7 @@ export default function GalleryManager() {
       setUploads((u) => [...u, { key, name: file.name, pct: 0 }]);
       try {
         const { media } = await api<{ media: Media }>(q(`/api/gallery/albums/${albumId}/media`), {
-          body: { kind },
+          body: { kind, published: !uploadAsDraft },
         });
         const thumbPromise = kind === 'image' ? makeImageThumb(file) : makeVideoPoster(file);
         await uploadFile(
@@ -334,10 +373,35 @@ export default function GalleryManager() {
                 <Button variant="ghost" onClick={() => setEmbedOpen(true)}>
                   <IconLink size={16} /> Video da link
                 </Button>
+                <Toggle
+                  checked={uploadAsDraft}
+                  onChange={setUploadAsDraft}
+                  label="Carica come bozza"
+                />
                 <span className="ml-auto hidden text-xs text-soft sm:block">
                   Trascina gli elementi per riordinarli
                 </span>
               </div>
+
+              {/* Bozze pronte: un solo tasto le manda online. */}
+              {draftMedia.length > 0 && (
+                <div className="mb-4 flex flex-wrap items-center gap-3 rounded-theme-sm border border-line bg-surface px-4 py-3">
+                  <span className="text-sm text-ink">
+                    <strong>
+                      {draftMedia.length === 1
+                        ? '1 elemento in bozza'
+                        : `${draftMedia.length} elementi in bozza`}
+                    </strong>{' '}
+                    <span className="text-soft">— non ancora visibili sul sito.</span>
+                  </span>
+                  <Button
+                    className="ml-auto"
+                    onClick={() => publishMany(draftMedia.map((m) => m.id), true)}
+                  >
+                    {draftMedia.length === 1 ? 'Pubblica sul sito' : 'Pubblica tutto sul sito'}
+                  </Button>
+                </div>
+              )}
 
               {uploads.length > 0 && (
                 <div className="mb-4 space-y-2">
@@ -395,6 +459,7 @@ export default function GalleryManager() {
                     media={selected.media}
                     onReorder={reorderMedia}
                     onEdit={setEditingMedia}
+                    onTogglePublished={(m) => publishMany([m.id], m.published !== 1)}
                   />
                 </div>
               )}
@@ -409,6 +474,8 @@ export default function GalleryManager() {
           onClose={() => setEditingMedia(null)}
           onSave={(fields) => saveMedia(editingMedia, fields)}
           onDelete={() => deleteMedia(editingMedia)}
+          onSaveDraft={(fields) => saveDraft(editingMedia, fields)}
+          onDiscardDraft={() => discardDraft(editingMedia)}
         />
       )}
       {albumDialog && (
