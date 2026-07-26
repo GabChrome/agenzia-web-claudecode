@@ -6,6 +6,10 @@ import { parseTheme } from '../auth';
 // vetrina: restituisce solo album ed elementi pubblicati.
 export const publicRoutes = new Hono<AppEnv>();
 
+function firstFilled(...values: string[]): string {
+  return values.find((v) => v.trim() !== '') ?? '';
+}
+
 publicRoutes.get('/:slug', async (c) => {
   const tenant = await c.env.DB.prepare('SELECT * FROM tenants WHERE slug = ?')
     .bind(c.req.param('slug'))
@@ -50,11 +54,23 @@ publicRoutes.get('/:slug', async (c) => {
           thumb: abs(m.thumb_key ? `/files/${m.thumb_key}` : m.embed_thumb_url),
           embed_url: m.embed_url,
           content_type: m.content_type,
+          title: { it: m.title_it, en: m.title_en },
           caption: { it: m.caption_it, en: m.caption_en },
+          description: { it: m.description_it, en: m.description_en },
+          // Se il cliente non compila il testo alternativo si ricade su
+          // didascalia e titolo della stessa lingua, poi sull'italiano: i siti
+          // hanno sempre un alt utilizzabile per accessibilità e SEO.
+          alt: {
+            it: firstFilled(m.alt_it, m.caption_it, m.title_it),
+            en: firstFilled(m.alt_en, m.caption_en, m.title_en, m.alt_it, m.caption_it, m.title_it),
+          },
         })),
       })),
     },
     200,
-    { 'Cache-Control': 'public, max-age=60' }
+    // Finestra breve: il cliente mette in bozza, ricarica il sito e vede il
+    // cambiamento entro ~30 s. `stale-while-revalidate` tiene comunque le
+    // pagine veloci, servendo subito la copia in cache mentre si aggiorna.
+    { 'Cache-Control': 'public, max-age=30, stale-while-revalidate=300' }
   );
 });

@@ -44,10 +44,18 @@ export interface MediaRow {
   embed_url: string | null;
   embed_thumb_url: string | null;
   content_type: string | null;
+  title_it: string;
+  title_en: string;
   caption_it: string;
   caption_en: string;
+  description_it: string;
+  description_en: string;
+  alt_it: string;
+  alt_en: string;
   position: number;
   published: number;
+  draft_json: string;
+  draft_at: string | null;
   created_at: string;
 }
 

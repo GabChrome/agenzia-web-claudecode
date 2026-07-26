@@ -1,7 +1,26 @@
 export type Role = 'agency' | 'client';
 export type MediaKind = 'image' | 'video' | 'embed';
 
+// Aspetto della vetrina sul sito del cliente: sono dati salvati sul cliente,
+// applicati dal componente di embed. Cambiarli non richiede alcun deploy.
+export interface SiteStyle {
+  layout?: string; // grid | masonry | carousel | list
+  columns?: string;
+  gap?: string;
+  radius?: string;
+  ratio?: string;
+  captions?: string; // below | overlay | hover | off
+  hover?: string; // zoom | lift | fade | none
+  header?: string; // on | off
+  font?: string;
+  accent?: string;
+  bg?: string;
+  text?: string;
+  muted?: string;
+}
+
 export interface TenantTheme {
+  site?: SiteStyle;
   accent?: string;
   bg?: string;
   surface?: string;
@@ -34,10 +53,20 @@ export interface Media {
   thumb: string | null;
   embed_url: string | null;
   content_type: string | null;
+  title_it: string;
+  title_en: string;
   caption_it: string;
   caption_en: string;
+  description_it: string;
+  description_en: string;
+  alt_it: string;
+  alt_en: string;
   position: number;
   published: number;
+  // Modifiche lasciate a metà, salvate automaticamente e riproposte alla
+  // riapertura del pannello. `null` quando non c'è nulla in sospeso.
+  draft: Record<string, string> | null;
+  draft_at: string | null;
   uploaded: boolean;
 }
 

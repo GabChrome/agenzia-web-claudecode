@@ -11,6 +11,44 @@ const MAX_THUMB_BYTES = 3 * MB;
 export const galleryRoutes = new Hono<AppEnv>();
 galleryRoutes.use('*', requireAuth, resolveTenant);
 
+// Testi modificabili per ogni elemento, con il limite di caratteri accettato.
+// L'ordine è quello usato dalle INSERT/UPDATE qui sotto.
+const MEDIA_TEXTS = [
+  ['title_it', 200],
+  ['title_en', 200],
+  ['caption_it', 500],
+  ['caption_en', 500],
+  ['description_it', 2000],
+  ['description_en', 2000],
+  ['alt_it', 300],
+  ['alt_en', 300],
+] as const;
+
+type MediaTextField = (typeof MEDIA_TEXTS)[number][0];
+
+// I campi assenti dal body restano invariati (`current`), così il pannello può
+// inviare anche una sola didascalia senza azzerare il resto.
+function readTexts(
+  body: Record<string, unknown>,
+  current?: Pick<MediaRow, MediaTextField>
+): string[] {
+  return MEDIA_TEXTS.map(([field, max]) =>
+    body[field] !== undefined ? cleanText(body[field], max) : (current?.[field] ?? '')
+  );
+}
+
+// Modifiche in sospeso: gli stessi campi di testo, tenuti da parte finché il
+// cliente non salva. Restano invisibili al sito.
+function parseDraft(json: string): Record<string, string> | null {
+  if (!json) return null;
+  try {
+    const parsed = JSON.parse(json);
+    return typeof parsed === 'object' && parsed !== null ? (parsed as Record<string, string>) : null;
+  } catch {
+    return null;
+  }
+}
+
 export function mediaDto(m: MediaRow) {
   return {
     id: m.id,
@@ -20,10 +58,19 @@ export function mediaDto(m: MediaRow) {
     thumb: m.thumb_key ? `/files/${m.thumb_key}` : m.embed_thumb_url,
     embed_url: m.embed_url,
     content_type: m.content_type,
+    title_it: m.title_it,
+    title_en: m.title_en,
     caption_it: m.caption_it,
     caption_en: m.caption_en,
+    description_it: m.description_it,
+    description_en: m.description_en,
+    alt_it: m.alt_it,
+    alt_en: m.alt_en,
     position: m.position,
     published: m.published,
+    // Lavoro lasciato a metà: il pannello lo ripropone alla riapertura.
+    draft: parseDraft(m.draft_json),
+    draft_at: m.draft_at,
     // false finché il file non è stato caricato su R2 (upload interrotti).
     uploaded: m.kind === 'embed' || m.r2_key !== null,
   };
@@ -199,8 +246,11 @@ galleryRoutes.post('/albums/:albumId/media', async (c) => {
     .first<{ p: number }>();
   const id = newId();
   await c.env.DB.prepare(
-    `INSERT INTO media (id, tenant_id, album_id, kind, embed_url, embed_thumb_url, caption_it, caption_en, position, published)
-     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
+    `INSERT INTO media (id, tenant_id, album_id, kind, embed_url, embed_thumb_url,
+                        title_it, title_en, caption_it, caption_en,
+                        description_it, description_en, alt_it, alt_en,
+                        position, published)
+     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
   )
     .bind(
       id,
@@ -209,8 +259,7 @@ galleryRoutes.post('/albums/:albumId/media', async (c) => {
       kind,
       embed_url,
       embed_thumb_url,
-      cleanText(body.caption_it, 500),
-      cleanText(body.caption_en, 500),
+      ...readTexts(body),
       pos?.p ?? 0,
       body.published === false ? 0 : 1
     )
@@ -277,13 +326,16 @@ galleryRoutes.patch('/media/:id', async (c) => {
     embed_thumb_url = parsed.thumb_url;
   }
 
+  // Salvare applica le modifiche e chiude il lavoro in sospeso.
   await c.env.DB.prepare(
-    `UPDATE media SET caption_it = ?, caption_en = ?, published = ?, embed_url = ?, embed_thumb_url = ?
+    `UPDATE media SET title_it = ?, title_en = ?, caption_it = ?, caption_en = ?,
+                      description_it = ?, description_en = ?, alt_it = ?, alt_en = ?,
+                      published = ?, embed_url = ?, embed_thumb_url = ?,
+                      draft_json = '', draft_at = NULL
      WHERE id = ? AND tenant_id = ?`
   )
     .bind(
-      body.caption_it !== undefined ? cleanText(body.caption_it, 500) : media.caption_it,
-      body.caption_en !== undefined ? cleanText(body.caption_en, 500) : media.caption_en,
+      ...readTexts(body, media),
       body.published !== undefined ? (body.published ? 1 : 0) : media.published,
       embed_url,
       embed_thumb_url,
@@ -292,6 +344,61 @@ galleryRoutes.patch('/media/:id', async (c) => {
     )
     .run();
   return c.json({ ok: true });
+});
+
+// Salvataggio automatico mentre il cliente scrive: conserva il lavoro in corso
+// senza applicarlo ai testi pubblicati.
+galleryRoutes.put('/media/:id/draft', async (c) => {
+  const tenant = c.get('tenant');
+  const media = await c.env.DB.prepare('SELECT id FROM media WHERE id = ? AND tenant_id = ?')
+    .bind(c.req.param('id'), tenant.id)
+    .first<{ id: string }>();
+  if (!media) return c.json({ error: 'Elemento non trovato' }, 404);
+
+  const body = await c.req.json<Record<string, unknown>>().catch(() => ({}) as Record<string, unknown>);
+  const draft: Record<string, string> = {};
+  for (const [field, max] of MEDIA_TEXTS) {
+    if (body[field] !== undefined) draft[field] = cleanText(body[field], max);
+  }
+  if (body.published !== undefined) draft.published = body.published ? '1' : '0';
+  if (typeof body.embed_url === 'string') draft.embed_url = cleanText(body.embed_url, 500);
+
+  const now = new Date().toISOString();
+  await c.env.DB.prepare('UPDATE media SET draft_json = ?, draft_at = ? WHERE id = ? AND tenant_id = ?')
+    .bind(JSON.stringify(draft), now, media.id, tenant.id)
+    .run();
+  return c.json({ ok: true, draft_at: now });
+});
+
+// Il cliente sceglie di buttare via le modifiche in sospeso.
+galleryRoutes.delete('/media/:id/draft', async (c) => {
+  const tenant = c.get('tenant');
+  await c.env.DB.prepare(
+    "UPDATE media SET draft_json = '', draft_at = NULL WHERE id = ? AND tenant_id = ?"
+  )
+    .bind(c.req.param('id'), tenant.id)
+    .run();
+  return c.json({ ok: true });
+});
+
+// Pubblica (o rimette in bozza) più elementi con un solo comando.
+galleryRoutes.post('/media/publish', async (c) => {
+  const tenant = c.get('tenant');
+  const body = await c.req
+    .json<{ ids?: unknown; published?: unknown }>()
+    .catch(() => ({}) as never);
+  const ids = Array.isArray(body.ids)
+    ? body.ids.filter((x): x is string => typeof x === 'string')
+    : [];
+  if (ids.length === 0 || ids.length > 500) {
+    return c.json({ error: 'Elenco di elementi non valido' }, 400);
+  }
+  const published = body.published === false ? 0 : 1;
+  const stmt = c.env.DB.prepare(
+    'UPDATE media SET published = ? WHERE id = ? AND tenant_id = ?'
+  );
+  await c.env.DB.batch(ids.map((id) => stmt.bind(published, id, tenant.id)));
+  return c.json({ ok: true, count: ids.length, published: published === 1 });
 });
 
 galleryRoutes.delete('/media/:id', async (c) => {

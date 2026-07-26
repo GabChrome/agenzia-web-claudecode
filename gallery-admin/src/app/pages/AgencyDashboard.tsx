@@ -2,7 +2,8 @@ import { type FormEvent, useCallback, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { api, errorMessage, uploadFile } from '../api';
 import { DEFAULT_THEME, applyTheme } from '../theme';
-import type { TenantSummary, TenantTheme, TenantUser } from '../types';
+import type { SiteStyle, TenantSummary, TenantTheme, TenantUser } from '../types';
+import { SiteStyleEditor, SiteStylePreview } from './agency/SiteStyle';
 import {
   Button,
   Dialog,
@@ -161,6 +162,8 @@ function TenantDialog({
   const [font, setFont] = useState(startTheme.font ?? '');
   const [logo, setLogo] = useState(startTheme.logo ?? '');
   const [logoBusy, setLogoBusy] = useState(false);
+  const [site, setSite] = useState<SiteStyle>(startTheme.site ?? {});
+  const [tab, setTab] = useState<'panel' | 'site'>('panel');
   const [error, setError] = useState('');
   const [busy, setBusy] = useState(false);
 
@@ -175,6 +178,7 @@ function TenantDialog({
       surface,
       text,
       radius,
+      site,
     };
     if (font.trim()) {
       theme.font = font.trim();
@@ -253,14 +257,50 @@ function TenantDialog({
                 setSlugTouched(true);
               }}
               required
-              pattern="[a-z0-9][a-z0-9-]*"
+              // Il trattino va sempre in fuga: senza, i browser recenti non
+              // compilano il pattern e la validazione viene ignorata.
+              pattern="[a-z0-9][a-z0-9\-]*"
+              title="Solo lettere minuscole, numeri e trattini"
               placeholder="da-mario"
             />
           </Field>
         </div>
 
-        <fieldset className="rounded-theme-sm border border-line p-4">
-          <legend className="px-1 text-sm font-semibold text-ink">Tema del pannello</legend>
+        <div className="flex items-center gap-1 border-b border-line">
+          {(
+            [
+              ['panel', 'Pannello di gestione'],
+              ['site', 'Vetrina sul sito'],
+            ] as const
+          ).map(([id, label]) => (
+            <button
+              key={id}
+              type="button"
+              onClick={() => setTab(id)}
+              className={`-mb-px border-b-2 px-3 py-2 text-sm font-semibold transition ${
+                tab === id ? 'border-accent text-ink' : 'border-transparent text-soft hover:text-ink'
+              }`}
+            >
+              {label}
+            </button>
+          ))}
+        </div>
+
+        {tab === 'site' && (
+          <>
+            <SiteStyleEditor site={site} onChange={setSite} />
+            <SiteStylePreview
+              site={site}
+              theme={{ accent, bg, surface, text, radius, logo }}
+              name={name}
+            />
+          </>
+        )}
+
+        <fieldset className={`rounded-theme-sm border border-line p-4 ${tab === 'panel' ? '' : 'hidden'}`}>
+          <legend className="px-1 text-sm font-semibold text-ink">
+            Come vede il pannello questo cliente
+          </legend>
           <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
             <ColorField label="Accento" value={accent} onChange={setAccent} />
             <ColorField label="Sfondo" value={bg} onChange={setBg} />

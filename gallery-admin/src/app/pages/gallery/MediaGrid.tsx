@@ -16,10 +16,12 @@ export function MediaGrid({
   media,
   onReorder,
   onEdit,
+  onTogglePublished,
 }: {
   media: Media[];
   onReorder: (activeId: string, overId: string) => void;
   onEdit: (media: Media) => void;
+  onTogglePublished: (media: Media) => void;
 }) {
   const sensors = useSensors(useSensor(PointerSensor, { activationConstraint: { distance: 8 } }));
   // Evita che il click di fine trascinamento apra il dialog di modifica.
@@ -56,6 +58,7 @@ export function MediaGrid({
               onClick={() => {
                 if (!draggingRef.current) onEdit(m);
               }}
+              onTogglePublished={() => onTogglePublished(m)}
             />
           ))}
         </div>
@@ -64,7 +67,15 @@ export function MediaGrid({
   );
 }
 
-function MediaCard({ media, onClick }: { media: Media; onClick: () => void }) {
+function MediaCard({
+  media,
+  onClick,
+  onTogglePublished,
+}: {
+  media: Media;
+  onClick: () => void;
+  onTogglePublished: () => void;
+}) {
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
     id: media.id,
   });
@@ -95,15 +106,49 @@ function MediaCard({ media, onClick }: { media: Media; onClick: () => void }) {
         </span>
       )}
 
+      {media.draft && (
+        <span
+          className="absolute left-2 top-9 rounded-full bg-accent px-2 py-0.5 text-[11px] font-semibold text-white"
+          title="Ci sono modifiche non ancora salvate: aprendo l’elemento riprendi da dove avevi lasciato."
+        >
+          In sospeso
+        </span>
+      )}
+
+      {/* Pubblicazione immediata, senza aprire la scheda. Il pulsante non deve
+          far partire il trascinamento né aprire la modifica. */}
+      {media.uploaded && (
+        <button
+          type="button"
+          onPointerDown={(e) => e.stopPropagation()}
+          onClick={(e) => {
+            e.stopPropagation();
+            onTogglePublished();
+          }}
+          className={`absolute bottom-2 right-2 rounded-full px-2.5 py-1 text-[11px] font-semibold shadow transition ${
+            media.published === 1
+              ? 'bg-white/90 text-ink opacity-0 hover:bg-white group-hover:opacity-100 focus-visible:opacity-100'
+              : 'bg-accent text-white hover:opacity-90'
+          }`}
+        >
+          {media.published === 1 ? 'Nascondi' : 'Pubblica'}
+        </button>
+      )}
+
       {!media.uploaded && (
         <div className="absolute inset-0 flex items-center justify-center bg-black/50 p-3 text-center text-xs font-semibold text-white">
           Caricamento non completato: apri e rimuovi l’elemento
         </div>
       )}
 
-      {media.caption_it && media.uploaded && (
-        <div className="pointer-events-none absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/70 to-transparent p-2 pt-6">
-          <p className="line-clamp-2 text-xs text-white">{media.caption_it}</p>
+      {(media.title_it || media.caption_it) && media.uploaded && (
+        <div className="pointer-events-none absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/75 to-transparent p-2 pt-6">
+          {media.title_it && (
+            <p className="line-clamp-1 text-xs font-semibold text-white">{media.title_it}</p>
+          )}
+          {media.caption_it && (
+            <p className="line-clamp-2 text-xs text-white/85">{media.caption_it}</p>
+          )}
         </div>
       )}
     </div>
@@ -125,7 +170,7 @@ function CardVisual({ media }: { media: Media }) {
       <>
         <img
           src={src}
-          alt={media.caption_it}
+          alt={media.alt_it || media.caption_it || media.title_it}
           loading="lazy"
           draggable={false}
           className="h-full w-full select-none object-cover"

@@ -1,6 +1,8 @@
 import type { TenantTheme } from './types';
 
-export const DEFAULT_THEME: Required<Omit<TenantTheme, 'logo'>> = {
+// `site` riguarda solo la vetrina sul sito del cliente: non ha un predefinito
+// qui, perché non influenza l'aspetto del pannello.
+export const DEFAULT_THEME: Required<Omit<TenantTheme, 'logo' | 'site'>> = {
   accent: '#9a7830',
   bg: '#f8f5f0',
   surface: '#ffffff',

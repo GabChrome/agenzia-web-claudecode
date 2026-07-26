@@ -8,7 +8,7 @@ import {
   requireAuth,
   verifyPassword,
 } from '../auth';
-import { cleanText, isValidEmail, newId } from '../util';
+import { cleanText, isValidEmail, newId, type SanitizedTheme } from '../util';
 import {
   RATE_LIMIT_MESSAGE,
   clearFailures,
@@ -90,8 +90,7 @@ authRoutes.post('/logout', async (c) => {
 
 authRoutes.get('/me', requireAuth, async (c) => {
   const user = c.get('user');
-  let tenant: { id: string; slug: string; name: string; theme: Record<string, string> } | null =
-    null;
+  let tenant: { id: string; slug: string; name: string; theme: SanitizedTheme } | null = null;
   if (user.role === 'client' && user.tenant_id) {
     const row = await c.env.DB.prepare('SELECT * FROM tenants WHERE id = ?')
       .bind(user.tenant_id)
