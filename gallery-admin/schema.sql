@@ -50,8 +50,16 @@ CREATE TABLE IF NOT EXISTS media (
   embed_url TEXT,
   embed_thumb_url TEXT,
   content_type TEXT,
+  -- Testi per elemento, tutti modificabili dal cliente e tutti bilingue:
+  -- titolo, didascalia breve, testo esteso e testo alternativo (accessibilità).
+  title_it TEXT NOT NULL DEFAULT '',
+  title_en TEXT NOT NULL DEFAULT '',
   caption_it TEXT NOT NULL DEFAULT '',
   caption_en TEXT NOT NULL DEFAULT '',
+  description_it TEXT NOT NULL DEFAULT '',
+  description_en TEXT NOT NULL DEFAULT '',
+  alt_it TEXT NOT NULL DEFAULT '',
+  alt_en TEXT NOT NULL DEFAULT '',
   position INTEGER NOT NULL DEFAULT 0,
   published INTEGER NOT NULL DEFAULT 1,
   created_at TEXT NOT NULL DEFAULT (datetime('now')),

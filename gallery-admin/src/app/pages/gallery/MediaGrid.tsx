@@ -101,9 +101,14 @@ function MediaCard({ media, onClick }: { media: Media; onClick: () => void }) {
         </div>
       )}
 
-      {media.caption_it && media.uploaded && (
-        <div className="pointer-events-none absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/70 to-transparent p-2 pt-6">
-          <p className="line-clamp-2 text-xs text-white">{media.caption_it}</p>
+      {(media.title_it || media.caption_it) && media.uploaded && (
+        <div className="pointer-events-none absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/75 to-transparent p-2 pt-6">
+          {media.title_it && (
+            <p className="line-clamp-1 text-xs font-semibold text-white">{media.title_it}</p>
+          )}
+          {media.caption_it && (
+            <p className="line-clamp-2 text-xs text-white/85">{media.caption_it}</p>
+          )}
         </div>
       )}
     </div>
@@ -125,7 +130,7 @@ function CardVisual({ media }: { media: Media }) {
       <>
         <img
           src={src}
-          alt={media.caption_it}
+          alt={media.alt_it || media.caption_it || media.title_it}
           loading="lazy"
           draggable={false}
           className="h-full w-full select-none object-cover"

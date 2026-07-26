@@ -36,7 +36,9 @@ app.use('*', async (c, next) => {
     // I file sono caricati dagli utenti: la sandbox impedisce l'esecuzione di
     // script se un file (es. SVG) venisse aperto direttamente nel browser.
     headers.set('Content-Security-Policy', 'sandbox');
-  } else if (!url.pathname.startsWith('/api/')) {
+  } else if ((headers.get('content-type') ?? '').includes('text/html')) {
+    // Solo le pagine del pannello: lo script di embed servito ai siti dei
+    // clienti non deve ereditare queste restrizioni.
     headers.set('X-Frame-Options', 'DENY');
     headers.set(
       'Content-Security-Policy',

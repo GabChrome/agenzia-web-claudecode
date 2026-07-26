@@ -29,13 +29,47 @@ const THEME_KEYS = [
   'logo',
 ] as const;
 
-export function sanitizeTheme(input: unknown): Record<string, string> {
-  const out: Record<string, string> = {};
+// Aspetto della vetrina sul sito del cliente. Sono dati, non codice: si
+// cambiano dal pannello e i siti li applicano da soli, senza toccare il backend
+// né ridistribuire nulla.
+const SITE_KEYS = [
+  'layout', // grid | masonry | carousel | list
+  'columns', // larghezza minima colonna (px)
+  'gap', // spazio tra gli elementi (px)
+  'radius', // arrotondamento (px)
+  'ratio', // 1/1, 4/3, 16/9, auto
+  'captions', // below | overlay | hover | off
+  'hover', // zoom | lift | fade | none
+  'header', // on | off — nome e logo del cliente sopra la vetrina
+  'font',
+  'accent',
+  'bg',
+  'text',
+  'muted',
+] as const;
+
+export type SanitizedTheme = Record<string, string | Record<string, string>>;
+
+export function sanitizeTheme(input: unknown): SanitizedTheme {
+  const out: SanitizedTheme = {};
   if (typeof input !== 'object' || input === null) return out;
+  const src = input as Record<string, unknown>;
+
   for (const key of THEME_KEYS) {
-    const value = (input as Record<string, unknown>)[key];
+    const value = src[key];
     if (typeof value === 'string' && value.length <= 300) out[key] = value;
   }
+
+  if (typeof src.site === 'object' && src.site !== null) {
+    const site: Record<string, string> = {};
+    const rawSite = src.site as Record<string, unknown>;
+    for (const key of SITE_KEYS) {
+      const value = rawSite[key];
+      if (typeof value === 'string' && value.length <= 300) site[key] = value;
+    }
+    if (Object.keys(site).length > 0) out.site = site;
+  }
+
   return out;
 }
 

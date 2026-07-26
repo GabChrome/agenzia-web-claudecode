@@ -1,6 +1,7 @@
 import type { Context, MiddlewareHandler } from 'hono';
 import { getCookie, setCookie, deleteCookie } from 'hono/cookie';
 import type { AppEnv, TenantRow, UserRow } from './types';
+import type { SanitizedTheme } from './util';
 
 export const SESSION_COOKIE = 'gallery_session';
 const SESSION_DAYS = 7;
@@ -121,7 +122,7 @@ export const resolveTenant: MiddlewareHandler<AppEnv> = async (c, next) => {
   await next();
 };
 
-export function parseTheme(themeJson: string): Record<string, string> {
+export function parseTheme(themeJson: string): SanitizedTheme {
   try {
     const parsed = JSON.parse(themeJson);
     return typeof parsed === 'object' && parsed !== null ? parsed : {};

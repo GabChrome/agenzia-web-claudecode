@@ -11,6 +11,32 @@ const MAX_THUMB_BYTES = 3 * MB;
 export const galleryRoutes = new Hono<AppEnv>();
 galleryRoutes.use('*', requireAuth, resolveTenant);
 
+// Testi modificabili per ogni elemento, con il limite di caratteri accettato.
+// L'ordine è quello usato dalle INSERT/UPDATE qui sotto.
+const MEDIA_TEXTS = [
+  ['title_it', 200],
+  ['title_en', 200],
+  ['caption_it', 500],
+  ['caption_en', 500],
+  ['description_it', 2000],
+  ['description_en', 2000],
+  ['alt_it', 300],
+  ['alt_en', 300],
+] as const;
+
+type MediaTextField = (typeof MEDIA_TEXTS)[number][0];
+
+// I campi assenti dal body restano invariati (`current`), così il pannello può
+// inviare anche una sola didascalia senza azzerare il resto.
+function readTexts(
+  body: Record<string, unknown>,
+  current?: Pick<MediaRow, MediaTextField>
+): string[] {
+  return MEDIA_TEXTS.map(([field, max]) =>
+    body[field] !== undefined ? cleanText(body[field], max) : (current?.[field] ?? '')
+  );
+}
+
 export function mediaDto(m: MediaRow) {
   return {
     id: m.id,
@@ -20,8 +46,14 @@ export function mediaDto(m: MediaRow) {
     thumb: m.thumb_key ? `/files/${m.thumb_key}` : m.embed_thumb_url,
     embed_url: m.embed_url,
     content_type: m.content_type,
+    title_it: m.title_it,
+    title_en: m.title_en,
     caption_it: m.caption_it,
     caption_en: m.caption_en,
+    description_it: m.description_it,
+    description_en: m.description_en,
+    alt_it: m.alt_it,
+    alt_en: m.alt_en,
     position: m.position,
     published: m.published,
     // false finché il file non è stato caricato su R2 (upload interrotti).
@@ -199,8 +231,11 @@ galleryRoutes.post('/albums/:albumId/media', async (c) => {
     .first<{ p: number }>();
   const id = newId();
   await c.env.DB.prepare(
-    `INSERT INTO media (id, tenant_id, album_id, kind, embed_url, embed_thumb_url, caption_it, caption_en, position, published)
-     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
+    `INSERT INTO media (id, tenant_id, album_id, kind, embed_url, embed_thumb_url,
+                        title_it, title_en, caption_it, caption_en,
+                        description_it, description_en, alt_it, alt_en,
+                        position, published)
+     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
   )
     .bind(
       id,
@@ -209,8 +244,7 @@ galleryRoutes.post('/albums/:albumId/media', async (c) => {
       kind,
       embed_url,
       embed_thumb_url,
-      cleanText(body.caption_it, 500),
-      cleanText(body.caption_en, 500),
+      ...readTexts(body),
       pos?.p ?? 0,
       body.published === false ? 0 : 1
     )
@@ -278,12 +312,13 @@ galleryRoutes.patch('/media/:id', async (c) => {
   }
 
   await c.env.DB.prepare(
-    `UPDATE media SET caption_it = ?, caption_en = ?, published = ?, embed_url = ?, embed_thumb_url = ?
+    `UPDATE media SET title_it = ?, title_en = ?, caption_it = ?, caption_en = ?,
+                      description_it = ?, description_en = ?, alt_it = ?, alt_en = ?,
+                      published = ?, embed_url = ?, embed_thumb_url = ?
      WHERE id = ? AND tenant_id = ?`
   )
     .bind(
-      body.caption_it !== undefined ? cleanText(body.caption_it, 500) : media.caption_it,
-      body.caption_en !== undefined ? cleanText(body.caption_en, 500) : media.caption_en,
+      ...readTexts(body, media),
       body.published !== undefined ? (body.published ? 1 : 0) : media.published,
       embed_url,
       embed_thumb_url,

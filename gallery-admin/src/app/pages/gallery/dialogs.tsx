@@ -6,11 +6,19 @@ import { Button, Dialog, ErrorText, Field, Input, Textarea, Toggle } from '../..
 /* ---------- Modifica di un elemento (foto, video o link) ---------- */
 
 export interface MediaFields {
+  title_it: string;
+  title_en: string;
   caption_it: string;
   caption_en: string;
+  description_it: string;
+  description_en: string;
+  alt_it: string;
+  alt_en: string;
   published: boolean;
   embed_url?: string;
 }
+
+type Lang = 'it' | 'en';
 
 export function EditMediaDialog({
   media,
@@ -23,19 +31,37 @@ export function EditMediaDialog({
   onSave: (fields: MediaFields) => Promise<void>;
   onDelete: () => Promise<void>;
 }) {
-  const [captionIt, setCaptionIt] = useState(media.caption_it);
-  const [captionEn, setCaptionEn] = useState(media.caption_en);
+  // I testi delle due lingue stanno in un unico stato: si passa da IT a EN con
+  // le schede, senza perdere quanto scritto nell'altra lingua.
+  const [texts, setTexts] = useState({
+    title_it: media.title_it,
+    title_en: media.title_en,
+    caption_it: media.caption_it,
+    caption_en: media.caption_en,
+    description_it: media.description_it,
+    description_en: media.description_en,
+    alt_it: media.alt_it,
+    alt_en: media.alt_en,
+  });
+  const [lang, setLang] = useState<Lang>('it');
   const [published, setPublished] = useState(media.published === 1);
   const [embedUrl, setEmbedUrl] = useState(media.embed_url ?? '');
   const [error, setError] = useState('');
   const [busy, setBusy] = useState(false);
+
+  const set = (field: keyof typeof texts) => (value: string) =>
+    setTexts((prev) => ({ ...prev, [field]: value }));
+
+  // Segnala con un pallino le lingue che hanno già del testo.
+  const filled = (l: Lang) =>
+    Boolean(texts[`title_${l}`] || texts[`caption_${l}`] || texts[`description_${l}`]);
 
   async function submit(e: FormEvent) {
     e.preventDefault();
     setBusy(true);
     setError('');
     try {
-      const fields: MediaFields = { caption_it: captionIt, caption_en: captionEn, published };
+      const fields: MediaFields = { ...texts, published };
       if (media.kind === 'embed') fields.embed_url = embedUrl;
       await onSave(fields);
       onClose();
@@ -77,13 +103,59 @@ export function EditMediaDialog({
             />
           </Field>
         )}
-        <div className="grid gap-4 sm:grid-cols-2">
-          <Field label="Didascalia (italiano)">
-            <Textarea value={captionIt} onChange={(e) => setCaptionIt(e.target.value)} />
+        <div className="space-y-3">
+          <div className="flex items-center gap-1 border-b border-line">
+            {(['it', 'en'] as Lang[]).map((l) => (
+              <button
+                key={l}
+                type="button"
+                onClick={() => setLang(l)}
+                className={`-mb-px flex items-center gap-1.5 border-b-2 px-3 py-2 text-sm font-semibold transition ${
+                  lang === l
+                    ? 'border-accent text-ink'
+                    : 'border-transparent text-soft hover:text-ink'
+                }`}
+              >
+                {l === 'it' ? 'Italiano' : 'English'}
+                {filled(l) && <span className="h-1.5 w-1.5 rounded-full bg-accent" />}
+              </button>
+            ))}
+          </div>
+
+          <Field label="Titolo" hint="Il nome dell’elemento, mostrato sopra la didascalia.">
+            <Input
+              value={texts[`title_${lang}`]}
+              onChange={(e) => set(`title_${lang}`)(e.target.value)}
+              placeholder={lang === 'it' ? 'Es. Sala principale' : 'e.g. Main hall'}
+            />
           </Field>
-          <Field label="Didascalia (inglese)">
-            <Textarea value={captionEn} onChange={(e) => setCaptionEn(e.target.value)} />
+          <Field label="Didascalia" hint="Una riga breve, mostrata sotto la foto nella vetrina.">
+            <Input
+              value={texts[`caption_${lang}`]}
+              onChange={(e) => set(`caption_${lang}`)(e.target.value)}
+            />
           </Field>
+          <Field
+            label="Testo esteso"
+            hint="Informazioni aggiuntive, mostrate quando si apre l’elemento a schermo intero."
+          >
+            <Textarea
+              rows={4}
+              value={texts[`description_${lang}`]}
+              onChange={(e) => set(`description_${lang}`)(e.target.value)}
+            />
+          </Field>
+          {media.kind !== 'embed' && (
+            <Field
+              label="Testo alternativo (facoltativo)"
+              hint="Descrive l’immagine a chi non può vederla e aiuta Google. Se lo lasci vuoto viene usata la didascalia."
+            >
+              <Input
+                value={texts[`alt_${lang}`]}
+                onChange={(e) => set(`alt_${lang}`)(e.target.value)}
+              />
+            </Field>
+          )}
         </div>
         <Toggle
           checked={published}
@@ -113,7 +185,7 @@ function MediaPreview({ media }: { media: Media }) {
     return (
       <img
         src={media.url}
-        alt={media.caption_it}
+        alt={media.alt_it || media.caption_it || media.title_it}
         className="max-h-72 w-full rounded-theme-sm border border-line bg-surface2 object-contain"
       />
     );
