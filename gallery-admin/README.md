@@ -330,6 +330,50 @@ export function Vetrina({ locale = 'it' }: { locale?: 'it' | 'en' }) {
 > Nota per i siti in export statico (come Anti Gravity): la lettura avviene nel browser,
 > quindi non serve alcun backend nel sito del cliente.
 
+## Notizie: un blog per ogni cliente
+
+Accanto alla galleria, ogni cliente ha una sezione **Notizie** (scheda «Notizie» dalla sua
+pagina, o `/t/<slug>/notizie` per l'agenzia) per dare aggiornamenti ai propri clienti:
+eventi, orari straordinari, nuovi arrivi. Per articolo: titolo, estratto e testo esteso
+(bilingue IT/EN, l'inglese è facoltativo), un **editor ricco** con grassetto, corsivo,
+titoli, elenchi, citazioni e **immagini inserite nel testo**, un'immagine di copertina,
+dei tag, e — come per le foto — bozza pubblicabile con un tasto, pubblicazione
+programmata a una data futura, e ripresa automatica del lavoro interrotto.
+
+Il testo scritto nell'editor è HTML: prima di essere salvato passa sempre da un filtro
+lato server (`sanitizePostHtml` in `src/worker/util.ts`) che tiene solo i tag che l'editor
+può davvero produrre e scarta tutto il resto — comprese chiamate dirette all'API che
+bypassano l'editor. È l'unica ragione per cui è sicuro mostrare quell'HTML così com'è,
+sia nel pannello sia sulle pagine pubbliche.
+
+### Due indirizzi diversi per lo stesso articolo
+
+Ogni articolo pubblicato esiste in due forme, scelte da chi integra il sito:
+
+- **Una pagina vera**, generata dal server (`<dominio-pannello>/n/<slug-cliente>/<slug-articolo>`),
+  con titolo, `<meta description>`, Open Graph e `canonical` già nell'HTML — quella che
+  Google indicizza e che WhatsApp/Facebook sanno leggere per l'anteprima. C'è anche un
+  indice (`/n/<slug-cliente>`) e un feed RSS (`/api/public/<slug-cliente>/feed.xml`).
+- **Un widget JavaScript** (`embed/notizie.js`, stessa filosofia di `vetrina.js`) da
+  incollare sul sito del cliente:
+
+  ```html
+  <div id="notizie"></div>
+  <script src="https://<dominio-pannello>/embed/notizie.js"
+          data-slug="da-mario" data-target="#notizie" data-locale="it" defer></script>
+  ```
+
+  Con `data-mode="list"` (predefinito) gli articoli si aprono a schermo intero sopra la
+  pagina, senza mai lasciare il sito. Con `data-mode="link"` ogni scheda porta invece alla
+  pagina vera qui sopra — la scelta giusta quando le notizie contano per la visibilità su
+  Google. Altri attributi: `data-limit` (mostra solo gli ultimi N, utile per un widget in
+  home), `data-tag` (un solo argomento), più `data-styles="off"`, `data-render="off"` e
+  `window.Notizie.renderItem` / `onOpen`, identici nello spirito a `vetrina.js`.
+
+La pagina vera vive sotto il dominio del pannello, non sotto quello del cliente: collegarla
+al dominio del cliente richiederebbe accesso al suo DNS, cosa che varia troppo da caso a
+caso per essere automatica.
+
 ## Limiti e note
 
 - **Upload**: foto fino a 25 MB, video fino a 100 MB (limite del piano Workers Free;
@@ -352,8 +396,10 @@ database. Su un'installazione già attiva, prima del deploy:
 ```bash
 npx wrangler d1 execute gallery-admin-db --remote --file=./migrations/002_media_texts.sql
 npx wrangler d1 execute gallery-admin-db --remote --file=./migrations/003_media_draft.sql
+npx wrangler d1 execute gallery-admin-db --remote --file=./migrations/004_posts.sql
 npm run deploy
 ```
 
-La `002` aggiunge i testi per elemento, la `003` la memoria del lavoro interrotto.
-Chi parte da zero non deve fare nulla: `schema.sql` contiene già tutto.
+La `002` aggiunge i testi per elemento, la `003` la memoria del lavoro interrotto, la
+`004` la sezione Notizie. Chi parte da zero non deve fare nulla: `schema.sql` contiene
+già tutto.

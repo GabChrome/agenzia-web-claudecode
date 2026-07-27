@@ -115,3 +115,112 @@ export async function deleteR2Prefix(bucket: R2Bucket, prefix: string): Promise<
     cursor = listing.truncated ? listing.cursor : undefined;
   } while (cursor);
 }
+
+/* ---------- Articoli (Notizie) ---------- */
+
+export function slugify(value: string): string {
+  return value
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[̀-ͯ]/g, '')
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '')
+    .slice(0, 80);
+}
+
+// Elenco separato da virgole: pochi tag per un blog di piccola attività non
+// giustificano una tabella a parte.
+export function cleanTags(value: unknown): string {
+  if (typeof value !== 'string') return '';
+  const tags = value
+    .split(',')
+    .map((t) => t.trim().slice(0, 30))
+    .filter(Boolean);
+  return [...new Set(tags)].slice(0, 10).join(', ');
+}
+
+// Tag e attributi che l'editor del pannello può davvero produrre. Qualsiasi
+// altra cosa arrivi dall'API (l'editor è solo un client: il testo può arrivare
+// anche da una chiamata diretta) viene rimossa prima di salvare, perché questo
+// HTML finisce reso così com'è sia nel pannello sia sulle pagine pubbliche.
+const ALLOWED_TAGS = new Set([
+  'p',
+  'br',
+  'strong',
+  'b',
+  'em',
+  'i',
+  'u',
+  's',
+  'a',
+  'ul',
+  'ol',
+  'li',
+  'blockquote',
+  'h2',
+  'h3',
+  'img',
+  'hr',
+  'code',
+  'pre',
+]);
+// Rimossi insieme al loro contenuto: non hanno un uso legittimo nel corpo di
+// un articolo e sono i vettori classici di script injection.
+const STRIP_WITH_CONTENT = new Set([
+  'script',
+  'style',
+  'iframe',
+  'object',
+  'embed',
+  'form',
+  'input',
+  'button',
+  'svg',
+  'math',
+  'link',
+  'meta',
+  'base',
+]);
+
+export async function sanitizePostHtml(html: string, origin: string): Promise<string> {
+  if (!html) return '';
+  const rewriter = new HTMLRewriter().on('*', {
+    element(el) {
+      const tag = el.tagName.toLowerCase();
+      if (STRIP_WITH_CONTENT.has(tag)) {
+        el.remove();
+        return;
+      }
+      if (!ALLOWED_TAGS.has(tag)) {
+        // Tag sconosciuto (es. <div>, <span> incollati da Word): si tiene il
+        // testo, si scarta solo il contenitore.
+        el.removeAndKeepContent();
+        return;
+      }
+      const attrs = [...el.attributes];
+      for (const [name] of attrs) {
+        if (tag === 'a' && name === 'href') {
+          const href = el.getAttribute('href') ?? '';
+          if (!/^(https?:|mailto:)/i.test(href.trim())) el.removeAttribute('href');
+          continue;
+        }
+        if (tag === 'img' && name === 'src') {
+          const src = el.getAttribute('src') ?? '';
+          if (!/^https?:\/\//i.test(src.trim()) && !src.startsWith(origin)) {
+            el.removeAttribute('src');
+          }
+          continue;
+        }
+        if (tag === 'img' && name === 'alt') continue;
+        el.removeAttribute(name);
+      }
+      if (tag === 'a' && el.getAttribute('href')) {
+        // Il sito che lo ospita non è il nostro: mai passargli l'opener.
+        el.setAttribute('rel', 'noopener noreferrer nofollow ugc');
+        el.setAttribute('target', '_blank');
+      }
+    },
+  });
+  const result = rewriter.transform(new Response(html));
+  return await result.text();
+}

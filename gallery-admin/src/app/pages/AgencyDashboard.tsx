@@ -97,6 +97,12 @@ export default function AgencyDashboard() {
                   >
                     Apri galleria
                   </Link>
+                  <Link
+                    to={`/t/${tenant.slug}/notizie`}
+                    className="inline-flex items-center justify-center rounded-theme-sm border border-line px-4 py-2 text-sm font-semibold text-ink transition hover:bg-surface2"
+                  >
+                    Notizie
+                  </Link>
                   <Button variant="ghost" onClick={() => setDialog({ mode: 'edit', tenant })}>
                     Tema e dati
                   </Button>

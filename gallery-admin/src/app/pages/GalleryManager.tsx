@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import {
   DndContext,
   type DragEndEvent,
@@ -287,6 +287,18 @@ export default function GalleryManager() {
         logo={data.tenant.theme.logo ?? null}
         backLink={slug ? { to: '/', label: 'Tutti i clienti' } : undefined}
       />
+
+      <div className="mx-auto w-full max-w-6xl px-4 pt-6">
+        <div className="mb-1 flex items-center gap-1 rounded-theme-sm border border-line bg-surface p-1 text-sm font-semibold">
+          <span className="rounded-theme-sm bg-accent px-3 py-1.5 text-white">Galleria</span>
+          <Link
+            to={slug ? `/t/${slug}/notizie` : '/notizie'}
+            className="rounded-theme-sm px-3 py-1.5 text-soft transition hover:text-ink"
+          >
+            Notizie
+          </Link>
+        </div>
+      </div>
 
       <div className="mx-auto flex w-full max-w-6xl flex-1 flex-col gap-6 px-4 py-6 md:flex-row">
         {/* Elenco album */}

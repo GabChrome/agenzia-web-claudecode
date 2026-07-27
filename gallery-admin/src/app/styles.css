@@ -27,3 +27,66 @@ body {
   color: var(--text);
   font-family: var(--font);
 }
+
+/* Corpo dell'articolo: sia dentro l'editor (mentre si scrive) sia nella sua
+   anteprima. È lo stesso HTML che finisce sul sito, qui solo ristretto alla
+   larghezza del pannello. */
+.rte-body {
+  font-size: 0.95rem;
+  line-height: 1.7;
+}
+.rte-body > * + * {
+  margin-top: 0.9em;
+}
+.rte-body h2 {
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin-top: 1.4em;
+}
+.rte-body h3 {
+  font-size: 1.05rem;
+  font-weight: 700;
+  margin-top: 1.2em;
+}
+.rte-body a {
+  color: var(--accent);
+  text-decoration: underline;
+}
+.rte-body ul,
+.rte-body ol {
+  padding-left: 1.4em;
+}
+.rte-body ul {
+  list-style: disc;
+}
+.rte-body ol {
+  list-style: decimal;
+}
+.rte-body blockquote {
+  border-left: 3px solid var(--accent);
+  padding-left: 0.9em;
+  color: var(--text-soft);
+}
+.rte-body img {
+  max-width: 100%;
+  border-radius: calc(var(--radius) * 0.5);
+}
+.rte-body code {
+  background: var(--surface2);
+  padding: 0.1em 0.35em;
+  border-radius: 4px;
+  font-size: 0.9em;
+}
+.rte-body pre {
+  background: var(--surface2);
+  padding: 0.8em 1em;
+  border-radius: calc(var(--radius) * 0.5);
+  overflow-x: auto;
+}
+.rte-body p.is-editor-empty:first-child::before {
+  content: attr(data-placeholder);
+  color: var(--text-soft);
+  float: left;
+  height: 0;
+  pointer-events: none;
+}

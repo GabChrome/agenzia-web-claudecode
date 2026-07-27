@@ -71,6 +71,42 @@ CREATE TABLE IF NOT EXISTS media (
   FOREIGN KEY (album_id) REFERENCES albums(id) ON DELETE CASCADE
 );
 
+CREATE TABLE IF NOT EXISTS posts (
+  id TEXT PRIMARY KEY,
+  tenant_id TEXT NOT NULL,
+  slug TEXT NOT NULL,
+  -- Finché l'articolo non è mai stato pubblicato, lo slug segue il titolo
+  -- (utile perché ogni nuovo articolo nasce con un titolo segnaposto): dopo
+  -- la prima pubblicazione resta fisso, per non rompere link già condivisi.
+  slug_locked INTEGER NOT NULL DEFAULT 0,
+  title_it TEXT NOT NULL DEFAULT '',
+  title_en TEXT NOT NULL DEFAULT '',
+  excerpt_it TEXT NOT NULL DEFAULT '',
+  excerpt_en TEXT NOT NULL DEFAULT '',
+  -- HTML prodotto dall'editor ricco del pannello (già pulito lato server).
+  body_it TEXT NOT NULL DEFAULT '',
+  body_en TEXT NOT NULL DEFAULT '',
+  cover_key TEXT,
+  cover_content_type TEXT,
+  -- Elenco separato da virgole: sufficiente per un blog di piccola attività,
+  -- senza bisogno di una tabella di categorie a parte.
+  tags TEXT NOT NULL DEFAULT '',
+  published INTEGER NOT NULL DEFAULT 0,
+  -- Se valorizzata e futura, l'articolo resta invisibile anche se published=1:
+  -- è la pubblicazione programmata, calcolata al volo (nessun processo esterno
+  -- deve "scattare" all'ora giusta).
+  publish_at TEXT,
+  -- Stesso meccanismo già usato per i testi delle foto: modifiche in corso
+  -- salvate automaticamente, riprese alla riapertura, invisibili sul sito
+  -- finché non si salva.
+  draft_json TEXT NOT NULL DEFAULT '',
+  draft_at TEXT,
+  created_at TEXT NOT NULL DEFAULT (datetime('now')),
+  updated_at TEXT NOT NULL DEFAULT (datetime('now')),
+  FOREIGN KEY (tenant_id) REFERENCES tenants(id) ON DELETE CASCADE,
+  UNIQUE (tenant_id, slug)
+);
+
 -- Contatori anti brute-force (finestre di 15 minuti per email/IP).
 CREATE TABLE IF NOT EXISTS login_attempts (
   key TEXT PRIMARY KEY,
@@ -81,3 +117,5 @@ CREATE TABLE IF NOT EXISTS login_attempts (
 CREATE INDEX IF NOT EXISTS idx_media_tenant ON media(tenant_id, album_id, position);
 CREATE INDEX IF NOT EXISTS idx_albums_tenant ON albums(tenant_id, position);
 CREATE INDEX IF NOT EXISTS idx_sessions_user ON sessions(user_id);
+CREATE INDEX IF NOT EXISTS idx_posts_tenant ON posts(tenant_id, published, publish_at);
+CREATE INDEX IF NOT EXISTS idx_posts_slug ON posts(tenant_id, slug);

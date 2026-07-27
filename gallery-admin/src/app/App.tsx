@@ -11,6 +11,7 @@ import type { Me } from './types';
 import { FullPageSpinner } from './ui';
 import LoginPage from './pages/LoginPage';
 import GalleryManager from './pages/GalleryManager';
+import NewsManager from './pages/NewsManager';
 import AgencyDashboard from './pages/AgencyDashboard';
 
 interface AuthContextValue {
@@ -56,6 +57,30 @@ function AppRoutes() {
             <Navigate to="/login" replace />
           ) : me.user.role === 'agency' ? (
             <GalleryManager />
+          ) : (
+            <Navigate to="/" replace />
+          )
+        }
+      />
+      <Route
+        path="/notizie"
+        element={
+          !me ? (
+            <Navigate to="/login" replace />
+          ) : me.user.role === 'agency' ? (
+            <Navigate to="/" replace />
+          ) : (
+            <NewsManager />
+          )
+        }
+      />
+      <Route
+        path="/t/:slug/notizie"
+        element={
+          !me ? (
+            <Navigate to="/login" replace />
+          ) : me.user.role === 'agency' ? (
+            <NewsManager />
           ) : (
             <Navigate to="/" replace />
           )

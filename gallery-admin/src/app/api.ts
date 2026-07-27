@@ -38,12 +38,12 @@ export async function api<T>(path: string, options: ApiOptions = {}): Promise<T>
 
 // Upload binario con avanzamento: fetch non espone il progresso di invio,
 // quindi qui serve XMLHttpRequest.
-export function uploadFile(
+export function uploadFile<T = unknown>(
   url: string,
   file: Blob,
   contentType: string,
   onProgress?: (pct: number) => void
-): Promise<void> {
+): Promise<T> {
   return new Promise((resolve, reject) => {
     const xhr = new XMLHttpRequest();
     xhr.open('PUT', url);
@@ -55,7 +55,7 @@ export function uploadFile(
     };
     xhr.onload = () => {
       if (xhr.status < 300) {
-        resolve();
+        resolve(xhr.responseText ? (JSON.parse(xhr.responseText) as T) : (undefined as T));
       } else {
         let message = 'Caricamento non riuscito';
         try {

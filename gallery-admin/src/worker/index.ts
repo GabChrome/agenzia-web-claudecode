@@ -3,7 +3,9 @@ import { cors } from 'hono/cors';
 import type { AppEnv } from './types';
 import { authRoutes } from './routes/auth';
 import { tenantRoutes } from './routes/tenants';
+import { articleRoutes } from './routes/articlePages';
 import { galleryRoutes } from './routes/gallery';
+import { newsRoutes } from './routes/news';
 import { publicRoutes } from './routes/public';
 
 const app = new Hono<AppEnv>();
@@ -62,9 +64,14 @@ app.use('/api/public/*', cors());
 app.route('/api/auth', authRoutes);
 app.route('/api/tenants', tenantRoutes);
 app.route('/api/gallery', galleryRoutes);
+app.route('/api/news', newsRoutes);
 app.route('/api/public', publicRoutes);
 
 app.all('/api/*', (c) => c.json({ error: 'Endpoint non trovato' }, 404));
+
+// Pagine pubbliche degli articoli (SEO, condivisione): navigazione diretta,
+// non protette da autenticazione.
+app.route('/n', articleRoutes);
 
 // Servizio dei file da R2, con supporto alle richieste Range (necessario
 // perché Safari riproduca i video) e cache lunga: le chiavi sono immutabili.

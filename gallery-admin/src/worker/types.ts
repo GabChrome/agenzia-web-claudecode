@@ -59,6 +59,28 @@ export interface MediaRow {
   created_at: string;
 }
 
+export interface PostRow {
+  id: string;
+  tenant_id: string;
+  slug: string;
+  slug_locked: number;
+  title_it: string;
+  title_en: string;
+  excerpt_it: string;
+  excerpt_en: string;
+  body_it: string;
+  body_en: string;
+  cover_key: string | null;
+  cover_content_type: string | null;
+  tags: string;
+  published: number;
+  publish_at: string | null;
+  draft_json: string;
+  draft_at: string | null;
+  created_at: string;
+  updated_at: string;
+}
+
 // Tipatura condivisa per Hono: bindings + variabili impostate dai middleware.
 export type AppEnv = {
   Bindings: Env;

@@ -101,3 +101,30 @@ export interface TenantUser {
   email: string;
   created_at: string;
 }
+
+export type PostStatus = 'draft' | 'scheduled' | 'published';
+
+// L'elenco non porta il corpo dell'articolo (può essere lungo): arriva solo
+// aprendo il singolo articolo per modificarlo.
+export interface PostSummary {
+  id: string;
+  slug: string;
+  title_it: string;
+  title_en: string;
+  excerpt_it: string;
+  excerpt_en: string;
+  cover: string | null;
+  tags: string[];
+  published: number;
+  publish_at: string | null;
+  status: PostStatus;
+  draft: Record<string, string> | null;
+  draft_at: string | null;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface Post extends PostSummary {
+  body_it: string;
+  body_en: string;
+}
